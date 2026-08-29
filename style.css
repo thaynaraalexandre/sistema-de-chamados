@@ -1,589 +1,890 @@
+/* =====================================================
+   RESET
+===================================================== */
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     font-family: Arial, Helvetica, sans-serif;
-    background: #f4f6f9;
-    color: #222;
+    background: #f4f7fb;
+    color: #1f2937;
+    line-height: 1.5;
 }
 
 button,
 input,
 select,
 textarea {
-    font-family: inherit;
+    font: inherit;
 }
 
 button {
     cursor: pointer;
-    border: none;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
 }
 
 
-/* ============================
-   LOGIN
-============================ */
+/* =====================================================
+   TELA DE ESCOLHA
+===================================================== */
 
-.tela-login {
+.tela-escolha {
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #1d4ed8, #2563eb);
-    padding: 20px;
+    padding: 30px;
+    background:
+        radial-gradient(circle at top left, rgba(37, 99, 235, .25), transparent 35%),
+        radial-gradient(circle at bottom right, rgba(124, 58, 237, .22), transparent 35%),
+        linear-gradient(135deg, #0f172a, #1e293b);
 }
 
-.login-container {
+.escolha-container {
     width: 100%;
-    max-width: 420px;
-    background: white;
-    padding: 35px;
-    border-radius: 18px;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.18);
+    max-width: 650px;
+    text-align: center;
+    background: rgba(255, 255, 255, .97);
+    padding: 50px 45px;
+    border-radius: 28px;
+    box-shadow: 0 25px 70px rgba(0, 0, 0, .30);
 }
 
-.login-container h1 {
-    margin-bottom: 10px;
-    color: #1d4ed8;
-}
-
-.login-container p {
-    color: #666;
-    margin-bottom: 20px;
-}
-
-.login-container label {
-    display: block;
-    margin: 12px 0 6px;
-    font-weight: bold;
-}
-
-.login-container input {
-    width: 100%;
-    padding: 13px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-}
-
-.login-container button {
-    width: 100%;
-    margin-top: 20px;
-    padding: 13px;
-    background: #2563eb;
+.escolha-logo {
+    width: 90px;
+    height: 90px;
+    margin: 0 auto 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
     color: white;
-    border-radius: 8px;
-    font-weight: bold;
+    border-radius: 25px;
+    font-size: 45px;
+    box-shadow: 0 15px 30px rgba(37, 99, 235, .30);
 }
 
-#mensagemLogin {
-    color: #dc2626;
-    margin-top: 15px;
+.escolha-container h1 {
+    font-size: 34px;
+    margin-bottom: 10px;
+    color: #111827;
+}
+
+.escolha-container > p {
+    color: #64748b;
+    margin-bottom: 35px;
+}
+
+.escolha-acoes {
+    display: grid;
+    gap: 18px;
+}
+
+.btn-escolha {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 22px;
+    border: 2px solid #e5e7eb;
+    border-radius: 18px;
+    background: white;
+    text-align: left;
+    transition: .25s ease;
+}
+
+.btn-escolha > span {
+    width: 58px;
+    height: 58px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    font-size: 28px;
+}
+
+.btn-escolha strong {
+    display: block;
+    font-size: 18px;
+    color: #111827;
+    margin-bottom: 4px;
+}
+
+.btn-escolha small {
+    color: #64748b;
+    font-size: 13px;
+}
+
+.btn-escolha.cliente > span {
+    background: #dbeafe;
+}
+
+.btn-escolha.administrativo > span {
+    background: #ede9fe;
+}
+
+.btn-escolha:hover {
+    transform: translateY(-4px);
+    border-color: #2563eb;
+    box-shadow: 0 15px 30px rgba(15, 23, 42, .10);
 }
 
 
-/* ============================
-   ÁREA DO CLIENTE
-============================ */
+/* =====================================================
+   ÁREA CLIENTE - LOGIN
+===================================================== */
 
 .area-cliente {
     min-height: 100vh;
-    background: #f4f6f9;
-    padding: 30px 20px;
 }
 
-.cliente-container {
-    max-width: 1100px;
-    margin: 0 auto;
-}
-
-.cliente-cabecalho {
-    background: white;
-    padding: 25px;
-    border-radius: 15px;
+.cliente-login {
+    min-height: 100vh;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 18px;
-    margin-bottom: 20px;
-    box-shadow: 0 3px 15px rgba(0,0,0,0.06);
+    justify-content: center;
+    padding: 30px;
+    background: linear-gradient(135deg, #eff6ff, #f5f3ff);
 }
 
-.cliente-logo {
-    width: 55px;
-    height: 55px;
-    background: #2563eb;
-    color: white;
-    border-radius: 14px;
+.cliente-login-logo {
+    width: 80px;
+    height: 80px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 28px;
-    flex-shrink: 0;
-}
-
-.cliente-cabecalho h1 {
-    color: #1d4ed8;
-    margin-bottom: 6px;
-}
-
-.cliente-cabecalho p {
-    color: #666;
-    line-height: 1.5;
-}
-
-
-/* ============================
-   MENU DO CLIENTE
-============================ */
-
-.cliente-menu {
-    background: white;
-    padding: 10px;
-    border-radius: 12px;
-    display: flex;
-    gap: 8px;
     margin-bottom: 20px;
-    box-shadow: 0 3px 15px rgba(0,0,0,0.06);
-}
-
-.cliente-menu-btn {
-    padding: 12px 18px;
-    background: transparent;
-    color: #555;
-    border-radius: 8px;
-    font-weight: bold;
-    transition: 0.2s;
-}
-
-.cliente-menu-btn:hover {
-    background: #f1f5f9;
-}
-
-.cliente-menu-btn.ativo {
-    background: #2563eb;
+    border-radius: 22px;
+    background: linear-gradient(135deg, #2563eb, #4f46e5);
     color: white;
+    font-size: 40px;
+    box-shadow: 0 15px 30px rgba(37, 99, 235, .25);
 }
 
+.cliente-login h1 {
+    font-size: 32px;
+    color: #111827;
+}
 
-/* ============================
-   CARD DO CLIENTE
-============================ */
+.cliente-login-subtitulo {
+    color: #64748b;
+    margin: 5px 0 25px;
+}
 
-.cliente-card {
+.cliente-login-card {
+    width: 100%;
+    max-width: 480px;
     background: white;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 3px 15px rgba(0,0,0,0.06);
+    border-radius: 24px;
+    padding: 35px;
+    box-shadow: 0 20px 50px rgba(15, 23, 42, .12);
 }
-
-
-/* ============================
-   TÍTULO
-============================ */
 
 .cliente-card-titulo {
-    margin-bottom: 25px;
-}
-
-.cliente-card-titulo > div {
     display: flex;
-    align-items: flex-start;
     gap: 15px;
+    margin-bottom: 28px;
 }
 
-.cliente-card-titulo > div > span {
-    width: 45px;
-    height: 45px;
-    background: #dbeafe;
-    color: #1d4ed8;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 23px;
-    flex-shrink: 0;
+.cliente-card-titulo > span {
+    font-size: 30px;
 }
 
 .cliente-card-titulo h2 {
-    color: #222;
-    margin-bottom: 5px;
+    font-size: 21px;
 }
 
 .cliente-card-titulo p {
-    color: #666;
-    line-height: 1.5;
-}
-
-
-/* ============================
-   FORMULÁRIO DO CLIENTE
-============================ */
-
-.cliente-form-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 18px;
+    color: #64748b;
+    font-size: 14px;
 }
 
 .campo-cliente {
-    margin-bottom: 18px;
+    margin-bottom: 20px;
 }
 
 .campo-cliente label {
     display: block;
-    font-weight: bold;
-    margin-bottom: 7px;
-    color: #333;
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 8px;
+    color: #374151;
 }
 
 .campo-cliente input,
 .campo-cliente select,
-.campo-cliente textarea {
+.campo-cliente textarea,
+.cliente-filtros input,
+.cliente-filtros select {
     width: 100%;
-    padding: 12px 13px;
-    border: 1px solid #d5d9df;
-    border-radius: 8px;
+    border: 1px solid #dbe2ea;
+    border-radius: 12px;
+    padding: 13px 15px;
+    background: #fff;
+    color: #1f2937;
     outline: none;
-    background: white;
-    color: #222;
-    font-size: 14px;
-    transition: 0.2s;
+    transition: .2s;
+}
+
+.campo-cliente textarea {
+    resize: vertical;
 }
 
 .campo-cliente input:focus,
 .campo-cliente select:focus,
-.campo-cliente textarea:focus {
+.campo-cliente textarea:focus,
+.cliente-filtros input:focus,
+.cliente-filtros select:focus {
     border-color: #2563eb;
-    box-shadow: 0 0 0 3px rgba(37,99,235,0.10);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, .10);
 }
 
-.campo-cliente textarea {
-    min-height: 140px;
-    resize: vertical;
+.btn-cliente-principal {
+    border: none;
+    background: linear-gradient(135deg, #2563eb, #4f46e5);
+    color: white;
+    padding: 13px 20px;
+    border-radius: 12px;
+    font-weight: 700;
+    transition: .2s;
+}
+
+.btn-cliente-principal:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(37, 99, 235, .25);
+}
+
+#formLoginCliente .btn-cliente-principal {
+    width: 100%;
+}
+
+.btn-voltar {
+    width: 100%;
+    margin-top: 18px;
+    padding: 12px;
+    border: none;
+    background: #f1f5f9;
+    border-radius: 12px;
+    color: #475569;
+    font-weight: 600;
+}
+
+.btn-voltar:hover {
+    background: #e2e8f0;
+}
+
+.mensagem-login-cliente {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.cliente-login-seguranca {
+    margin-top: 18px;
+    color: #64748b;
+    font-size: 13px;
+    text-align: center;
+}
+
+.cliente-login-footer {
+    margin-top: 25px;
+    color: #94a3b8;
+    font-size: 13px;
+}
+
+
+/* =====================================================
+   PAINEL CLIENTE
+===================================================== */
+
+.painel-cliente {
+    min-height: 100vh;
+    display: flex;
+    background: #f8fafc;
+}
+
+.cliente-menu-lateral {
+    width: 255px;
+    min-height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    background: #0f172a;
+    color: white;
+    padding: 22px 15px;
+    z-index: 10;
+}
+
+.cliente-menu-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 10px 25px;
+    border-bottom: 1px solid rgba(255,255,255,.10);
+}
+
+.cliente-menu-icone {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    border-radius: 12px;
+    font-size: 21px;
+}
+
+.cliente-menu-logo strong {
+    display: block;
+    font-size: 14px;
+}
+
+.cliente-menu-logo small {
+    color: #94a3b8;
+}
+
+.cliente-navegacao {
+    padding-top: 25px;
+    display: grid;
+    gap: 7px;
+}
+
+.cliente-menu-link,
+.cliente-menu-sair {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    border: none;
+    background: transparent;
+    color: #cbd5e1;
+    padding: 13px 15px;
+    border-radius: 11px;
+    text-align: left;
+    font-weight: 600;
+}
+
+.cliente-menu-link:hover,
+.cliente-menu-link.ativo {
+    color: white;
+    background: rgba(59, 130, 246, .20);
+}
+
+.cliente-menu-rodape {
+    margin-top: auto;
+}
+
+.cliente-menu-sair:hover {
+    background: rgba(239, 68, 68, .15);
+    color: #fca5a5;
+}
+
+.cliente-conteudo {
+    width: calc(100% - 255px);
+    margin-left: 255px;
+    min-height: 100vh;
+}
+
+.cliente-topo {
+    min-height: 85px;
+    background: white;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 18px 35px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cliente-topo h1 {
+    font-size: 23px;
+}
+
+.cliente-topo p {
+    color: #64748b;
+    font-size: 14px;
+}
+
+.cliente-topo-usuario {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.cliente-avatar {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #dbeafe;
+}
+
+.cliente-topo-usuario strong {
+    display: block;
+    font-size: 14px;
+}
+
+.cliente-topo-usuario small {
+    color: #64748b;
+}
+
+
+/* =====================================================
+   TELAS CLIENTE
+===================================================== */
+
+.cliente-tela {
+    padding: 35px;
+}
+
+.cliente-titulo-pagina {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 28px;
+}
+
+.cliente-titulo-pagina h2 {
+    font-size: 25px;
+}
+
+.cliente-titulo-pagina p {
+    color: #64748b;
+    margin-top: 4px;
+}
+
+.btn-novo-chamado {
+    white-space: nowrap;
+}
+
+.cliente-dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 25px;
+}
+
+.cliente-dashboard-card {
+    background: white;
+    padding: 22px;
+    border-radius: 17px;
+    border: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 5px 20px rgba(15,23,42,.04);
+}
+
+.cliente-card-icone {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 13px;
+    background: #eff6ff;
+    font-size: 23px;
+}
+
+.cliente-dashboard-card span {
+    display: block;
+    color: #64748b;
+    font-size: 13px;
+}
+
+.cliente-dashboard-card strong {
+    display: block;
+    font-size: 26px;
+    margin-top: 2px;
+}
+
+.cliente-card {
+    background: white;
+    border-radius: 18px;
+    border: 1px solid #e5e7eb;
+    padding: 25px;
+    box-shadow: 0 5px 20px rgba(15,23,42,.04);
+}
+
+.cliente-card-cabecalho {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.cliente-card-cabecalho h2 {
+    font-size: 19px;
+}
+
+.cliente-card-cabecalho p {
+    color: #64748b;
+    font-size: 13px;
+}
+
+.btn-cliente-secundario {
+    border: 1px solid #dbe2ea;
+    background: white;
+    color: #374151;
+    padding: 10px 15px;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+.btn-cliente-secundario:hover {
+    background: #f8fafc;
+}
+
+.cliente-sem-chamados {
+    text-align: center;
+    padding: 50px 20px;
+    color: #64748b;
+}
+
+.cliente-sem-chamados span {
+    font-size: 40px;
+}
+
+.cliente-sem-chamados h3 {
+    color: #334155;
+    margin: 10px 0 5px;
+}
+
+
+/* =====================================================
+   FORMULÁRIO CLIENTE
+===================================================== */
+
+.cliente-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0 20px;
 }
 
 .campo-largo {
     grid-column: span 2;
 }
 
-
-/* ============================
-   AVISO
-============================ */
-
 .cliente-aviso {
     display: flex;
+    gap: 10px;
     align-items: center;
-    gap: 12px;
+    padding: 14px;
     background: #eff6ff;
-    border: 1px solid #dbeafe;
-    padding: 14px 16px;
-    border-radius: 10px;
-    margin: 5px 0 20px;
-}
-
-.cliente-aviso span {
-    font-size: 22px;
-    flex-shrink: 0;
-}
-
-.cliente-aviso p {
     color: #1e40af;
-    font-size: 14px;
-    line-height: 1.5;
+    border-radius: 12px;
+    margin: 10px 0 22px;
+    font-size: 13px;
 }
-
-
-/* ============================
-   BOTÕES DO CLIENTE
-============================ */
 
 .cliente-acoes {
     display: flex;
     justify-content: flex-end;
-    gap: 10px;
-    padding-top: 5px;
-}
-
-.btn-cliente-secundario {
-    padding: 12px 20px;
-    background: #e5e7eb;
-    color: #374151;
-    border-radius: 8px;
-    font-weight: bold;
-}
-
-.btn-cliente-secundario:hover {
-    background: #d1d5db;
-}
-
-.btn-cliente-principal {
-    padding: 12px 20px;
-    background: #2563eb;
-    color: white;
-    border-radius: 8px;
-    font-weight: bold;
-}
-
-.btn-cliente-principal:hover {
-    background: #1d4ed8;
-}
-
-
-/* ============================
-   MEUS CHAMADOS
-============================ */
-
-.cliente-sem-chamados {
-    text-align: center;
-    padding: 45px 20px;
-    color: #666;
-}
-
-.cliente-sem-chamados span {
-    display: block;
-    font-size: 45px;
-    margin-bottom: 10px;
-}
-
-.cliente-sem-chamados h3 {
-    margin-bottom: 8px;
-    color: #333;
-}
-
-.cliente-sem-chamados p {
-    color: #666;
-    line-height: 1.5;
-}
-
-
-/* ============================
-   RODAPÉ DO CLIENTE
-============================ */
-
-.cliente-footer {
-    margin-top: 25px;
-    padding: 20px 5px;
-    text-align: center;
-    color: #666;
-}
-
-.cliente-footer p {
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-
-.cliente-footer span {
-    font-size: 13px;
-}
-
-
-/* ============================
-   SISTEMA
-============================ */
-
-#sistema {
-    max-width: 1400px;
-    margin: auto;
-    padding: 25px;
-}
-
-
-/* ============================
-   TOPO
-============================ */
-
-.topo {
-    background: white;
-    padding: 25px;
-    border-radius: 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 20px;
-    margin-bottom: 25px;
-    box-shadow: 0 3px 15px rgba(0,0,0,0.06);
-}
-
-.topo h1 {
-    color: #1d4ed8;
-    margin-bottom: 6px;
-}
-
-.topo p {
-    color: #666;
-}
-
-#btnSair {
-    background: #dc2626;
-    color: white;
-    padding: 11px 18px;
-    border-radius: 8px;
-    font-weight: bold;
-}
-
-
-/* ============================
-   LOGO
-============================ */
-
-.logo-empresa {
-    display: flex;
-    align-items: center;
     gap: 12px;
 }
 
-.icone-logo {
-    width: 50px;
-    height: 50px;
-    background: #2563eb;
-    color: white;
-    border-radius: 12px;
+
+/* =====================================================
+   FILTROS
+===================================================== */
+
+.cliente-filtros {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+
+/* =====================================================
+   PERFIL
+===================================================== */
+
+.perfil-card {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.perfil-avatar {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 25px;
+    background: #dbeafe;
+    font-size: 40px;
 }
 
-.logo-empresa strong {
+.perfil-informacoes {
+    display: grid;
+    gap: 18px;
+}
+
+.perfil-informacoes span {
+    display: block;
+    color: #64748b;
+    font-size: 13px;
+}
+
+.perfil-informacoes strong {
+    display: block;
+    margin-top: 3px;
+}
+
+
+/* =====================================================
+   RODAPÉ CLIENTE
+===================================================== */
+
+.cliente-footer {
+    padding: 25px 35px;
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid #e5e7eb;
+    color: #64748b;
+    font-size: 13px;
+}
+
+.cliente-footer strong {
+    display: block;
+    color: #334155;
+}
+
+.cliente-footer span {
     display: block;
 }
 
-.logo-empresa small {
-    color: #666;
+
+/* =====================================================
+   SISTEMA ADMINISTRATIVO
+===================================================== */
+
+#sistema {
+    min-height: 100vh;
+    background: #f1f5f9;
+    padding-left: 250px;
 }
 
 
-/* ============================
-   MENU LATERAL
-============================ */
+/* =====================================================
+   MENU ADMIN
+===================================================== */
 
 .menu-lateral {
-    background: white;
-    padding: 20px;
-    border-radius: 15px;
-    margin-bottom: 25px;
-    box-shadow: 0 3px 15px rgba(0,0,0,0.06);
+    width: 250px;
+    min-height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    background: #111827;
+    color: white;
+    padding: 20px 15px;
+    z-index: 20;
 }
 
 .menu-logo {
     display: flex;
     align-items: center;
     gap: 12px;
-    margin-bottom: 20px;
+    padding: 10px;
+    margin-bottom: 25px;
 }
 
 .menu-logo > span {
-    width: 45px;
-    height: 45px;
-    background: #2563eb;
-    color: white;
-    border-radius: 10px;
+    width: 43px;
+    height: 43px;
     display: flex;
     align-items: center;
     justify-content: center;
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    border-radius: 12px;
     font-size: 22px;
 }
 
 .menu-logo strong {
     display: block;
+    font-size: 14px;
 }
 
 .menu-logo small {
-    color: #666;
+    color: #94a3b8;
 }
 
 .menu-navegacao {
+    display: grid;
+    gap: 5px;
+}
+
+.menu-link {
     display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.menu-navegacao a {
-    display: block;
-    width: 100%;
-    box-sizing: border-box;
-    padding: 12px 14px;
+    align-items: center;
+    gap: 11px;
+    padding: 12px 13px;
+    color: #cbd5e1;
     border-radius: 10px;
-    color: inherit;
-    text-decoration: none;
     font-size: 14px;
-    transition: 0.2s;
+    font-weight: 600;
+    transition: .2s;
 }
 
-.menu-navegacao a:hover {
-    background: #f1f5f9;
-    transform: translateX(3px);
-}
-
-.menu-navegacao a.ativo {
+.menu-link:hover,
+.menu-link.ativo {
     background: #2563eb;
     color: white;
 }
 
 
-/* ============================
-   DASHBOARD
-============================ */
+/* =====================================================
+   TOPO ADMIN
+===================================================== */
+
+.topo {
+    min-height: 85px;
+    padding: 15px 30px;
+    background: white;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 25px;
+}
+
+.logo-empresa {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.icone-logo {
+    width: 43px;
+    height: 43px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #dbeafe;
+    border-radius: 12px;
+    font-size: 22px;
+}
+
+.logo-empresa strong {
+    display: block;
+    font-size: 14px;
+}
+
+.logo-empresa small {
+    color: #64748b;
+}
+
+.topo h1 {
+    font-size: 22px;
+}
+
+.topo p {
+    color: #64748b;
+    font-size: 13px;
+}
+
+#btnSair {
+    border: none;
+    padding: 10px 16px;
+    border-radius: 10px;
+    background: #fee2e2;
+    color: #b91c1c;
+    font-weight: 700;
+}
+
+#btnSair:hover {
+    background: #fecaca;
+}
+
+
+/* =====================================================
+   DASHBOARD ADMIN
+===================================================== */
 
 .dashboard {
+    padding: 30px;
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: 15px;
-    margin-bottom: 25px;
+    gap: 18px;
 }
 
 .card-dashboard {
     background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
     padding: 20px;
-    border-radius: 14px;
     display: flex;
     align-items: center;
     gap: 15px;
-    box-shadow: 0 3px 15px rgba(0,0,0,0.06);
+    box-shadow: 0 5px 20px rgba(15,23,42,.04);
 }
 
 .card-dashboard > span {
-    font-size: 30px;
+    font-size: 27px;
 }
 
 .card-dashboard h3 {
-    font-size: 14px;
-    color: #666;
-    margin-bottom: 6px;
+    font-size: 12px;
+    color: #64748b;
+    font-weight: 600;
 }
 
 .card-dashboard strong {
-    font-size: 28px;
-    color: #1d4ed8;
+    display: block;
+    font-size: 27px;
+    margin-top: 3px;
 }
 
 
-/* ============================
-   PRIORIDADES
-============================ */
+/* =====================================================
+   SEÇÕES ADMIN
+===================================================== */
 
 .prioridades,
 .novo-chamado,
 .atendentes,
+.sla,
+.notificacoes,
 .chamados,
+.historico-geral,
 .relatorio,
-.recentes {
+.recentes,
+.configuracoes {
+    margin: 0 30px 25px;
     background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 18px;
     padding: 25px;
-    border-radius: 15px;
-    margin-bottom: 25px;
-    box-shadow: 0 3px 15px rgba(0,0,0,0.06);
+    box-shadow: 0 5px 20px rgba(15,23,42,.04);
 }
 
 .prioridades h2,
 .novo-chamado h2,
-.atendentes h2,
-.chamados h2,
-.relatorio h2,
 .recentes h2 {
+    font-size: 20px;
     margin-bottom: 20px;
 }
 
@@ -595,38 +896,40 @@ button {
 
 .prioridades-grid > div {
     padding: 20px;
-    border-radius: 12px;
+    border-radius: 14px;
     background: #f8fafc;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+    text-align: center;
 }
 
 .prioridades-grid strong {
+    display: block;
     font-size: 30px;
 }
 
 .prioridades-grid span {
-    color: #555;
+    color: #64748b;
 }
 
 
-/* ============================
-   FORMULÁRIO ADMIN
-============================ */
+/* =====================================================
+   FORM ADMIN
+===================================================== */
 
 .form-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 18px;
+    margin-bottom: 18px;
 }
 
 .novo-chamado label,
-.modal-conteudo label {
+.modal-conteudo label,
+.configuracao-item label {
     display: block;
-    font-weight: bold;
     margin-bottom: 7px;
-    margin-top: 12px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #374151;
 }
 
 .novo-chamado input,
@@ -634,64 +937,130 @@ button {
 .novo-chamado textarea,
 .modal-conteudo input,
 .modal-conteudo select,
-.modal-conteudo textarea {
+.modal-conteudo textarea,
+.configuracao-item input {
     width: 100%;
-    padding: 12px;
-    border: 1px solid #d5d9df;
-    border-radius: 8px;
+    border: 1px solid #dbe2ea;
+    border-radius: 10px;
+    padding: 12px 13px;
     outline: none;
 }
 
-.novo-chamado textarea,
-.modal-conteudo textarea {
-    min-height: 110px;
+.novo-chamado textarea {
+    min-height: 130px;
     resize: vertical;
+    margin-bottom: 15px;
+}
+
+.novo-chamado input:focus,
+.novo-chamado select:focus,
+.novo-chamado textarea:focus,
+.modal-conteudo input:focus,
+.modal-conteudo select:focus,
+.modal-conteudo textarea:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 4px rgba(37,99,235,.10);
 }
 
 .novo-chamado form > button,
 .modal-conteudo form > button,
 .modal-conteudo > button:not(.fechar-modal) {
-    margin-top: 18px;
-    padding: 12px 20px;
+    border: none;
+    padding: 12px 18px;
     background: #2563eb;
     color: white;
-    border-radius: 8px;
-    font-weight: bold;
+    border-radius: 10px;
+    font-weight: 700;
 }
 
 
-/* ============================
+/* =====================================================
    CABEÇALHOS
-============================ */
+===================================================== */
 
 .cabecalho-atendentes,
+.cabecalho-sla,
+.cabecalho-notificacoes,
 .cabecalho-chamados,
-.cabecalho-relatorio {
+.cabecalho-historico-geral,
+.cabecalho-relatorio,
+.cabecalho-configuracoes {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
     gap: 20px;
     margin-bottom: 20px;
 }
 
+.cabecalho-atendentes h2,
+.cabecalho-sla h2,
+.cabecalho-notificacoes h2,
+.cabecalho-chamados h2,
+.cabecalho-historico-geral h2,
+.cabecalho-relatorio h2,
+.cabecalho-configuracoes h2 {
+    font-size: 20px;
+}
+
 .cabecalho-atendentes p,
-.cabecalho-relatorio p {
-    color: #666;
+.cabecalho-sla p,
+.cabecalho-notificacoes p,
+.cabecalho-historico-geral p,
+.cabecalho-relatorio p,
+.cabecalho-configuracoes p {
+    color: #64748b;
+    font-size: 13px;
 }
 
 .cabecalho-atendentes button,
-.cabecalho-relatorio button {
+.cabecalho-notificacoes button,
+.cabecalho-historico-geral button,
+.cabecalho-relatorio button,
+#btnSalvarConfiguracoes {
+    border: none;
     background: #2563eb;
     color: white;
-    padding: 12px 18px;
-    border-radius: 8px;
-    font-weight: bold;
+    padding: 11px 16px;
+    border-radius: 10px;
+    font-weight: 700;
 }
 
 
-/* ============================
-   FILTROS
-============================ */
+/* =====================================================
+   SLA
+===================================================== */
+
+.sla-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+}
+
+.sla-card {
+    text-align: center;
+    padding: 25px;
+    border-radius: 14px;
+    background: #f8fafc;
+}
+
+.sla-card span {
+    display: block;
+    font-size: 28px;
+}
+
+.sla-card strong {
+    display: block;
+    font-size: 30px;
+}
+
+.sla-card small {
+    color: #64748b;
+}
+
+
+/* =====================================================
+   FILTROS ADMIN
+===================================================== */
 
 .filtros {
     display: flex;
@@ -701,360 +1070,20 @@ button {
 
 .filtros input,
 .filtros select {
-    padding: 11px;
-    border: 1px solid #d5d9df;
-    border-radius: 8px;
-}
-
-
-/* ============================
-   ATENDENTES
-============================ */
-
-#listaAtendentes {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
-}
-
-.card-atendente {
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
-    padding: 18px;
-    background: #f8fafc;
-}
-
-.card-atendente h3 {
-    margin-bottom: 10px;
-}
-
-.card-atendente p {
-    color: #666;
-    margin: 6px 0;
-}
-
-.acoes-atendente {
-    display: flex;
-    gap: 8px;
-    margin-top: 15px;
-}
-
-.editar-atendente {
-    background: #f59e0b;
-    color: white;
-    padding: 8px 12px;
-    border-radius: 6px;
-}
-
-.excluir-atendente {
-    background: #dc2626;
-    color: white;
-    padding: 8px 12px;
-    border-radius: 6px;
-}
-
-
-/* ============================
-   CHAMADOS
-============================ */
-
-.card-chamado {
-    display: grid;
-    grid-template-columns: 1fr 300px;
-    gap: 25px;
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
-    padding: 20px;
-    margin-bottom: 15px;
-    background: #fafafa;
-}
-
-.card-chamado h3 {
-    color: #1d4ed8;
-    margin-bottom: 12px;
-}
-
-.card-chamado p {
-    margin: 8px 0;
-    line-height: 1.5;
-}
-
-.card-chamado select {
-    width: 100%;
-    padding: 9px;
-    margin: 8px 0 12px;
-    border: 1px solid #ddd;
-    border-radius: 7px;
-}
-
-.card-chamado button {
-    padding: 9px 12px;
-    border-radius: 7px;
-    margin: 4px;
-    background: #dc2626;
-    color: white;
-}
-
-.card-chamado .btn-detalhes {
-    background: #2563eb;
-}
-
-.card-chamado .btn-editar {
-    background: #f59e0b;
-}
-
-.prioridade,
-.status {
-    display: inline-block;
-    padding: 5px 9px;
-    border-radius: 20px;
-    font-size: 13px;
-    font-weight: bold;
-}
-
-.prioridade-alta {
-    background: #fee2e2;
-    color: #b91c1c;
-}
-
-.prioridade-media {
-    background: #fef3c7;
-    color: #92400e;
-}
-
-.prioridade-baixa {
-    background: #dcfce7;
-    color: #166534;
-}
-
-.status-aberto {
-    background: #dbeafe;
-    color: #1d4ed8;
-}
-
-.status-em-andamento {
-    background: #fef3c7;
-    color: #92400e;
-}
-
-.status-resolvido {
-    background: #dcfce7;
-    color: #166534;
-}
-
-
-/* ============================
-   SLA
-============================ */
-
-.sla {
-    background: white;
-    padding: 25px;
-    border-radius: 15px;
-    margin-bottom: 25px;
-    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.06);
-}
-
-.cabecalho-sla {
-    margin-bottom: 20px;
-}
-
-.cabecalho-sla h2 {
-    margin-bottom: 6px;
-}
-
-.cabecalho-sla p {
-    color: #666;
-}
-
-.sla-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
-}
-
-.sla-card {
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
-    padding: 22px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.sla-card span {
-    font-size: 28px;
-}
-
-.sla-card strong {
-    font-size: 30px;
-    color: #1d4ed8;
-}
-
-.sla-card small {
-    color: #666;
-}
-
-
-/* ============================
-   NOTIFICAÇÕES
-============================ */
-
-.notificacoes {
-    background: white;
-    padding: 25px;
-    border-radius: 15px;
-    margin-bottom: 25px;
-    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.06);
-}
-
-.cabecalho-notificacoes {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 20px;
-    margin-bottom: 20px;
-}
-
-.cabecalho-notificacoes h2 {
-    margin-bottom: 6px;
-}
-
-.cabecalho-notificacoes p {
-    color: #666;
-}
-
-.cabecalho-notificacoes button {
-    background: #dc2626;
-    color: white;
-    padding: 10px 16px;
-    border-radius: 8px;
-    font-weight: bold;
-}
-
-.notificacao {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    padding: 15px;
-    margin-bottom: 10px;
+    border: 1px solid #dbe2ea;
+    padding: 10px 12px;
     border-radius: 10px;
-    background: #f8fafc;
-    border-left: 5px solid #2563eb;
+    outline: none;
 }
 
-.notificacao-urgente {
-    border-left-color: #dc2626;
-}
-
-.notificacao-atencao {
-    border-left-color: #f59e0b;
-}
-
-.notificacao-icone {
-    font-size: 25px;
-}
-
-.notificacao-conteudo {
-    flex: 1;
-}
-
-.notificacao-conteudo strong {
-    display: block;
-    margin-bottom: 5px;
-}
-
-.notificacao-conteudo small {
-    color: #666;
-}
-
-.sem-notificacoes {
-    text-align: center;
-    padding: 25px;
-    color: #666;
+.filtros input {
+    min-width: 230px;
 }
 
 
-/* ============================
-   HISTÓRICO GERAL
-============================ */
-
-.historico-geral {
-    background: white;
-    padding: 25px;
-    border-radius: 15px;
-    margin-bottom: 25px;
-    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.06);
-}
-
-.cabecalho-historico-geral {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 20px;
-    margin-bottom: 20px;
-}
-
-.cabecalho-historico-geral h2 {
-    margin-bottom: 6px;
-}
-
-.cabecalho-historico-geral p {
-    color: #666;
-}
-
-.cabecalho-historico-geral button {
-    background: #dc2626;
-    color: white;
-    padding: 10px 16px;
-    border-radius: 8px;
-    font-weight: bold;
-}
-
-.item-historico-geral {
-    display: flex;
-    align-items: flex-start;
-    gap: 15px;
-    padding: 15px;
-    margin-bottom: 10px;
-    background: #f8fafc;
-    border-radius: 10px;
-    border-left: 4px solid #2563eb;
-}
-
-.icone-historico-geral {
-    font-size: 24px;
-}
-
-.conteudo-historico-geral {
-    flex: 1;
-}
-
-.conteudo-historico-geral strong {
-    display: block;
-    margin-bottom: 5px;
-}
-
-.conteudo-historico-geral p {
-    margin-bottom: 5px;
-}
-
-.conteudo-historico-geral small {
-    color: #666;
-}
-
-.sem-historico-geral {
-    text-align: center;
-    padding: 30px;
-    color: #666;
-}
-
-
-/* ============================
+/* =====================================================
    RELATÓRIO
-============================ */
+===================================================== */
 
 .relatorio-grid {
     display: grid;
@@ -1063,521 +1092,393 @@ button {
 }
 
 .relatorio-card {
-    background: #f8fafc;
-    padding: 20px;
-    border-radius: 12px;
+    padding: 22px;
     text-align: center;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+    background: #f8fafc;
+    border-radius: 14px;
 }
 
 .relatorio-card span {
+    display: block;
     font-size: 25px;
 }
 
 .relatorio-card strong {
+    display: block;
     font-size: 28px;
-    color: #1d4ed8;
 }
 
 .relatorio-card small {
-    color: #666;
+    color: #64748b;
 }
 
 
-/* ============================
-   RECENTES
-============================ */
+/* =====================================================
+   CONFIGURAÇÕES
+===================================================== */
 
-.chamado-recente {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px;
-    border-bottom: 1px solid #eee;
-    gap: 15px;
+.configuracoes-conteudo {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
 }
 
-.chamado-recente div {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-.chamado-recente small {
-    color: #666;
-}
-
-.mini-status {
-    padding: 6px 10px;
-    border-radius: 20px;
-    background: #dbeafe;
-    color: #1d4ed8;
-    font-size: 13px;
-    font-weight: bold;
+#btnSalvarConfiguracoes {
+    align-self: end;
 }
 
 
-/* ============================
+/* =====================================================
    MODAIS
-============================ */
+===================================================== */
 
 .modal {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.55);
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
     z-index: 1000;
+    background: rgba(15, 23, 42, .65);
+    padding: 30px;
+    overflow-y: auto;
 }
 
 .modal-conteudo {
-    position: relative;
     width: 100%;
     max-width: 650px;
-    max-height: 90vh;
-    overflow-y: auto;
-    background: white;
+    margin: 30px auto;
     padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    position: relative;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 25px 70px rgba(0,0,0,.25);
 }
 
 .fechar-modal {
     position: absolute;
     right: 18px;
     top: 15px;
-    background: transparent;
-    font-size: 30px;
-    color: #555;
+    width: 35px;
+    height: 35px;
+    border: none;
+    border-radius: 50%;
+    background: #f1f5f9;
+    font-size: 24px;
+    color: #475569;
 }
 
-.detalhe-item {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    padding: 10px 0;
-    border-bottom: 1px solid #eee;
+.fechar-modal:hover {
+    background: #e2e8f0;
 }
 
-.detalhe-item strong {
-    color: #1d4ed8;
+.modal-conteudo h2 {
+    margin-bottom: 20px;
 }
 
 .modal-conteudo hr {
     border: none;
-    border-top: 1px solid #ddd;
-    margin: 20px 0;
+    border-top: 1px solid #e5e7eb;
+    margin: 25px 0;
 }
 
-.historico-item {
-    padding: 12px;
-    background: #f8fafc;
-    border-radius: 8px;
-    margin: 10px 0;
-}
-
-.historico-item small {
-    color: #666;
+.modal-conteudo textarea {
+    min-height: 100px;
+    resize: vertical;
+    margin-bottom: 15px;
 }
 
 .acoes-edicao {
     display: flex;
+    justify-content: flex-end;
     gap: 10px;
+    margin-top: 20px;
 }
 
 .acoes-edicao button:last-child {
-    background: #6b7280;
+    background: #e2e8f0;
+    color: #334155;
 }
 
 
-/* ============================
-   VAZIOS
-============================ */
+/* =====================================================
+   LISTAS / CARDS GERADOS PELO JAVASCRIPT
+===================================================== */
 
-.sem-chamados,
-.sem-atendentes,
-.sem-recentes {
-    text-align: center;
-    padding: 30px;
-    color: #666;
+#listaChamados,
+#listaMeusChamados,
+#listaAtendentes,
+#listaNotificacoes,
+#listaNotificacoesCliente,
+#listaHistoricoGeral,
+#listaHistoricoCliente,
+#chamadosRecentes,
+#clienteChamadosRecentes {
+    display: grid;
+    gap: 12px;
+}
+
+.chamado-card,
+.atendente-card,
+.notificacao-card,
+.historico-card,
+.recente-card {
+    padding: 18px;
+    border: 1px solid #e5e7eb;
+    border-radius: 13px;
+    background: #fff;
+    transition: .2s;
+}
+
+.chamado-card:hover,
+.atendente-card:hover,
+.notificacao-card:hover,
+.historico-card:hover,
+.recente-card:hover {
+    border-color: #bfdbfe;
+    box-shadow: 0 8px 20px rgba(15,23,42,.06);
 }
 
 
-/* ============================
-   CONFIGURAÇÕES
-============================ */
+/* =====================================================
+   RESPONSIVIDADE
+===================================================== */
 
-.configuracoes {
-    background: white;
-    padding: 25px;
-    border-radius: 15px;
-    margin-bottom: 25px;
-    box-shadow: 0 3px 15px rgba(0,0,0,0.06);
-}
-
-.cabecalho-configuracoes {
-    margin-bottom: 20px;
-}
-
-.cabecalho-configuracoes h2 {
-    margin-bottom: 6px;
-}
-
-.cabecalho-configuracoes p {
-    color: #666;
-}
-
-.configuracoes-conteudo {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.configuracao-item {
-    margin-bottom: 10px;
-}
-
-.configuracao-item label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 7px;
-}
-
-.configuracao-item input {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #d5d9df;
-    border-radius: 8px;
-}
-
-#btnSalvarConfiguracoes {
-    width: fit-content;
-    padding: 12px 20px;
-    background: #2563eb;
-    color: white;
-    border-radius: 8px;
-    font-weight: bold;
-    margin-top: 5px;
-}
-
-
-/* ============================
-   RODAPÉ
-============================ */
-
-.rodape {
-    margin-top: 40px;
-    padding: 25px 30px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 20px;
-    border-top: 1px solid #e5e7eb;
-    font-size: 14px;
-}
-
-.rodape strong {
-    font-size: 16px;
-}
-
-.rodape p {
-    margin: 6px 0;
-}
-
-.rodape small {
-    font-size: 12px;
-}
-
-
-/* ============================
-   MODO ESCURO
-============================ */
-
-body.modo-escuro {
-    background: #111827;
-    color: #f3f4f6;
-}
-
-body.modo-escuro .topo,
-body.modo-escuro .card-dashboard,
-body.modo-escuro .prioridades,
-body.modo-escuro .novo-chamado,
-body.modo-escuro .atendentes,
-body.modo-escuro .sla,
-body.modo-escuro .notificacoes,
-body.modo-escuro .chamados,
-body.modo-escuro .historico-geral,
-body.modo-escuro .relatorio,
-body.modo-escuro .recentes,
-body.modo-escuro .configuracoes,
-body.modo-escuro .menu-lateral,
-body.modo-escuro .modal-conteudo {
-    background: #1f2937;
-    color: #f3f4f6;
-}
-
-body.modo-escuro input,
-body.modo-escuro select,
-body.modo-escuro textarea {
-    background: #111827;
-    color: #f3f4f6;
-    border-color: #374151;
-}
-
-body.modo-escuro input::placeholder,
-body.modo-escuro textarea::placeholder {
-    color: #9ca3af;
-}
-
-body.modo-escuro h1,
-body.modo-escuro h2,
-body.modo-escuro h3,
-body.modo-escuro p,
-body.modo-escuro span,
-body.modo-escuro small,
-body.modo-escuro label {
-    color: inherit;
-}
-
-body.modo-escuro .menu-navegacao a:hover {
-    background: #374151;
-}
-
-body.modo-escuro .rodape {
-    border-color: #374151;
-}
-
-
-/* ============================
-   MODO ESCURO - ÁREA CLIENTE
-============================ */
-
-body.modo-escuro .area-cliente {
-    background: #111827;
-}
-
-body.modo-escuro .cliente-cabecalho,
-body.modo-escuro .cliente-menu,
-body.modo-escuro .cliente-card {
-    background: #1f2937;
-    color: #f3f4f6;
-}
-
-body.modo-escuro .cliente-cabecalho h1,
-body.modo-escuro .cliente-card-titulo h2 {
-    color: #f3f4f6;
-}
-
-body.modo-escuro .cliente-cabecalho p,
-body.modo-escuro .cliente-card-titulo p,
-body.modo-escuro .cliente-footer,
-body.modo-escuro .cliente-sem-chamados p {
-    color: #9ca3af;
-}
-
-body.modo-escuro .cliente-menu-btn {
-    color: #d1d5db;
-}
-
-body.modo-escuro .cliente-menu-btn:hover {
-    background: #374151;
-}
-
-body.modo-escuro .campo-cliente label {
-    color: #f3f4f6;
-}
-
-body.modo-escuro .campo-cliente input,
-body.modo-escuro .campo-cliente select,
-body.modo-escuro .campo-cliente textarea {
-    background: #111827;
-    color: #f3f4f6;
-    border-color: #374151;
-}
-
-body.modo-escuro .cliente-aviso {
-    background: #172554;
-    border-color: #1e3a8a;
-}
-
-body.modo-escuro .cliente-aviso p {
-    color: #bfdbfe;
-}
-
-
-/* ============================
-   RESPONSIVO
-============================ */
-
-@media (max-width: 1000px) {
+@media (max-width: 1200px) {
 
     .dashboard {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .cliente-dashboard-grid {
         grid-template-columns: repeat(2, 1fr);
     }
 
     .relatorio-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .form-grid {
         grid-template-columns: repeat(2, 1fr);
     }
 
-    #listaAtendentes {
-        grid-template-columns: repeat(2, 1fr);
+    .configuracoes-conteudo {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+
+@media (max-width: 900px) {
+
+    .cliente-menu-lateral,
+    .menu-lateral {
+        width: 220px;
+    }
+
+    .cliente-conteudo {
+        width: calc(100% - 220px);
+        margin-left: 220px;
+    }
+
+    #sistema {
+        padding-left: 220px;
+    }
+
+    .topo {
+        flex-wrap: wrap;
+    }
+
+    .cliente-topo {
+        flex-wrap: wrap;
+    }
+
+    .filtros {
+        width: 100%;
+    }
+
+    .filtros input,
+    .filtros select {
+        flex: 1;
     }
 }
 
 
 @media (max-width: 700px) {
 
-    #sistema {
-        padding: 12px;
-    }
-
-    .topo,
-    .cabecalho-atendentes,
-    .cabecalho-chamados,
-    .cabecalho-relatorio {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .dashboard,
-    .prioridades-grid,
-    .form-grid,
-    #listaAtendentes,
-    .relatorio-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .card-chamado {
-        grid-template-columns: 1fr;
-    }
-
-    .filtros {
-        flex-direction: column;
-    }
-
-    .filtros input,
-    .filtros select {
-        width: 100%;
-    }
-
-    .login-container {
-        padding: 25px;
-    }
-
-    .sla-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .cabecalho-notificacoes {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .notificacao {
-        align-items: flex-start;
-    }
-
-    .cabecalho-historico-geral {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .item-historico-geral {
-        align-items: flex-start;
-    }
-
-    .area-cliente {
+    .tela-escolha {
         padding: 15px;
     }
 
-    .cliente-cabecalho {
-        padding: 20px;
-        align-items: flex-start;
+    .escolha-container {
+        padding: 35px 20px;
     }
 
-    .cliente-cabecalho h1 {
-        font-size: 22px;
+    .escolha-container h1 {
+        font-size: 27px;
     }
 
-    .cliente-menu {
-        flex-direction: column;
-    }
-
-    .cliente-menu-btn {
+    .cliente-menu-lateral,
+    .menu-lateral {
+        position: relative;
         width: 100%;
-        text-align: left;
+        min-height: auto;
     }
 
-    .cliente-card {
+    .painel-cliente {
+        display: block;
+    }
+
+    .cliente-conteudo {
+        width: 100%;
+        margin-left: 0;
+    }
+
+    #sistema {
+        padding-left: 0;
+    }
+
+    .menu-lateral {
+        display: block;
+    }
+
+    .cliente-navegacao,
+    .menu-navegacao {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .cliente-menu-rodape {
+        margin-top: 15px;
+    }
+
+    .cliente-topo {
         padding: 20px;
     }
 
-    .cliente-form-grid {
+    .cliente-tela {
+        padding: 20px;
+    }
+
+    .dashboard {
+        padding: 20px;
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .prioridades,
+    .novo-chamado,
+    .atendentes,
+    .sla,
+    .notificacoes,
+    .chamados,
+    .historico-geral,
+    .relatorio,
+    .recentes,
+    .configuracoes {
+        margin: 0 20px 20px;
+        padding: 20px;
+    }
+
+    .cliente-dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .cliente-form-grid,
+    .form-grid,
+    .configuracoes-conteudo {
         grid-template-columns: 1fr;
     }
 
     .campo-largo {
-        grid-column: span 1;
+        grid-column: auto;
     }
 
-    .cliente-acoes {
-        flex-direction: column-reverse;
+    .cliente-filtros {
+        grid-template-columns: 1fr;
     }
 
-    .btn-cliente-secundario,
-    .btn-cliente-principal {
+    .sla-grid,
+    .prioridades-grid,
+    .relatorio-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .cliente-titulo-pagina,
+    .cabecalho-atendentes,
+    .cabecalho-sla,
+    .cabecalho-notificacoes,
+    .cabecalho-chamados,
+    .cabecalho-historico-geral,
+    .cabecalho-relatorio,
+    .cabecalho-configuracoes {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .btn-novo-chamado {
         width: 100%;
     }
-}
 
-
-/* ============================
-   IMPRESSÃO
-============================ */
-
-@media print {
-
-    .tela-login,
-    #btnSair,
-    .novo-chamado,
-    .atendentes,
-    .filtros,
-    .btn-detalhes,
-    .btn-editar,
-    .card-chamado button,
-    .cabecalho-relatorio button,
-    .menu-lateral,
-    .cliente-menu {
-        display: none !important;
+    .perfil-card {
+        flex-direction: column;
+        align-items: flex-start;
     }
 
-    body {
-        background: white;
+    .cliente-footer {
+        flex-direction: column;
+        gap: 10px;
+        padding: 20px;
     }
 
-    #sistema {
-        max-width: 100%;
-        padding: 0;
+    .topo {
+        padding: 20px;
+        align-items: flex-start;
     }
 
-    .relatorio,
-    .dashboard,
-    .prioridades,
-    .recentes,
-    .chamados,
-    .sla,
-    .notificacoes,
-    .historico-geral {
-        box-shadow: none;
-        border: 1px solid #ddd;
+    .topo > div:nth-child(2) {
+        order: 3;
+        width: 100%;
+    }
+
+    .modal {
+        padding: 10px;
+    }
+
+    .modal-conteudo {
+        margin: 10px auto;
+        padding: 22px;
     }
 }
 
 
-html {
-    scroll-behavior: smooth;
+@media (max-width: 450px) {
+
+    .cliente-navegacao,
+    .menu-navegacao {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard {
+        grid-template-columns: 1fr;
+    }
+
+    .btn-escolha {
+        padding: 16px;
+    }
+
+    .btn-escolha > span {
+        width: 45px;
+        height: 45px;
+        font-size: 22px;
+    }
+
+    .cliente-login-card {
+        padding: 22px;
+    }
+
+    .cliente-acoes,
+    .acoes-edicao {
+        flex-direction: column;
+    }
+
+    .cliente-acoes button,
+    .acoes-edicao button {
+        width: 100%;
+    }
 }
