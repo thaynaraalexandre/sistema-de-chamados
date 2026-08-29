@@ -1,0 +1,1117 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f6f9;
+    color: #222;
+}
+
+button,
+input,
+select,
+textarea {
+    font-family: inherit;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+}
+
+
+/* ============================
+   LOGIN
+============================ */
+
+.tela-login {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #1d4ed8, #2563eb);
+    padding: 20px;
+}
+
+.login-container {
+    width: 100%;
+    max-width: 420px;
+    background: white;
+    padding: 35px;
+    border-radius: 18px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.18);
+}
+
+.login-container h1 {
+    margin-bottom: 10px;
+    color: #1d4ed8;
+}
+
+.login-container p {
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.login-container label {
+    display: block;
+    margin: 12px 0 6px;
+    font-weight: bold;
+}
+
+.login-container input {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.login-container button {
+    width: 100%;
+    margin-top: 20px;
+    padding: 13px;
+    background: #2563eb;
+    color: white;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+#mensagemLogin {
+    color: #dc2626;
+    margin-top: 15px;
+}
+
+
+/* ============================
+   SISTEMA
+============================ */
+
+#sistema {
+    max-width: 1400px;
+    margin: auto;
+    padding: 25px;
+}
+
+
+/* ============================
+   TOPO
+============================ */
+
+.topo {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 3px 15px rgba(0,0,0,0.06);
+}
+
+.topo h1 {
+    color: #1d4ed8;
+    margin-bottom: 6px;
+}
+
+.topo p {
+    color: #666;
+}
+
+#btnSair {
+    background: #dc2626;
+    color: white;
+    padding: 11px 18px;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+
+/* ============================
+   DASHBOARD
+============================ */
+
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.card-dashboard {
+    background: white;
+    padding: 20px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 3px 15px rgba(0,0,0,0.06);
+}
+
+.card-dashboard > span {
+    font-size: 30px;
+}
+
+.card-dashboard h3 {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 6px;
+}
+
+.card-dashboard strong {
+    font-size: 28px;
+    color: #1d4ed8;
+}
+
+
+/* ============================
+   PRIORIDADES
+============================ */
+
+.prioridades,
+.novo-chamado,
+.atendentes,
+.chamados,
+.relatorio,
+.recentes {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    margin-bottom: 25px;
+    box-shadow: 0 3px 15px rgba(0,0,0,0.06);
+}
+
+.prioridades h2,
+.novo-chamado h2,
+.atendentes h2,
+.chamados h2,
+.relatorio h2,
+.recentes h2 {
+    margin-bottom: 20px;
+}
+
+.prioridades-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.prioridades-grid > div {
+    padding: 20px;
+    border-radius: 12px;
+    background: #f8fafc;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.prioridades-grid strong {
+    font-size: 30px;
+}
+
+.prioridades-grid span {
+    color: #555;
+}
+
+
+/* ============================
+   FORMULÁRIO
+============================ */
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+}
+
+.novo-chamado label,
+.modal-conteudo label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 7px;
+    margin-top: 12px;
+}
+
+.novo-chamado input,
+.novo-chamado select,
+.novo-chamado textarea,
+.modal-conteudo input,
+.modal-conteudo select,
+.modal-conteudo textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d5d9df;
+    border-radius: 8px;
+    outline: none;
+}
+
+.novo-chamado textarea,
+.modal-conteudo textarea {
+    min-height: 110px;
+    resize: vertical;
+}
+
+.novo-chamado form > button,
+.modal-conteudo form > button,
+.modal-conteudo > button:not(.fechar-modal) {
+    margin-top: 18px;
+    padding: 12px 20px;
+    background: #2563eb;
+    color: white;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+
+/* ============================
+   CABEÇALHOS
+============================ */
+
+.cabecalho-atendentes,
+.cabecalho-chamados,
+.cabecalho-relatorio {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.cabecalho-atendentes p,
+.cabecalho-relatorio p {
+    color: #666;
+}
+
+.cabecalho-atendentes button,
+.cabecalho-relatorio button {
+    background: #2563eb;
+    color: white;
+    padding: 12px 18px;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+
+/* ============================
+   FILTROS
+============================ */
+
+.filtros {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.filtros input,
+.filtros select {
+    padding: 11px;
+    border: 1px solid #d5d9df;
+    border-radius: 8px;
+}
+
+
+/* ============================
+   ATENDENTES
+============================ */
+
+#listaAtendentes {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.card-atendente {
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 18px;
+    background: #f8fafc;
+}
+
+.card-atendente h3 {
+    margin-bottom: 10px;
+}
+
+.card-atendente p {
+    color: #666;
+    margin: 6px 0;
+}
+
+.acoes-atendente {
+    display: flex;
+    gap: 8px;
+    margin-top: 15px;
+}
+
+.editar-atendente {
+    background: #f59e0b;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+}
+
+.excluir-atendente {
+    background: #dc2626;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+}
+
+
+/* ============================
+   CHAMADOS
+============================ */
+
+.card-chamado {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 25px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 15px;
+    background: #fafafa;
+}
+
+.card-chamado h3 {
+    color: #1d4ed8;
+    margin-bottom: 12px;
+}
+
+.card-chamado p {
+    margin: 8px 0;
+    line-height: 1.5;
+}
+
+.card-chamado select {
+    width: 100%;
+    padding: 9px;
+    margin: 8px 0 12px;
+    border: 1px solid #ddd;
+    border-radius: 7px;
+}
+
+.card-chamado button {
+    padding: 9px 12px;
+    border-radius: 7px;
+    margin: 4px;
+    background: #dc2626;
+    color: white;
+}
+
+.card-chamado .btn-detalhes {
+    background: #2563eb;
+}
+
+.card-chamado .btn-editar {
+    background: #f59e0b;
+}
+
+.prioridade,
+.status {
+    display: inline-block;
+    padding: 5px 9px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.prioridade-alta {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.prioridade-media {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.prioridade-baixa {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.status-aberto {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.status-em-andamento {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.status-resolvido {
+    background: #dcfce7;
+    color: #166534;
+}
+
+
+/* ============================
+   RELATÓRIO
+============================ */
+
+.relatorio-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 15px;
+}
+
+.relatorio-card {
+    background: #f8fafc;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.relatorio-card span {
+    font-size: 25px;
+}
+
+.relatorio-card strong {
+    font-size: 28px;
+    color: #1d4ed8;
+}
+
+.relatorio-card small {
+    color: #666;
+}
+
+
+/* ============================
+   RECENTES
+============================ */
+
+.chamado-recente {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    gap: 15px;
+}
+
+.chamado-recente div {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.chamado-recente small {
+    color: #666;
+}
+
+.mini-status {
+    padding: 6px 10px;
+    border-radius: 20px;
+    background: #dbeafe;
+    color: #1d4ed8;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+
+/* ============================
+   MODAIS
+============================ */
+
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 1000;
+}
+
+.modal-conteudo {
+    position: relative;
+    width: 100%;
+    max-width: 650px;
+    max-height: 90vh;
+    overflow-y: auto;
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+}
+
+.fechar-modal {
+    position: absolute;
+    right: 18px;
+    top: 15px;
+    background: transparent;
+    font-size: 30px;
+    color: #555;
+}
+
+.detalhe-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.detalhe-item strong {
+    color: #1d4ed8;
+}
+
+.modal-conteudo hr {
+    border: none;
+    border-top: 1px solid #ddd;
+    margin: 20px 0;
+}
+
+.historico-item {
+    padding: 12px;
+    background: #f8fafc;
+    border-radius: 8px;
+    margin: 10px 0;
+}
+
+.historico-item small {
+    color: #666;
+}
+
+.acoes-edicao {
+    display: flex;
+    gap: 10px;
+}
+
+.acoes-edicao button:last-child {
+    background: #6b7280;
+}
+
+
+/* ============================
+   VAZIOS
+============================ */
+
+.sem-chamados,
+.sem-atendentes,
+.sem-recentes {
+    text-align: center;
+    padding: 30px;
+    color: #666;
+}
+
+
+/* ============================
+   RESPONSIVO
+============================ */
+
+@media (max-width: 1000px) {
+
+    .dashboard {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .relatorio-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    #listaAtendentes {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+
+@media (max-width: 700px) {
+
+    #sistema {
+        padding: 12px;
+    }
+
+    .topo,
+    .cabecalho-atendentes,
+    .cabecalho-chamados,
+    .cabecalho-relatorio {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .dashboard,
+    .prioridades-grid,
+    .form-grid,
+    #listaAtendentes,
+    .relatorio-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .card-chamado {
+        grid-template-columns: 1fr;
+    }
+
+    .filtros {
+        flex-direction: column;
+    }
+
+    .filtros input,
+    .filtros select {
+        width: 100%;
+    }
+
+    .login-container {
+        padding: 25px;
+    }
+}
+
+
+/* ============================
+   IMPRESSÃO
+============================ */
+
+@media print {
+
+    .tela-login,
+    #btnSair,
+    .novo-chamado,
+    .atendentes,
+    .filtros,
+    .btn-detalhes,
+    .btn-editar,
+    .card-chamado button,
+    .cabecalho-relatorio button {
+        display: none !important;
+    }
+
+    body {
+        background: white;
+    }
+
+    #sistema {
+        max-width: 100%;
+        padding: 0;
+    }
+
+    .relatorio,
+    .dashboard,
+    .prioridades,
+    .recentes,
+    .chamados {
+        box-shadow: none;
+        border: 1px solid #ddd;
+    }
+}/* ============================
+   SLA
+============================ */
+
+.sla {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    margin-bottom: 25px;
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.06);
+}
+
+.cabecalho-sla {
+    margin-bottom: 20px;
+}
+
+.cabecalho-sla h2 {
+    margin-bottom: 6px;
+}
+
+.cabecalho-sla p {
+    color: #666;
+}
+
+.sla-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.sla-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 22px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sla-card span {
+    font-size: 28px;
+}
+
+.sla-card strong {
+    font-size: 30px;
+    color: #1d4ed8;
+}
+
+.sla-card small {
+    color: #666;
+}
+
+
+/* ============================
+   SLA RESPONSIVO
+============================ */
+
+@media (max-width: 700px) {
+
+    .sla-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* ============================
+   SLA NA IMPRESSÃO
+============================ */
+
+@media print {
+
+    .sla {
+        box-shadow: none;
+        border: 1px solid #ddd;
+    }
+
+}/* ============================
+   CENTRAL DE NOTIFICAÇÕES
+============================ */
+
+.notificacoes {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    margin-bottom: 25px;
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.06);
+}
+
+.cabecalho-notificacoes {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.cabecalho-notificacoes h2 {
+    margin-bottom: 6px;
+}
+
+.cabecalho-notificacoes p {
+    color: #666;
+}
+
+.cabecalho-notificacoes button {
+    background: #dc2626;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.notificacao {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    background: #f8fafc;
+    border-left: 5px solid #2563eb;
+}
+
+.notificacao-urgente {
+    border-left-color: #dc2626;
+}
+
+.notificacao-atencao {
+    border-left-color: #f59e0b;
+}
+
+.notificacao-icone {
+    font-size: 25px;
+}
+
+.notificacao-conteudo {
+    flex: 1;
+}
+
+.notificacao-conteudo strong {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.notificacao-conteudo small {
+    color: #666;
+}
+
+.sem-notificacoes {
+    text-align: center;
+    padding: 25px;
+    color: #666;
+}
+
+
+/* ============================
+   NOTIFICAÇÕES RESPONSIVAS
+============================ */
+
+@media (max-width: 700px) {
+
+    .cabecalho-notificacoes {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .notificacao {
+        align-items: flex-start;
+    }
+}
+
+
+/* ============================
+   IMPRESSÃO
+============================ */
+
+@media print {
+
+    .notificacoes {
+        box-shadow: none;
+        border: 1px solid #ddd;
+    }
+
+}/* ============================
+   HISTÓRICO GERAL
+============================ */
+
+.historico-geral {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    margin-bottom: 25px;
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.06);
+}
+
+.cabecalho-historico-geral {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.cabecalho-historico-geral h2 {
+    margin-bottom: 6px;
+}
+
+.cabecalho-historico-geral p {
+    color: #666;
+}
+
+.cabecalho-historico-geral button {
+    background: #dc2626;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.item-historico-geral {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 15px;
+    margin-bottom: 10px;
+    background: #f8fafc;
+    border-radius: 10px;
+    border-left: 4px solid #2563eb;
+}
+
+.icone-historico-geral {
+    font-size: 24px;
+}
+
+.conteudo-historico-geral {
+    flex: 1;
+}
+
+.conteudo-historico-geral strong {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.conteudo-historico-geral p {
+    margin-bottom: 5px;
+}
+
+.conteudo-historico-geral small {
+    color: #666;
+}
+
+.sem-historico-geral {
+    text-align: center;
+    padding: 30px;
+    color: #666;
+}
+
+
+/* ============================
+   RESPONSIVO
+============================ */
+
+@media (max-width: 700px) {
+
+    .cabecalho-historico-geral {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .item-historico-geral {
+        align-items: flex-start;
+    }
+}
+
+
+/* ============================
+   IMPRESSÃO
+============================ */
+
+@media print {
+
+    .historico-geral {
+        box-shadow: none;
+        border: 1px solid #ddd;
+    }
+
+}/* ============================
+   RODAPÉ
+============================ */
+
+.rodape {
+    margin-top: 40px;
+    padding: 25px 30px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+
+    border-top: 1px solid #e5e7eb;
+
+    font-size: 14px;
+}
+
+.rodape strong {
+    font-size: 16px;
+}
+
+.rodape p {
+    margin: 6px 0;
+}
+
+.rodape small {
+    font-size: 12px;
+}/* ============================
+   ETAPA 21
+   MODO ESCURO
+============================ */
+
+body.modo-escuro {
+    background: #111827;
+    color: #f3f4f6;
+}
+
+body.modo-escuro .topo,
+body.modo-escuro .card-dashboard,
+body.modo-escuro .prioridades,
+body.modo-escuro .novo-chamado,
+body.modo-escuro .atendentes,
+body.modo-escuro .sla,
+body.modo-escuro .notificacoes,
+body.modo-escuro .chamados,
+body.modo-escuro .historico-geral,
+body.modo-escuro .relatorio,
+body.modo-escuro .recentes,
+body.modo-escuro .desempenho-atendentes,
+body.modo-escuro .perfil-atendente,
+body.modo-escuro .modal-conteudo {
+    background: #1f2937;
+    color: #f3f4f6;
+}
+
+body.modo-escuro input,
+body.modo-escuro select,
+body.modo-escuro textarea {
+    background: #111827;
+    color: #f3f4f6;
+    border-color: #374151;
+}
+
+body.modo-escuro input::placeholder,
+body.modo-escuro textarea::placeholder {
+    color: #9ca3af;
+}
+
+body.modo-escuro h1,
+body.modo-escuro h2,
+body.modo-escuro h3,
+body.modo-escuro p,
+body.modo-escuro span,
+body.modo-escuro small,
+body.modo-escuro label {
+    color: inherit;
+}
+
+body.modo-escuro .menu-navegacao {
+    background: #1f2937;
+}
+
+body.modo-escuro .menu-navegacao button {
+    background: #374151;
+    color: #f3f4f6;
+}
+
+body.modo-escuro .rodape {
+    border-color: #374151;
+}
+
+/* ============================
+   ETAPA 26
+   MENU
+============================ */
+
+.menu-navegacao {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.menu-navegacao a {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 12px 14px;
+
+    border-radius: 10px;
+
+    color: inherit;
+    text-decoration: none;
+
+    font-size: 14px;
+
+    transition: 0.2s;
+}
+
+.menu-navegacao a:hover {
+    background: #f1f5f9;
+    transform: translateX(3px);
+}
+
+html {
+    scroll-behavior: smooth;
+}

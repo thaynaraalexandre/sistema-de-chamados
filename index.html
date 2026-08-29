@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sistema de Chamados</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- ============================
+     LOGIN
+============================ -->
+
+<section id="telaLogin" class="tela-login">
+
+    <div class="login-container">
+
+        <h1>🎧 Sistema de Chamados</h1>
+
+        <p>
+            Faça login para acessar o sistema
+        </p>
+
+        <form id="formLogin">
+
+            <label for="usuario">
+                Usuário
+            </label>
+
+            <input
+                type="text"
+                id="usuario"
+                placeholder="Digite seu usuário"
+                required
+            >
+
+            <label for="senha">
+                Senha
+            </label>
+
+            <input
+                type="password"
+                id="senha"
+                placeholder="Digite sua senha"
+                required
+            >
+
+            <button type="submit">
+                Entrar
+            </button>
+
+            <p id="mensagemLogin"></p>
+
+        </form>
+
+    </div>
+
+</section>
+
+
+<!-- ============================
+     SISTEMA
+============================ -->
+
+<main id="sistema">
+
+
+    <!-- ============================
+         MENU LATERAL - ETAPA 26
+    ============================ -->
+
+    <aside id="menuLateral" class="menu-lateral">
+
+        <div class="menu-logo">
+
+            <span>🎧</span>
+
+            <div>
+
+                <strong id="menuNomeSistema">
+                    Central de Atendimento
+                </strong>
+
+                <small>
+                    Menu principal
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <nav class="menu-navegacao">
+
+            <a href="#dashboard">
+                🏠 Dashboard
+            </a>
+
+            <a href="#chamados">
+                🎫 Chamados
+            </a>
+
+            <a href="#atendentes">
+                👥 Atendentes
+            </a>
+
+            <a href="#sla">
+                ⏱️ SLA
+            </a>
+
+            <a href="#notificacoes">
+                🔔 Notificações
+            </a>
+
+            <a href="#historico-geral">
+                📜 Histórico
+            </a>
+
+            <a href="#relatorio">
+                📊 Relatórios
+            </a>
+
+            <a href="#configuracoes">
+                ⚙️ Configurações
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+    <!-- ============================
+         TOPO
+    ============================ -->
+
+    <header class="topo">
+
+        <div class="logo-empresa">
+
+            <div class="icone-logo">
+                🎧
+            </div>
+
+            <div>
+
+                <strong id="logoNomeEmpresa">
+                    Central de Atendimento
+                </strong>
+
+                <small id="logoEmpresa">
+                    Sistema de Chamados
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <div>
+
+            <h1 id="tituloSistema">
+                🎧 Central de Atendimento
+            </h1>
+
+            <p id="subtituloSistema">
+                Gerenciamento de chamados e suporte técnico
+            </p>
+
+        </div>
+
+
+        <button id="btnSair">
+            🚪 Sair
+        </button>
+
+    </header>
+
+
+    <!-- ============================
+         DASHBOARD
+    ============================ -->
+
+    <section id="dashboard" class="dashboard">
+
+        <div class="card-dashboard">
+
+            <span>📋</span>
+
+            <div>
+
+                <h3>
+                    Total de chamados
+                </h3>
+
+                <strong id="totalChamados">
+                    0
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="card-dashboard">
+
+            <span>🟢</span>
+
+            <div>
+
+                <h3>
+                    Chamados abertos
+                </h3>
+
+                <strong id="chamadosAbertos">
+                    0
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="card-dashboard">
+
+            <span>🟡</span>
+
+            <div>
+
+                <h3>
+                    Em andamento
+                </h3>
+
+                <strong id="chamadosAndamento">
+                    0
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="card-dashboard">
+
+            <span>🔵</span>
+
+            <div>
+
+                <h3>
+                    Resolvidos
+                </h3>
+
+                <strong id="chamadosResolvidos">
+                    0
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="card-dashboard">
+
+            <span>📈</span>
+
+            <div>
+
+                <h3>
+                    Taxa de resolução
+                </h3>
+
+                <strong id="taxaResolucao">
+                    0%
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ============================
+         PRIORIDADES
+    ============================ -->
+
+    <section class="prioridades">
+
+        <h2>
+            Prioridades
+        </h2>
+
+        <div class="prioridades-grid">
+
+            <div>
+
+                <strong id="prioridadeAlta">
+                    0
+                </strong>
+
+                <span>
+                    🔴 Alta
+                </span>
+
+            </div>
+
+
+            <div>
+
+                <strong id="prioridadeMedia">
+                    0
+                </strong>
+
+                <span>
+                    🟡 Média
+                </span>
+
+            </div>
+
+
+            <div>
+
+                <strong id="prioridadeBaixa">
+                    0
+                </strong>
+
+                <span>
+                    🟢 Baixa
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ============================
+         NOVO CHAMADO
+    ============================ -->
+
+    <section class="novo-chamado">
+
+        <h2>
+            ➕ Novo chamado
+        </h2>
+
+        <form id="formChamado">
+
+            <div class="form-grid">
+
+                <div>
+
+                    <label for="cliente">
+                        Cliente
+                    </label>
+
+                    <input
+                        type="text"
+                        id="cliente"
+                        placeholder="Nome do cliente"
+                        required
+                    >
+
+                </div>
+
+
+                <div>
+
+                    <label for="email">
+                        E-mail
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        placeholder="cliente@email.com"
+                        required
+                    >
+
+                </div>
+
+
+                <div>
+
+                    <label for="assunto">
+                        Assunto
+                    </label>
+
+                    <input
+                        type="text"
+                        id="assunto"
+                        placeholder="Assunto do chamado"
+                        required
+                    >
+
+                </div>
+
+
+                <div>
+
+                    <label for="prioridade">
+                        Prioridade
+                    </label>
+
+                    <select id="prioridade" required>
+
+                        <option value="">
+                            Selecione
+                        </option>
+
+                        <option value="Alta">
+                            Alta
+                        </option>
+
+                        <option value="Média">
+                            Média
+                        </option>
+
+                        <option value="Baixa">
+                            Baixa
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div>
+
+                    <label for="atendente">
+                        Atendente
+                    </label>
+
+                    <select id="atendente">
+
+                        <option value="">
+                            Selecione um atendente
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <label for="descricao">
+                Descrição
+            </label>
+
+            <textarea
+                id="descricao"
+                placeholder="Descreva o problema ou solicitação..."
+                required
+            ></textarea>
+
+
+            <button type="submit">
+                💾 Cadastrar chamado
+            </button>
+
+        </form>
+
+    </section>
+
+
+    <!-- ============================
+         ATENDENTES
+    ============================ -->
+
+    <section id="atendentes" class="atendentes">
+
+        <div class="cabecalho-atendentes">
+
+            <div>
+
+                <h2>
+                    👥 Atendentes
+                </h2>
+
+                <p>
+                    Gerencie os profissionais responsáveis pelos chamados.
+                </p>
+
+            </div>
+
+            <button id="btnNovoAtendente">
+                ➕ Novo atendente
+            </button>
+
+        </div>
+
+
+        <div id="listaAtendentes">
+
+            <div class="sem-atendentes">
+
+                <h3>
+                    Nenhum atendente cadastrado
+                </h3>
+
+                <p>
+                    Cadastre um atendente para começar.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ============================
+         SLA
+    ============================ -->
+
+    <section id="sla" class="sla">
+
+        <div class="cabecalho-sla">
+
+            <div>
+
+                <h2>
+                    ⏱️ Controle de SLA
+                </h2>
+
+                <p>
+                    Acompanhe os chamados que precisam de atenção.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="sla-grid">
+
+            <div class="sla-card">
+
+                <span>🟢</span>
+
+                <strong id="slaDentro">
+                    0
+                </strong>
+
+                <small>
+                    Dentro do prazo
+                </small>
+
+            </div>
+
+
+            <div class="sla-card">
+
+                <span>🟡</span>
+
+                <strong id="slaAtencao">
+                    0
+                </strong>
+
+                <small>
+                    Próximos do prazo
+                </small>
+
+            </div>
+
+
+            <div class="sla-card">
+
+                <span>🔴</span>
+
+                <strong id="slaAtrasados">
+                    0
+                </strong>
+
+                <small>
+                    Fora do prazo
+                </small>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ============================
+         NOTIFICAÇÕES
+    ============================ -->
+
+    <section id="notificacoes" class="notificacoes">
+
+        <div class="cabecalho-notificacoes">
+
+            <div>
+
+                <h2>
+                    🔔 Central de notificações
+                </h2>
+
+                <p>
+                    Acompanhe chamados que precisam de atenção.
+                </p>
+
+            </div>
+
+            <button
+                type="button"
+                onclick="limparNotificacoes()"
+            >
+                🗑️ Limpar
+            </button>
+
+        </div>
+
+
+        <div id="listaNotificacoes">
+
+            <div class="sem-notificacoes">
+
+                <h3>
+                    Nenhuma notificação
+                </h3>
+
+                <p>
+                    Tudo está em ordem por enquanto.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ============================
+         CHAMADOS
+    ============================ -->
+
+    <section id="chamados" class="chamados">
+
+        <div class="cabecalho-chamados">
+
+            <h2>
+                📋 Chamados
+            </h2>
+
+
+            <div class="filtros">
+
+                <input
+                    type="search"
+                    id="pesquisa"
+                    placeholder="🔎 Pesquisar chamado..."
+                >
+
+
+                <select id="filtroStatus">
+
+                    <option value="Todos">
+                        Todos os status
+                    </option>
+
+                    <option value="Aberto">
+                        Aberto
+                    </option>
+
+                    <option value="Em andamento">
+                        Em andamento
+                    </option>
+
+                    <option value="Resolvido">
+                        Resolvido
+                    </option>
+
+                </select>
+
+
+                <select id="filtroPrioridade">
+
+                    <option value="Todas">
+                        Todas as prioridades
+                    </option>
+
+                    <option value="Alta">
+                        Alta
+                    </option>
+
+                    <option value="Média">
+                        Média
+                    </option>
+
+                    <option value="Baixa">
+                        Baixa
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <div id="listaChamados">
+
+            <div class="sem-chamados">
+
+                <h3>
+                    Nenhum chamado encontrado
+                </h3>
+
+                <p>
+                    Cadastre um novo chamado para começar.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ============================
+         HISTÓRICO GERAL
+    ============================ -->
+
+    <section
+        id="historico-geral"
+        class="historico-geral"
+    >
+
+        <div class="cabecalho-historico-geral">
+
+            <div>
+
+                <h2>
+                    📜 Histórico de atividades
+                </h2>
+
+                <p>
+                    Acompanhe as principais ações realizadas no sistema.
+                </p>
+
+            </div>
+
+            <button
+                type="button"
+                onclick="limparHistoricoGeral()"
+            >
+                🗑️ Limpar histórico
+            </button>
+
+        </div>
+
+
+        <div id="listaHistoricoGeral">
+
+            <div class="sem-historico-geral">
+
+                <h3>
+                    Nenhuma atividade registrada
+                </h3>
+
+                <p>
+                    As atividades do sistema aparecerão aqui.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ============================
+         RELATÓRIO
+    ============================ -->
+
+    <section
+        id="relatorio"
+        class="relatorio"
+    >
+
+        <div class="cabecalho-relatorio">
+
+            <div>
+
+                <h2>
+                    📊 Relatório
+                </h2>
+
+                <p>
+                    Resumo geral dos chamados.
+                </p>
+
+            </div>
+
+            <button
+                type="button"
+                onclick="imprimirRelatorio()"
+            >
+                🖨️ Imprimir relatório
+            </button>
+
+        </div>
+
+
+        <div class="relatorio-grid">
+
+            <div class="relatorio-card">
+
+                <span>📋</span>
+
+                <strong id="relatorioTotal">
+                    0
+                </strong>
+
+                <small>
+                    Total
+                </small>
+
+            </div>
+
+
+            <div class="relatorio-card">
+
+                <span>🟢</span>
+
+                <strong id="relatorioAbertos">
+                    0
+                </strong>
+
+                <small>
+                    Abertos
+                </small>
+
+            </div>
+
+
+            <div class="relatorio-card">
+
+                <span>🟡</span>
+
+                <strong id="relatorioAndamento">
+                    0
+                </strong>
+
+                <small>
+                    Em andamento
+                </small>
+
+            </div>
+
+
+            <div class="relatorio-card">
+
+                <span>🔵</span>
+
+                <strong id="relatorioResolvidos">
+                    0
+                </strong>
+
+                <small>
+                    Resolvidos
+                </small>
+
+            </div>
+
+
+            <div class="relatorio-card">
+
+                <span>📈</span>
+
+                <strong id="relatorioTaxa">
+                    0%
+                </strong>
+
+                <small>
+                    Taxa de resolução
+                </small>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ============================
+         CHAMADOS RECENTES
+    ============================ -->
+
+    <section class="recentes">
+
+        <h2>
+            🕐 Chamados recentes
+        </h2>
+
+        <div id="chamadosRecentes">
+
+            <p class="sem-recentes">
+                Nenhum chamado cadastrado.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- ============================
+         CONFIGURAÇÕES
+    ============================ -->
+
+    <section
+        id="configuracoes"
+        class="configuracoes"
+    >
+
+        <div class="cabecalho-configuracoes">
+
+            <div>
+
+                <h2>
+                    ⚙️ Configurações do sistema
+                </h2>
+
+                <p>
+                    Personalize as informações do seu sistema.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="configuracoes-conteudo">
+
+            <div class="configuracao-item">
+
+                <label for="nomeSistema">
+                    Nome do sistema
+                </label>
+
+                <input
+                    type="text"
+                    id="nomeSistema"
+                    placeholder="Sistema de Chamados"
+                >
+
+            </div>
+
+
+            <div class="configuracao-item">
+
+                <label for="nomeEmpresa">
+                    Nome da empresa
+                </label>
+
+                <input
+                    type="text"
+                    id="nomeEmpresa"
+                    placeholder="Nome da empresa"
+                >
+
+            </div>
+
+
+            <div class="configuracao-item">
+
+                <label for="emailEmpresa">
+                    E-mail de contato
+                </label>
+
+                <input
+                    type="email"
+                    id="emailEmpresa"
+                    placeholder="contato@empresa.com"
+                >
+
+            </div>
+
+
+            <button
+                type="button"
+                id="btnSalvarConfiguracoes"
+            >
+                💾 Salvar configurações
+            </button>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- ============================
+     MODAL DETALHES
+============================ -->
+
+<div
+    id="modalDetalhes"
+    class="modal"
+>
+
+    <div class="modal-conteudo">
+
+        <button
+            class="fechar-modal"
+            onclick="fecharDetalhes()"
+        >
+            ×
+        </button>
+
+        <h2>
+            👁️ Detalhes do chamado
+        </h2>
+
+        <br>
+
+        <div id="conteudoDetalhes"></div>
+
+        <hr>
+
+        <h3>
+            📝 Histórico de atendimento
+        </h3>
+
+        <div id="historicoChamado">
+
+            <p>
+                Nenhum atendimento registrado.
+            </p>
+
+        </div>
+
+        <label for="novoHistorico">
+            Adicionar atualização
+        </label>
+
+        <textarea
+            id="novoHistorico"
+            placeholder="Digite uma atualização do atendimento..."
+        ></textarea>
+
+        <button
+            type="button"
+            onclick="adicionarHistorico()"
+        >
+            ➕ Adicionar atualização
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ============================
+     MODAL EDITAR CHAMADO
+============================ -->
+
+<div
+    id="modalEditar"
+    class="modal"
+>
+
+    <div class="modal-conteudo">
+
+        <button
+            class="fechar-modal"
+            onclick="fecharEdicao()"
+        >
+            ×
+        </button>
+
+        <h2>
+            ✏️ Editar chamado
+        </h2>
+
+
+        <form
+            id="formEditar"
+            onsubmit="event.preventDefault(); salvarEdicao();"
+        >
+
+            <label for="editarCliente">
+                Cliente
+            </label>
+
+            <input
+                type="text"
+                id="editarCliente"
+                required
+            >
+
+
+            <label for="editarEmail">
+                E-mail
+            </label>
+
+            <input
+                type="email"
+                id="editarEmail"
+                required
+            >
+
+
+            <label for="editarAssunto">
+                Assunto
+            </label>
+
+            <input
+                type="text"
+                id="editarAssunto"
+                required
+            >
+
+
+            <label for="editarDescricao">
+                Descrição
+            </label>
+
+            <textarea
+                id="editarDescricao"
+                required
+            ></textarea>
+
+
+            <label for="editarPrioridade">
+                Prioridade
+            </label>
+
+            <select id="editarPrioridade">
+
+                <option value="Alta">
+                    Alta
+                </option>
+
+                <option value="Média">
+                    Média
+                </option>
+
+                <option value="Baixa">
+                    Baixa
+                </option>
+
+            </select>
+
+
+            <label for="editarStatus">
+                Status
+            </label>
+
+            <select id="editarStatus">
+
+                <option value="Aberto">
+                    Aberto
+                </option>
+
+                <option value="Em andamento">
+                    Em andamento
+                </option>
+
+                <option value="Resolvido">
+                    Resolvido
+                </option>
+
+            </select>
+
+
+            <label for="editarAtendente">
+                Atendente
+            </label>
+
+            <select id="editarAtendente">
+
+                <option value="">
+                    Sem atendente
+                </option>
+
+            </select>
+
+
+            <div class="acoes-edicao">
+
+                <button type="submit">
+                    💾 Salvar alterações
+                </button>
+
+                <button
+                    type="button"
+                    onclick="fecharEdicao()"
+                >
+                    Cancelar
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- ============================
+     MODAL ATENDENTE
+============================ -->
+
+<div
+    id="modalAtendente"
+    class="modal"
+>
+
+    <div class="modal-conteudo">
+
+        <button
+            class="fechar-modal"
+            onclick="fecharAtendente()"
+        >
+            ×
+        </button>
+
+        <h2>
+            👤 Atendente
+        </h2>
+
+
+        <form id="formAtendente">
+
+            <label for="nomeAtendente">
+                Nome
+            </label>
+
+            <input
+                type="text"
+                id="nomeAtendente"
+                placeholder="Nome do atendente"
+                required
+            >
+
+
+            <label for="emailAtendente">
+                E-mail
+            </label>
+
+            <input
+                type="email"
+                id="emailAtendente"
+                placeholder="atendente@email.com"
+                required
+            >
+
+
+            <label for="funcaoAtendente">
+                Função
+            </label>
+
+            <select id="funcaoAtendente">
+
+                <option value="Suporte Técnico">
+                    Suporte Técnico
+                </option>
+
+                <option value="Analista de Suporte">
+                    Analista de Suporte
+                </option>
+
+                <option value="Desenvolvedor">
+                    Desenvolvedor
+                </option>
+
+                <option value="Administrador">
+                    Administrador
+                </option>
+
+            </select>
+
+
+            <button type="submit">
+                💾 Salvar atendente
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- ============================
+     JAVASCRIPT
+============================ -->
+
+<script src="script.js"></script>
+
+</body>
+</html>
