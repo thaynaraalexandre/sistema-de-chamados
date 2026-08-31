@@ -1125,7 +1125,109 @@
 <!-- =====================================================
      SISTEMA ADMINISTRATIVO
 ====================================================== -->
+<!-- =====================================================
+     LOGIN ADMINISTRATIVO
+====================================================== -->
 
+<section
+    id="loginAdministrativo"
+    class="cliente-login"
+    style="display:none;"
+>
+
+    <div class="cliente-login-logo">
+        🛠️
+    </div>
+
+    <h1>
+        Área Administrativa
+    </h1>
+
+    <p class="cliente-login-subtitulo">
+        Acesso restrito aos administradores
+    </p>
+
+    <div class="cliente-login-card">
+
+        <div class="cliente-card-titulo">
+
+            <span>🔐</span>
+
+            <div>
+                <h2>
+                    Login administrativo
+                </h2>
+
+                <p>
+                    Informe suas credenciais para continuar.
+                </p>
+            </div>
+
+        </div>
+
+        <form id="formLoginAdmin">
+
+            <div class="campo-cliente">
+
+                <label for="loginAdminUsuario">
+                    👤 Usuário
+                </label>
+
+                <input
+                    type="text"
+                    id="loginAdminUsuario"
+                    placeholder="Digite o usuário"
+                    autocomplete="username"
+                    required
+                >
+
+            </div>
+
+            <div class="campo-cliente">
+
+                <label for="loginAdminSenha">
+                    🔑 Senha
+                </label>
+
+                <input
+                    type="password"
+                    id="loginAdminSenha"
+                    placeholder="Digite sua senha"
+                    autocomplete="current-password"
+                    required
+                >
+
+            </div>
+
+            <button
+                type="submit"
+                class="btn-cliente-principal"
+            >
+                🔐 Entrar como administrador
+            </button>
+
+        </form>
+
+        <p
+            id="mensagemLoginAdmin"
+            class="mensagem-login-cliente"
+        ></p>
+
+        <button
+            type="button"
+            class="btn-voltar"
+            onclick="voltarTelaEscolha()"
+        >
+            ← Voltar para tela inicial
+        </button>
+
+    </div>
+
+    <div class="cliente-login-seguranca">
+        🔒 Área restrita para administradores.
+    </div>
+
+</section>
 <main
     id="sistema"
     style="display:none;"

@@ -1,6 +1,7 @@
 /* =========================================================
    CENTRAL DE ATENDIMENTO
    SCRIPT.JS COMPLETO
+   COM LOGIN ADMINISTRATIVO
 ========================================================= */
 
 
@@ -8,45 +9,79 @@
    DADOS DO SISTEMA
 ========================================================= */
 
-let chamados = JSON.parse(localStorage.getItem("chamados")) || [];
-let atendentes = JSON.parse(localStorage.getItem("atendentes")) || [];
-let notificacoes = JSON.parse(localStorage.getItem("notificacoes")) || [];
-let historicoGeral = JSON.parse(localStorage.getItem("historicoGeral")) || [];
+let chamados =
+    JSON.parse(localStorage.getItem("chamados")) || [];
 
-let clienteLogado = JSON.parse(localStorage.getItem("clienteLogado")) || null;
+let atendentes =
+    JSON.parse(localStorage.getItem("atendentes")) || [];
+
+let notificacoes =
+    JSON.parse(localStorage.getItem("notificacoes")) || [];
+
+let historicoGeral =
+    JSON.parse(localStorage.getItem("historicoGeral")) || [];
+
+let clienteLogado =
+    JSON.parse(localStorage.getItem("clienteLogado")) || null;
+
+let administradorLogado =
+    sessionStorage.getItem("administradorLogado") === "true";
 
 let chamadoSelecionado = null;
+
 let chamadoEditando = null;
+
+
+/* =========================================================
+   CREDENCIAIS ADMINISTRATIVAS
+========================================================= */
+
+const USUARIO_ADMIN = "admin";
+
+const SENHA_ADMIN = "Admin@123";
 
 
 /* =========================================================
    CONFIGURAÇÕES
 ========================================================= */
 
-let configuracoes = JSON.parse(
-    localStorage.getItem("configuracoes")
-) || {
-    nomeSistema: "Central de Atendimento",
-    nomeEmpresa: "Sistema de Chamados",
-    emailEmpresa: ""
-};
+let configuracoes =
+    JSON.parse(
+        localStorage.getItem("configuracoes")
+    ) || {
+
+        nomeSistema:
+            "Central de Atendimento",
+
+        nomeEmpresa:
+            "Sistema de Chamados",
+
+        emailEmpresa:
+            ""
+
+    };
 
 
 /* =========================================================
    INICIALIZAÇÃO
 ========================================================= */
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
 
-    carregarConfiguracoes();
+        carregarConfiguracoes();
 
-    atualizarTudo();
+        configurarEventos();
 
-    configurarEventos();
+        verificarClienteLogado();
 
-    verificarClienteLogado();
+        atualizarTudo();
 
-});
+        protegerAreaAdministrativa();
+
+    }
+);
 
 
 /* =========================================================
@@ -55,8 +90,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function configurarEventos() {
 
+    /* LOGIN CLIENTE */
+
     const formLoginCliente =
-        document.getElementById("formLoginCliente");
+        document.getElementById(
+            "formLoginCliente"
+        );
 
     if (formLoginCliente) {
 
@@ -68,8 +107,29 @@ function configurarEventos() {
     }
 
 
+    /* LOGIN ADMIN */
+
+    const formLoginAdmin =
+        document.getElementById(
+            "formLoginAdmin"
+        );
+
+    if (formLoginAdmin) {
+
+        formLoginAdmin.addEventListener(
+            "submit",
+            fazerLoginAdmin
+        );
+
+    }
+
+
+    /* CHAMADO CLIENTE */
+
     const formChamadoCliente =
-        document.getElementById("formChamadoCliente");
+        document.getElementById(
+            "formChamadoCliente"
+        );
 
     if (formChamadoCliente) {
 
@@ -81,8 +141,12 @@ function configurarEventos() {
     }
 
 
+    /* CHAMADO ADMIN */
+
     const formChamado =
-        document.getElementById("formChamado");
+        document.getElementById(
+            "formChamado"
+        );
 
     if (formChamado) {
 
@@ -94,8 +158,12 @@ function configurarEventos() {
     }
 
 
+    /* EDITAR CHAMADO */
+
     const formEditar =
-        document.getElementById("formEditar");
+        document.getElementById(
+            "formEditar"
+        );
 
     if (formEditar) {
 
@@ -107,8 +175,12 @@ function configurarEventos() {
     }
 
 
+    /* ATENDENTE */
+
     const formAtendente =
-        document.getElementById("formAtendente");
+        document.getElementById(
+            "formAtendente"
+        );
 
     if (formAtendente) {
 
@@ -120,8 +192,12 @@ function configurarEventos() {
     }
 
 
+    /* NOVO ATENDENTE */
+
     const btnNovoAtendente =
-        document.getElementById("btnNovoAtendente");
+        document.getElementById(
+            "btnNovoAtendente"
+        );
 
     if (btnNovoAtendente) {
 
@@ -133,8 +209,12 @@ function configurarEventos() {
     }
 
 
+    /* SAIR ADMIN */
+
     const btnSair =
-        document.getElementById("btnSair");
+        document.getElementById(
+            "btnSair"
+        );
 
     if (btnSair) {
 
@@ -146,8 +226,12 @@ function configurarEventos() {
     }
 
 
+    /* CONFIGURAÇÕES */
+
     const btnSalvarConfiguracoes =
-        document.getElementById("btnSalvarConfiguracoes");
+        document.getElementById(
+            "btnSalvarConfiguracoes"
+        );
 
     if (btnSalvarConfiguracoes) {
 
@@ -159,8 +243,12 @@ function configurarEventos() {
     }
 
 
+    /* PESQUISA ADMIN */
+
     const pesquisa =
-        document.getElementById("pesquisa");
+        document.getElementById(
+            "pesquisa"
+        );
 
     if (pesquisa) {
 
@@ -173,7 +261,9 @@ function configurarEventos() {
 
 
     const filtroStatus =
-        document.getElementById("filtroStatus");
+        document.getElementById(
+            "filtroStatus"
+        );
 
     if (filtroStatus) {
 
@@ -186,7 +276,9 @@ function configurarEventos() {
 
 
     const filtroPrioridade =
-        document.getElementById("filtroPrioridade");
+        document.getElementById(
+            "filtroPrioridade"
+        );
 
     if (filtroPrioridade) {
 
@@ -198,8 +290,12 @@ function configurarEventos() {
     }
 
 
+    /* PESQUISA CLIENTE */
+
     const pesquisaCliente =
-        document.getElementById("pesquisaChamadosCliente");
+        document.getElementById(
+            "pesquisaChamadosCliente"
+        );
 
     if (pesquisaCliente) {
 
@@ -212,7 +308,9 @@ function configurarEventos() {
 
 
     const filtroStatusCliente =
-        document.getElementById("filtroStatusCliente");
+        document.getElementById(
+            "filtroStatusCliente"
+        );
 
     if (filtroStatusCliente) {
 
@@ -225,7 +323,9 @@ function configurarEventos() {
 
 
     const filtroPrioridadeCliente =
-        document.getElementById("filtroPrioridadeCliente");
+        document.getElementById(
+            "filtroPrioridadeCliente"
+        );
 
     if (filtroPrioridadeCliente) {
 
@@ -239,52 +339,87 @@ function configurarEventos() {
 
     /* MENU ADMINISTRATIVO */
 
-    document.querySelectorAll(".menu-link").forEach(
-        function (link) {
+    document
+        .querySelectorAll(".menu-link")
+        .forEach(
+            function (link) {
 
-            link.addEventListener(
-                "click",
-                function () {
+                link.addEventListener(
+                    "click",
+                    function () {
 
-                    document
-                        .querySelectorAll(".menu-link")
-                        .forEach(function (item) {
+                        if (
+                            !administradorLogado
+                        ) {
 
-                            item.classList.remove("ativo");
+                            return;
 
-                        });
-
-                    this.classList.add("ativo");
-
-                }
-            );
-
-        }
-    );
-
-}
+                        }
 
 
-/* =========================================================
+                        document
+                            .querySelectorAll(
+                                ".menu-link"
+                            )
+                            .forEach(
+                                function (item) {
+
+                                    item.classList.remove(
+                                        "ativo"
+                                    );
+
+                                }
+                            );
+
+
+                        this.classList.add(
+                            "ativo"
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+}/* =========================================================
    TELA INICIAL
 ========================================================= */
 
 function abrirAreaCliente() {
 
     const telaEscolha =
-        document.getElementById("telaEscolha");
+        document.getElementById(
+            "telaEscolha"
+        );
 
     const areaCliente =
-        document.getElementById("areaCliente");
+        document.getElementById(
+            "areaCliente"
+        );
 
     const sistema =
-        document.getElementById("sistema");
+        document.getElementById(
+            "sistema"
+        );
+
+    const loginAdmin =
+        document.getElementById(
+            "loginAdministrativo"
+        );
+
 
     if (telaEscolha)
         telaEscolha.style.display = "none";
 
+
     if (sistema)
         sistema.style.display = "none";
+
+
+    if (loginAdmin)
+        loginAdmin.style.display = "none";
+
 
     if (areaCliente)
         areaCliente.style.display = "block";
@@ -303,51 +438,314 @@ function abrirAreaCliente() {
 }
 
 
+/* =========================================================
+   ABRIR ÁREA ADMINISTRATIVA
+========================================================= */
+
 function abrirAreaAdministrativa() {
 
     const telaEscolha =
-        document.getElementById("telaEscolha");
+        document.getElementById(
+            "telaEscolha"
+        );
 
     const areaCliente =
-        document.getElementById("areaCliente");
+        document.getElementById(
+            "areaCliente"
+        );
 
     const sistema =
-        document.getElementById("sistema");
+        document.getElementById(
+            "sistema"
+        );
+
+    const loginAdmin =
+        document.getElementById(
+            "loginAdministrativo"
+        );
+
 
     if (telaEscolha)
         telaEscolha.style.display = "none";
 
+
     if (areaCliente)
         areaCliente.style.display = "none";
 
+
     if (sistema)
-        sistema.style.display = "block";
+        sistema.style.display = "none";
 
 
-    atualizarTudo();
+    /* Se já estiver autenticado */
+
+    if (administradorLogado) {
+
+        if (loginAdmin)
+            loginAdmin.style.display = "none";
+
+
+        if (sistema)
+            sistema.style.display = "block";
+
+
+        atualizarTudo();
+
+        return;
+
+    }
+
+
+    /* Mostrar login administrativo */
+
+    if (loginAdmin)
+        loginAdmin.style.display = "block";
+
+
+    const usuario =
+        document.getElementById(
+            "loginAdminUsuario"
+        );
+
+    const senha =
+        document.getElementById(
+            "loginAdminSenha"
+        );
+
+
+    if (usuario)
+        usuario.value = "";
+
+
+    if (senha)
+        senha.value = "";
+
+
+    const mensagem =
+        document.getElementById(
+            "mensagemLoginAdmin"
+        );
+
+
+    if (mensagem) {
+
+        mensagem.textContent = "";
+
+        mensagem.className =
+            "mensagem-login-cliente";
+
+    }
 
 }
 
 
+/* =========================================================
+   LOGIN ADMINISTRATIVO
+========================================================= */
+
+function fazerLoginAdmin(event) {
+
+    event.preventDefault();
+
+
+    const usuarioElemento =
+        document.getElementById(
+            "loginAdminUsuario"
+        );
+
+    const senhaElemento =
+        document.getElementById(
+            "loginAdminSenha"
+        );
+
+    const mensagem =
+        document.getElementById(
+            "mensagemLoginAdmin"
+        );
+
+
+    const usuario =
+        usuarioElemento
+            ? usuarioElemento.value.trim()
+            : "";
+
+
+    const senha =
+        senhaElemento
+            ? senhaElemento.value
+            : "";
+
+
+    if (
+        usuario === USUARIO_ADMIN &&
+        senha === SENHA_ADMIN
+    ) {
+
+        administradorLogado = true;
+
+
+        sessionStorage.setItem(
+            "administradorLogado",
+            "true"
+        );
+
+
+        if (mensagem) {
+
+            mensagem.textContent =
+                "Login realizado com sucesso!";
+
+
+            mensagem.className =
+                "mensagem-login-cliente sucesso";
+
+        }
+
+
+        adicionarHistoricoGeral(
+            "Login administrativo",
+            "O administrador acessou a área administrativa."
+        );
+
+
+        setTimeout(
+            function () {
+
+                const loginAdmin =
+                    document.getElementById(
+                        "loginAdministrativo"
+                    );
+
+
+                const sistema =
+                    document.getElementById(
+                        "sistema"
+                    );
+
+
+                if (loginAdmin)
+                    loginAdmin.style.display =
+                        "none";
+
+
+                if (sistema)
+                    sistema.style.display =
+                        "block";
+
+
+                atualizarTudo();
+
+            },
+            400
+        );
+
+
+    } else {
+
+        administradorLogado = false;
+
+
+        sessionStorage.removeItem(
+            "administradorLogado"
+        );
+
+
+        if (mensagem) {
+
+            mensagem.textContent =
+                "❌ Usuário ou senha incorretos.";
+
+
+            mensagem.className =
+                "mensagem-login-cliente erro";
+
+        }
+
+
+        if (senhaElemento)
+            senhaElemento.value = "";
+
+    }
+
+}
+
+
+/* =========================================================
+   PROTEGER ÁREA ADMINISTRATIVA
+========================================================= */
+
+function protegerAreaAdministrativa() {
+
+    const sistema =
+        document.getElementById(
+            "sistema"
+        );
+
+
+    const loginAdmin =
+        document.getElementById(
+            "loginAdministrativo"
+        );
+
+
+    if (!administradorLogado) {
+
+        if (sistema)
+            sistema.style.display = "none";
+
+
+        if (loginAdmin)
+            loginAdmin.style.display = "none";
+
+    }
+
+}
+
+
+/* =========================================================
+   VOLTAR PARA TELA INICIAL
+========================================================= */
+
 function voltarTelaEscolha() {
 
     const telaEscolha =
-        document.getElementById("telaEscolha");
+        document.getElementById(
+            "telaEscolha"
+        );
+
 
     const areaCliente =
-        document.getElementById("areaCliente");
+        document.getElementById(
+            "areaCliente"
+        );
+
 
     const sistema =
-        document.getElementById("sistema");
+        document.getElementById(
+            "sistema"
+        );
+
+
+    const loginAdmin =
+        document.getElementById(
+            "loginAdministrativo"
+        );
+
 
     if (telaEscolha)
         telaEscolha.style.display = "flex";
 
+
     if (areaCliente)
         areaCliente.style.display = "none";
 
+
     if (sistema)
         sistema.style.display = "none";
+
+
+    if (loginAdmin)
+        loginAdmin.style.display = "none";
 
 }
 
@@ -360,24 +758,24 @@ function fazerLoginCliente(event) {
 
     event.preventDefault();
 
+
     const nome =
         document
-            .getElementById("loginClienteNome")
+            .getElementById(
+                "loginClienteNome"
+            )
             .value
             .trim();
 
+
     const email =
         document
-            .getElementById("loginClienteEmail")
+            .getElementById(
+                "loginClienteEmail"
+            )
             .value
             .trim()
             .toLowerCase();
-
-
-    const mensagem =
-        document.getElementById(
-            "mensagemLoginCliente"
-        );
 
 
     if (!nome || !email) {
@@ -393,118 +791,27 @@ function fazerLoginCliente(event) {
 
 
     clienteLogado = {
+
         nome: nome,
+
         email: email
+
     };
 
 
     localStorage.setItem(
         "clienteLogado",
-        JSON.stringify(clienteLogado)
+        JSON.stringify(
+            clienteLogado
+        )
     );
 
 
-    adicionarHistoricoGeral(
-        "Login do cliente",
-        `${nome} acessou a Área do Cliente.`
-    );
+    mostrarPainelCliente();
 
-
-    mostrarMensagemLogin(
-        "Login realizado com sucesso!",
-        "sucesso"
-    );
-
-
-    setTimeout(function () {
-
-        mostrarPainelCliente();
-
-    }, 500);
-
-}
-
-
-function mostrarMensagemLogin(texto, tipo) {
-
-    const mensagem =
-        document.getElementById(
-            "mensagemLoginCliente"
-        );
-
-    if (!mensagem)
-        return;
-
-
-    mensagem.textContent = texto;
-
-    mensagem.className =
-        "mensagem-login-cliente " + tipo;
-
-}
-
-
-function mostrarLoginCliente() {
-
-    const login =
-        document.getElementById("loginCliente");
-
-    const painel =
-        document.getElementById("painelCliente");
-
-
-    if (login)
-        login.style.display = "block";
-
-    if (painel)
-        painel.style.display = "none";
-
-}
-
-
-function mostrarPainelCliente() {
-
-    const login =
-        document.getElementById("loginCliente");
-
-    const painel =
-        document.getElementById("painelCliente");
-
-
-    if (login)
-        login.style.display = "none";
-
-    if (painel)
-        painel.style.display = "flex";
-
-
-    preencherDadosCliente();
-
-    atualizarDashboardCliente();
-
-    renderizarChamadosCliente();
-
-    renderizarNotificacoesCliente();
-
-    renderizarHistoricoCliente();
-
-}
-
-
-/* =========================================================
-   CLIENTE LOGADO
+}/* =========================================================
+   PREENCHER DADOS CLIENTE
 ========================================================= */
-
-function verificarClienteLogado() {
-
-    if (!clienteLogado)
-        return;
-
-
-    preencherDadosCliente();
-
-}
-
 
 function preencherDadosCliente() {
 
@@ -515,7 +822,9 @@ function preencherDadosCliente() {
     const elementos = [
 
         "nomeClienteLogado",
+
         "nomeClienteTopo",
+
         "perfilNomeCliente"
 
     ];
@@ -525,6 +834,7 @@ function preencherDadosCliente() {
 
         const elemento =
             document.getElementById(id);
+
 
         if (elemento)
             elemento.textContent =
@@ -538,6 +848,7 @@ function preencherDadosCliente() {
             "perfilEmailCliente"
         );
 
+
     if (email)
         email.textContent =
             clienteLogado.email;
@@ -548,6 +859,10 @@ function preencherDadosCliente() {
 }
 
 
+/* =========================================================
+   PREENCHER FORMULÁRIO CLIENTE
+========================================================= */
+
 function preencherDadosFormularioCliente() {
 
     if (!clienteLogado)
@@ -555,17 +870,25 @@ function preencherDadosFormularioCliente() {
 
 
     const nome =
-        document.getElementById("clienteNome");
+        document.getElementById(
+            "clienteNome"
+        );
+
 
     const email =
-        document.getElementById("clienteEmail");
+        document.getElementById(
+            "clienteEmail"
+        );
 
 
     if (nome)
-        nome.value = clienteLogado.nome;
+        nome.value =
+            clienteLogado.nome;
+
 
     if (email)
-        email.value = clienteLogado.email;
+        email.value =
+            clienteLogado.email;
 
 }
 
@@ -580,6 +903,7 @@ function sairCliente() {
 
         adicionarHistoricoGeral(
             "Logout do cliente",
+
             `${clienteLogado.nome} saiu da Área do Cliente.`
         );
 
@@ -588,16 +912,21 @@ function sairCliente() {
 
     clienteLogado = null;
 
+
     localStorage.removeItem(
         "clienteLogado"
     );
 
 
     const areaCliente =
-        document.getElementById("areaCliente");
+        document.getElementById(
+            "areaCliente"
+        );
+
 
     if (areaCliente)
-        areaCliente.style.display = "none";
+        areaCliente.style.display =
+            "none";
 
 
     voltarTelaEscolha();
@@ -609,15 +938,24 @@ function sairCliente() {
    NAVEGAÇÃO CLIENTE
 ========================================================= */
 
-function mostrarTelaCliente(id, botao) {
+function mostrarTelaCliente(
+    id,
+    botao
+) {
 
     document
-        .querySelectorAll(".cliente-tela")
+        .querySelectorAll(
+            ".cliente-tela"
+        )
         .forEach(function (tela) {
 
-            tela.style.display = "none";
+            tela.style.display =
+                "none";
 
-            tela.classList.remove("ativo");
+
+            tela.classList.remove(
+                "ativo"
+            );
 
         });
 
@@ -625,57 +963,88 @@ function mostrarTelaCliente(id, botao) {
     const tela =
         document.getElementById(id);
 
+
     if (tela) {
 
-        tela.style.display = "block";
+        tela.style.display =
+            "block";
 
-        tela.classList.add("ativo");
+
+        tela.classList.add(
+            "ativo"
+        );
 
     }
 
 
     document
-        .querySelectorAll(".cliente-menu-link")
+        .querySelectorAll(
+            ".cliente-menu-link"
+        )
         .forEach(function (item) {
 
-            item.classList.remove("ativo");
+            item.classList.remove(
+                "ativo"
+            );
 
         });
 
 
     if (botao)
-        botao.classList.add("ativo");
+        botao.classList.add(
+            "ativo"
+        );
 
 
-    if (id === "clienteDashboard") {
+    /* Dashboard */
+
+    if (
+        id === "clienteDashboard"
+    ) {
 
         atualizarDashboardCliente();
 
     }
 
 
-    if (id === "meusChamadosCliente") {
+    /* Meus chamados */
+
+    if (
+        id === "meusChamadosCliente"
+    ) {
 
         renderizarChamadosCliente();
 
     }
 
 
-    if (id === "notificacoesCliente") {
+    /* Notificações */
+
+    if (
+        id === "notificacoesCliente"
+    ) {
 
         renderizarNotificacoesCliente();
 
     }
 
 
-    if (id === "historicoCliente") {
+    /* Histórico */
+
+    if (
+        id === "historicoCliente"
+    ) {
 
         renderizarHistoricoCliente();
 
     }
 
 
-    if (id === "perfilCliente") {
+    /* Perfil */
+
+    if (
+        id === "perfilCliente"
+    ) {
 
         preencherDadosCliente();
 
@@ -684,7 +1053,13 @@ function mostrarTelaCliente(id, botao) {
 }
 
 
-function mostrarTelaClientePorId(id) {
+/* =========================================================
+   MOSTRAR TELA CLIENTE POR ID
+========================================================= */
+
+function mostrarTelaClientePorId(
+    id
+) {
 
     const botoes =
         document.querySelectorAll(
@@ -692,17 +1067,24 @@ function mostrarTelaClientePorId(id) {
         );
 
 
-    let botaoEncontrado = null;
+    let botaoEncontrado =
+        null;
 
 
     botoes.forEach(function (botao) {
 
         const onclick =
-            botao.getAttribute("onclick") || "";
+            botao.getAttribute(
+                "onclick"
+            ) || "";
 
-        if (onclick.includes(id)) {
 
-            botaoEncontrado = botao;
+        if (
+            onclick.includes(id)
+        ) {
+
+            botaoEncontrado =
+                botao;
 
         }
 
@@ -734,7 +1116,9 @@ function abrirTelaNovoChamadoCliente() {
    CADASTRAR CHAMADO CLIENTE
 ========================================================= */
 
-function cadastrarChamadoCliente(event) {
+function cadastrarChamadoCliente(
+    event
+) {
 
     event.preventDefault();
 
@@ -751,71 +1135,102 @@ function cadastrarChamadoCliente(event) {
 
 
     const nome =
-        document.getElementById(
-            "clienteNome"
-        ).value.trim();
+        document
+            .getElementById(
+                "clienteNome"
+            )
+            .value
+            .trim();
 
 
     const email =
-        document.getElementById(
-            "clienteEmail"
-        ).value.trim();
+        document
+            .getElementById(
+                "clienteEmail"
+            )
+            .value
+            .trim();
 
 
     const telefone =
-        document.getElementById(
-            "clienteTelefone"
-        ).value.trim();
+        document
+            .getElementById(
+                "clienteTelefone"
+            )
+            .value
+            .trim();
 
 
     const categoria =
-        document.getElementById(
-            "clienteCategoria"
-        ).value;
+        document
+            .getElementById(
+                "clienteCategoria"
+            )
+            .value;
 
 
     const assunto =
-        document.getElementById(
-            "clienteAssunto"
-        ).value.trim();
+        document
+            .getElementById(
+                "clienteAssunto"
+            )
+            .value
+            .trim();
 
 
     const prioridade =
-        document.getElementById(
-            "clientePrioridade"
-        ).value;
+        document
+            .getElementById(
+                "clientePrioridade"
+            )
+            .value;
 
 
     const descricao =
-        document.getElementById(
-            "clienteDescricao"
-        ).value.trim();
+        document
+            .getElementById(
+                "clienteDescricao"
+            )
+            .value
+            .trim();
 
 
-    const novoChamado = criarChamadoBase({
+    const novoChamado =
+        criarChamadoBase({
 
-        cliente: nome,
+            cliente:
+                nome,
 
-        email: email,
+            email:
+                email,
 
-        telefone: telefone,
+            telefone:
+                telefone,
 
-        categoria: categoria,
+            categoria:
+                categoria,
 
-        assunto: assunto,
+            assunto:
+                assunto,
 
-        prioridade: prioridade,
+            prioridade:
+                prioridade,
 
-        descricao: descricao,
+            descricao:
+                descricao,
 
-        atendente: "",
+            atendente:
+                "",
 
-        origem: "Cliente"
+            origem:
+                "Cliente"
 
-    });
+        });
 
 
-    chamados.push(novoChamado);
+    chamados.push(
+        novoChamado
+    );
 
 
     salvarDados();
@@ -857,23 +1272,28 @@ function cadastrarChamadoCliente(event) {
         "meusChamadosCliente"
     );
 
-}
-
-
-/* =========================================================
+}/* =========================================================
    CRIAR CHAMADO BASE
 ========================================================= */
 
 function criarChamadoBase(dados) {
 
-    const agora =
-        new Date();
+    const agora = new Date();
+
+    const numero =
+        chamados.length > 0
+            ? Math.max(
+                ...chamados.map(
+                    chamado =>
+                        Number(chamado.id) || 0
+                )
+            ) + 1
+            : 1;
 
 
     return {
 
-        id:
-            gerarIdChamado(),
+        id: numero,
 
         cliente:
             dados.cliente || "",
@@ -885,7 +1305,7 @@ function criarChamadoBase(dados) {
             dados.telefone || "",
 
         categoria:
-            dados.categoria || "Outro",
+            dados.categoria || "",
 
         assunto:
             dados.assunto || "",
@@ -903,13 +1323,19 @@ function criarChamadoBase(dados) {
             dados.atendente || "",
 
         origem:
-            dados.origem || "Administrativo",
+            dados.origem || "Admin",
 
-        criadoEm:
+        dataCriacao:
             agora.toISOString(),
 
-        atualizadoEm:
+        dataAtualizacao:
             agora.toISOString(),
+
+        dataFechamento:
+            null,
+
+        observacoes:
+            "",
 
         historico: [
 
@@ -922,7 +1348,7 @@ function criarChamadoBase(dados) {
                     "Chamado criado",
 
                 descricao:
-                    "Chamado cadastrado no sistema."
+                    "Chamado aberto no sistema."
 
             }
 
@@ -933,25 +1359,8 @@ function criarChamadoBase(dados) {
 }
 
 
-function gerarIdChamado() {
-
-    if (chamados.length === 0)
-        return 1;
-
-
-    return Math.max(
-        ...chamados.map(function (chamado) {
-
-            return Number(chamado.id) || 0;
-
-        })
-    ) + 1;
-
-}
-
-
 /* =========================================================
-   CADASTRAR CHAMADO ADMINISTRATIVO
+   CADASTRAR CHAMADO ADMIN
 ========================================================= */
 
 function cadastrarChamadoAdmin(event) {
@@ -959,67 +1368,116 @@ function cadastrarChamadoAdmin(event) {
     event.preventDefault();
 
 
+    if (!administradorLogado) {
+
+        alert(
+            "Acesso administrativo necessário."
+        );
+
+        return;
+
+    }
+
+
     const cliente =
         document
-            .getElementById("cliente")
-            .value
-            .trim();
+            .getElementById("nomeCliente")
+            ?.value
+            .trim() || "";
 
 
     const email =
         document
-            .getElementById("email")
-            .value
-            .trim();
+            .getElementById("emailCliente")
+            ?.value
+            .trim() || "";
+
+
+    const telefone =
+        document
+            .getElementById("telefoneCliente")
+            ?.value
+            .trim() || "";
+
+
+    const categoria =
+        document
+            .getElementById("categoria")
+            ?.value || "";
 
 
     const assunto =
         document
             .getElementById("assunto")
-            .value
-            .trim();
+            ?.value
+            .trim() || "";
 
 
     const prioridade =
         document
             .getElementById("prioridade")
-            .value;
-
-
-    const atendente =
-        document
-            .getElementById("atendente")
-            .value;
+            ?.value || "Média";
 
 
     const descricao =
         document
             .getElementById("descricao")
-            .value
-            .trim();
+            ?.value
+            .trim() || "";
+
+
+    if (
+        !cliente ||
+        !email ||
+        !assunto ||
+        !descricao
+    ) {
+
+        alert(
+            "Preencha todos os campos obrigatórios."
+        );
+
+        return;
+
+    }
 
 
     const novoChamado =
         criarChamadoBase({
 
-            cliente: cliente,
+            cliente:
+                cliente,
 
-            email: email,
+            email:
+                email,
 
-            assunto: assunto,
+            telefone:
+                telefone,
 
-            prioridade: prioridade,
+            categoria:
+                categoria,
 
-            atendente: atendente,
+            assunto:
+                assunto,
 
-            descricao: descricao,
+            prioridade:
+                prioridade,
 
-            origem: "Administrativo"
+            descricao:
+                descricao,
+
+            atendente:
+                "",
+
+            origem:
+                "Admin"
 
         });
 
 
-    chamados.push(novoChamado);
+    chamados.push(
+        novoChamado
+    );
 
 
     salvarDados();
@@ -1027,9 +1485,9 @@ function cadastrarChamadoAdmin(event) {
 
     adicionarNotificacao(
 
-        "Novo chamado cadastrado",
+        "Novo chamado",
 
-        `O chamado #${novoChamado.id} foi cadastrado para ${cliente}.`
+        `O chamado #${novoChamado.id} foi criado para ${cliente}.`
 
     );
 
@@ -1038,56 +1496,143 @@ function cadastrarChamadoAdmin(event) {
 
         "Chamado criado",
 
-        `Chamado #${novoChamado.id} cadastrado para ${cliente}.`
+        `O administrador criou o chamado #${novoChamado.id}.`
 
     );
-
-
-    event.target.reset();
 
 
     atualizarTudo();
 
 
+    if (event.target)
+        event.target.reset();
+
+
     alert(
-        `Chamado #${novoChamado.id} cadastrado com sucesso!`
+        `Chamado #${novoChamado.id} criado com sucesso!`
     );
 
 }
 
 
 /* =========================================================
-   DASHBOARD
+   SALVAR DADOS
 ========================================================= */
 
-function atualizarDashboard() {
+function salvarDados() {
+
+    localStorage.setItem(
+        "chamados",
+        JSON.stringify(chamados)
+    );
+
+
+    localStorage.setItem(
+        "atendentes",
+        JSON.stringify(atendentes)
+    );
+
+
+    localStorage.setItem(
+        "notificacoes",
+        JSON.stringify(notificacoes)
+    );
+
+
+    localStorage.setItem(
+        "historicoGeral",
+        JSON.stringify(historicoGeral)
+    );
+
+
+    localStorage.setItem(
+        "configuracoes",
+        JSON.stringify(configuracoes)
+    );
+
+}
+
+
+/* =========================================================
+   ATUALIZAR TUDO
+========================================================= */
+
+function atualizarTudo() {
+
+    salvarDados();
+
+    renderizarChamados();
+
+    renderizarAtendentes();
+
+    renderizarNotificacoes();
+
+    renderizarHistorico();
+
+    atualizarDashboard();
+
+    atualizarDashboardCliente();
+
+    renderizarChamadosCliente();
+
+    renderizarNotificacoesCliente();
+
+    renderizarHistoricoCliente();
+
+    preencherDadosCliente();
+
+    atualizarContadores();
+
+}
+
+
+/* =========================================================
+   CONTADORES
+========================================================= */
+
+function atualizarContadores() {
 
     const total =
         chamados.length;
 
 
     const abertos =
-        chamados.filter(function (c) {
-
-            return c.status === "Aberto";
-
-        }).length;
+        chamados.filter(
+            chamado =>
+                chamado.status === "Aberto"
+        ).length;
 
 
     const andamento =
-        chamados.filter(function (c) {
+        chamados.filter(
+            chamado =>
+                chamado.status ===
+                "Em andamento"
+        ).length;
 
-            return c.status === "Em andamento";
 
-        }).length;
+    const pendentes =
+        chamados.filter(
+            chamado =>
+                chamado.status ===
+                "Pendente"
+        ).length;
 
 
     const resolvidos =
-        chamados.filter(function (c) {
+        chamados.filter(
+            chamado =>
+                chamado.status ===
+                "Resolvido"
+        ).length;
 
-            return c.status === "Resolvido";
 
-        }).length;
+    const fechados =
+        chamados.filter(
+            chamado =>
+                chamado.status ===
+                "Fechado"
+        ).length;
 
 
     definirTexto(
@@ -1109,586 +1654,258 @@ function atualizarDashboard() {
 
 
     definirTexto(
+        "chamadosPendentes",
+        pendentes
+    );
+
+
+    definirTexto(
         "chamadosResolvidos",
         resolvidos
     );
 
 
-    const taxa =
-        total > 0
-            ? Math.round(
-                (resolvidos / total) * 100
-            )
-            : 0;
-
-
     definirTexto(
-        "taxaResolucao",
-        taxa + "%"
-    );
-
-
-    const alta =
-        chamados.filter(function (c) {
-
-            return c.prioridade === "Alta";
-
-        }).length;
-
-
-    const media =
-        chamados.filter(function (c) {
-
-            return c.prioridade === "Média";
-
-        }).length;
-
-
-    const baixa =
-        chamados.filter(function (c) {
-
-            return c.prioridade === "Baixa";
-
-        }).length;
-
-
-    definirTexto(
-        "prioridadeAlta",
-        alta
+        "chamadosFechados",
+        fechados
     );
 
 
     definirTexto(
-        "prioridadeMedia",
-        media
+        "contadorNotificacoes",
+        notificacoes.length
     );
-
-
-    definirTexto(
-        "prioridadeBaixa",
-        baixa
-    );
-
-
-    atualizarRelatorio();
 
 }
 
 
 /* =========================================================
-   DASHBOARD CLIENTE
+   FUNÇÃO AUXILIAR — TEXTO
 ========================================================= */
 
-function atualizarDashboardCliente() {
+function definirTexto(
+    id,
+    valor
+) {
+
+    const elemento =
+        document.getElementById(id);
+
+
+    if (elemento)
+        elemento.textContent =
+            valor;
+
+}
+
+
+/* =========================================================
+   VERIFICAR CLIENTE LOGADO
+========================================================= */
+
+function verificarClienteLogado() {
 
     if (!clienteLogado)
         return;
 
 
-    const meusChamados =
-        obterChamadosCliente();
-
-
-    const total =
-        meusChamados.length;
-
-
-    const abertos =
-        meusChamados.filter(function (c) {
-
-            return c.status === "Aberto";
-
-        }).length;
-
-
-    const andamento =
-        meusChamados.filter(function (c) {
-
-            return c.status === "Em andamento";
-
-        }).length;
-
-
-    const resolvidos =
-        meusChamados.filter(function (c) {
-
-            return c.status === "Resolvido";
-
-        }).length;
-
-
-    definirTexto(
-        "clienteTotalChamados",
-        total
-    );
-
-
-    definirTexto(
-        "clienteChamadosAbertos",
-        abertos
-    );
-
-
-    definirTexto(
-        "clienteChamadosAndamento",
-        andamento
-    );
-
-
-    definirTexto(
-        "clienteChamadosResolvidos",
-        resolvidos
-    );
-
-
-    renderizarChamadosRecentesCliente();
+    mostrarPainelCliente();
 
 }
 
 
 /* =========================================================
-   CHAMADOS DO CLIENTE
+   MOSTRAR LOGIN CLIENTE
 ========================================================= */
 
-function obterChamadosCliente() {
+function mostrarLoginCliente() {
 
-    if (!clienteLogado)
-        return [];
-
-
-    return chamados.filter(function (chamado) {
-
-        return (
-
-            String(chamado.email)
-                .toLowerCase()
-                ===
-            String(clienteLogado.email)
-                .toLowerCase()
-
-        );
-
-    });
-
-}
-
-
-/* =========================================================
-   LISTA DE CHAMADOS CLIENTE
-========================================================= */
-
-function renderizarChamadosCliente() {
-
-    const container =
+    const login =
         document.getElementById(
-            "listaMeusChamados"
+            "loginCliente"
         );
 
 
-    if (!container)
-        return;
-
-
-    let lista =
-        obterChamadosCliente();
-
-
-    const pesquisa =
-        document
-            .getElementById(
-                "pesquisaChamadosCliente"
-            );
-
-
-    const filtroStatus =
-        document
-            .getElementById(
-                "filtroStatusCliente"
-            );
-
-
-    const filtroPrioridade =
-        document
-            .getElementById(
-                "filtroPrioridadeCliente"
-            );
-
-
-    const termo =
-        pesquisa
-            ? pesquisa.value
-                .toLowerCase()
-                .trim()
-            : "";
-
-
-    const status =
-        filtroStatus
-            ? filtroStatus.value
-            : "Todos";
-
-
-    const prioridade =
-        filtroPrioridade
-            ? filtroPrioridade.value
-            : "Todas";
-
-
-    lista =
-        lista.filter(function (chamado) {
-
-            const correspondePesquisa =
-
-                !termo ||
-
-                String(chamado.id)
-                    .includes(termo) ||
-
-                chamado.assunto
-                    .toLowerCase()
-                    .includes(termo) ||
-
-                chamado.descricao
-                    .toLowerCase()
-                    .includes(termo);
-
-
-            const correspondeStatus =
-
-                status === "Todos" ||
-
-                chamado.status === status;
-
-
-            const correspondePrioridade =
-
-                prioridade === "Todas" ||
-
-                chamado.prioridade === prioridade;
-
-
-            return (
-
-                correspondePesquisa &&
-
-                correspondeStatus &&
-
-                correspondePrioridade
-
-            );
-
-        });
-
-
-    lista.sort(
-        ordenarPorDataDesc
-    );
-
-
-    if (lista.length === 0) {
-
-        container.innerHTML = `
-
-            <div class="cliente-sem-chamados">
-
-                <span>📭</span>
-
-                <h3>Nenhum chamado encontrado</h3>
-
-                <p>
-                    Seus chamados aparecerão aqui depois
-                    que você enviar uma solicitação.
-                </p>
-
-            </div>
-
-        `;
-
-        return;
-
-    }
-
-
-    container.innerHTML =
-        lista
-            .map(
-                criarCardChamadoCliente
-            )
-            .join("");
-
-}
-
-
-/* =========================================================
-   CARD CHAMADO CLIENTE
-========================================================= */
-
-function criarCardChamadoCliente(chamado) {
-
-    return `
-
-        <div class="cliente-chamado-card">
-
-            <div class="cliente-chamado-cabecalho">
-
-                <div>
-
-                    <span class="cliente-chamado-id">
-                        #${chamado.id}
-                    </span>
-
-                    <h3>
-                        ${escapeHTML(chamado.assunto)}
-                    </h3>
-
-                </div>
-
-                <span class="status-badge ${classeStatus(chamado.status)}">
-                    ${iconeStatus(chamado.status)}
-                    ${escapeHTML(chamado.status)}
-                </span>
-
-            </div>
-
-
-            <div class="cliente-chamado-info">
-
-                <span>
-                    📁 ${escapeHTML(chamado.categoria || "Outro")}
-                </span>
-
-                <span>
-                    ${iconePrioridade(chamado.prioridade)}
-                    ${escapeHTML(chamado.prioridade)}
-                </span>
-
-                <span>
-                    📅 ${formatarData(chamado.criadoEm)}
-                </span>
-
-            </div>
-
-
-            <p class="cliente-chamado-descricao">
-
-                ${escapeHTML(
-                    limitarTexto(
-                        chamado.descricao,
-                        180
-                    )
-                )}
-
-            </p>
-
-
-            <div class="cliente-chamado-rodape">
-
-                <span>
-                    🎧 ${
-                        chamado.atendente
-                            ? escapeHTML(chamado.atendente)
-                            : "Aguardando atendente"
-                    }
-                </span>
-
-
-                <button
-                    type="button"
-                    onclick="verDetalhesCliente(${chamado.id})"
-                >
-                    👁️ Ver detalhes
-                </button>
-
-            </div>
-
-        </div>
-
-    `;
-
-}
-
-
-/* =========================================================
-   CHAMADOS RECENTES CLIENTE
-========================================================= */
-
-function renderizarChamadosRecentesCliente() {
-
-    const container =
+    const painel =
         document.getElementById(
-            "clienteChamadosRecentes"
+            "painelCliente"
         );
 
 
-    if (!container)
-        return;
+    if (login)
+        login.style.display =
+            "block";
 
 
-    const lista =
-        obterChamadosCliente()
-            .sort(ordenarPorDataDesc)
-            .slice(0, 5);
-
-
-    if (lista.length === 0) {
-
-        container.innerHTML = `
-
-            <div class="cliente-sem-chamados">
-
-                <span>📭</span>
-
-                <h3>Nenhum chamado encontrado</h3>
-
-                <p>
-                    Seus chamados recentes aparecerão aqui.
-                </p>
-
-            </div>
-
-        `;
-
-        return;
-
-    }
-
-
-    container.innerHTML =
-        lista
-            .map(
-                criarCardChamadoCliente
-            )
-            .join("");
+    if (painel)
+        painel.style.display =
+            "none";
 
 }
 
 
 /* =========================================================
-   CHAMADOS ADMINISTRATIVO
+   MOSTRAR PAINEL CLIENTE
+========================================================= */
+
+function mostrarPainelCliente() {
+
+    const login =
+        document.getElementById(
+            "loginCliente"
+        );
+
+
+    const painel =
+        document.getElementById(
+            "painelCliente"
+        );
+
+
+    if (login)
+        login.style.display =
+            "none";
+
+
+    if (painel)
+        painel.style.display =
+            "block";
+
+
+    preencherDadosCliente();
+
+    atualizarDashboardCliente();
+
+    renderizarChamadosCliente();
+
+}/* =========================================================
+   RENDERIZAR CHAMADOS — ADMIN
 ========================================================= */
 
 function renderizarChamados() {
 
-    const container =
+    const tabela =
         document.getElementById(
             "listaChamados"
         );
 
 
-    if (!container)
+    if (!tabela)
         return;
+
+
+    const pesquisa =
+        (
+            document.getElementById(
+                "pesquisa"
+            )?.value || ""
+        )
+        .toLowerCase()
+        .trim();
+
+
+    const filtroStatus =
+        document.getElementById(
+            "filtroStatus"
+        )?.value || "";
+
+
+    const filtroPrioridade =
+        document.getElementById(
+            "filtroPrioridade"
+        )?.value || "";
 
 
     let lista =
         [...chamados];
 
 
-    const pesquisa =
-        document.getElementById(
-            "pesquisa"
-        );
+    if (pesquisa) {
 
+        lista =
+            lista.filter(
+                chamado =>
 
-    const filtroStatus =
-        document.getElementById(
-            "filtroStatus"
-        );
+                    String(chamado.id)
+                        .toLowerCase()
+                        .includes(pesquisa)
 
+                    ||
 
-    const filtroPrioridade =
-        document.getElementById(
-            "filtroPrioridade"
-        );
+                    (chamado.cliente || "")
+                        .toLowerCase()
+                        .includes(pesquisa)
 
+                    ||
 
-    const termo =
-        pesquisa
-            ? pesquisa.value
-                .toLowerCase()
-                .trim()
-            : "";
+                    (chamado.email || "")
+                        .toLowerCase()
+                        .includes(pesquisa)
 
+                    ||
 
-    const status =
-        filtroStatus
-            ? filtroStatus.value
-            : "Todos";
+                    (chamado.assunto || "")
+                        .toLowerCase()
+                        .includes(pesquisa)
 
+                    ||
 
-    const prioridade =
-        filtroPrioridade
-            ? filtroPrioridade.value
-            : "Todas";
-
-
-    lista =
-        lista.filter(function (chamado) {
-
-            const correspondePesquisa =
-
-                !termo ||
-
-                String(chamado.id)
-                    .includes(termo) ||
-
-                chamado.cliente
-                    .toLowerCase()
-                    .includes(termo) ||
-
-                chamado.email
-                    .toLowerCase()
-                    .includes(termo) ||
-
-                chamado.assunto
-                    .toLowerCase()
-                    .includes(termo);
-
-
-            const correspondeStatus =
-
-                status === "Todos" ||
-
-                chamado.status === status;
-
-
-            const correspondePrioridade =
-
-                prioridade === "Todas" ||
-
-                chamado.prioridade === prioridade;
-
-
-            return (
-
-                correspondePesquisa &&
-
-                correspondeStatus &&
-
-                correspondePrioridade
+                    (chamado.categoria || "")
+                        .toLowerCase()
+                        .includes(pesquisa)
 
             );
 
-        });
+    }
+
+
+    if (filtroStatus) {
+
+        lista =
+            lista.filter(
+                chamado =>
+                    chamado.status ===
+                    filtroStatus
+            );
+
+    }
+
+
+    if (filtroPrioridade) {
+
+        lista =
+            lista.filter(
+                chamado =>
+                    chamado.prioridade ===
+                    filtroPrioridade
+            );
+
+    }
 
 
     lista.sort(
-        ordenarPorDataDesc
+        (a, b) =>
+            Number(b.id) -
+            Number(a.id)
     );
 
 
     if (lista.length === 0) {
 
-        container.innerHTML = `
+        tabela.innerHTML = `
 
-            <div class="sem-chamados">
+            <tr>
 
-                <h3>Nenhum chamado encontrado</h3>
+                <td
+                    colspan="100%"
+                    style="text-align:center;"
+                >
 
-                <p>
-                    Cadastre um novo chamado para começar.
-                </p>
+                    Nenhum chamado encontrado.
 
-            </div>
+                </td>
+
+            </tr>
 
         `;
 
@@ -1697,126 +1914,109 @@ function renderizarChamados() {
     }
 
 
-    container.innerHTML =
-        lista
-            .map(
-                criarCardChamadoAdmin
-            )
-            .join("");
+    tabela.innerHTML =
+        lista.map(
+            chamado =>
+                criarLinhaChamado(
+                    chamado
+                )
+        ).join("");
 
 }
 
 
 /* =========================================================
-   CARD CHAMADO ADMIN
+   CRIAR LINHA DO CHAMADO
 ========================================================= */
 
-function criarCardChamadoAdmin(chamado) {
+function criarLinhaChamado(
+    chamado
+) {
+
+    const data =
+        formatarData(
+            chamado.dataCriacao
+        );
+
+
+    const status =
+        chamado.status ||
+        "Aberto";
+
+
+    const prioridade =
+        chamado.prioridade ||
+        "Média";
+
 
     return `
 
-        <article class="chamado-card">
+        <tr>
 
-            <div class="chamado-card-topo">
+            <td>
+                #${escapeHTML(chamado.id)}
+            </td>
 
-                <div>
+            <td>
+                ${escapeHTML(
+                    chamado.cliente
+                )}
+            </td>
 
-                    <span class="chamado-id">
-                        #${chamado.id}
-                    </span>
+            <td>
+                ${escapeHTML(
+                    chamado.assunto
+                )}
+            </td>
 
-                    <h3>
-                        ${escapeHTML(chamado.assunto)}
-                    </h3>
+            <td>
+                ${escapeHTML(
+                    chamado.categoria
+                )}
+            </td>
 
-                </div>
-
-
-                <span class="status-badge ${classeStatus(chamado.status)}">
-
-                    ${iconeStatus(chamado.status)}
-
-                    ${escapeHTML(chamado.status)}
-
+            <td>
+                <span class="status status-${normalizarClasse(status)}">
+                    ${escapeHTML(status)}
                 </span>
+            </td>
 
-            </div>
+            <td>
+                <span class="prioridade prioridade-${normalizarClasse(prioridade)}">
+                    ${escapeHTML(prioridade)}
+                </span>
+            </td>
 
+            <td>
+                ${data}
+            </td>
 
-            <div class="chamado-card-info">
-
-                <p>
-                    👤
-                    <strong>Cliente:</strong>
-                    ${escapeHTML(chamado.cliente)}
-                </p>
-
-                <p>
-                    ✉️
-                    <strong>E-mail:</strong>
-                    ${escapeHTML(chamado.email)}
-                </p>
-
-                <p>
-                    ${iconePrioridade(chamado.prioridade)}
-                    <strong>Prioridade:</strong>
-                    ${escapeHTML(chamado.prioridade)}
-                </p>
-
-                <p>
-                    🎧
-                    <strong>Atendente:</strong>
-                    ${
-                        chamado.atendente
-                            ? escapeHTML(chamado.atendente)
-                            : "Não atribuído"
-                    }
-                </p>
-
-                <p>
-                    📅
-                    <strong>Criado:</strong>
-                    ${formatarData(chamado.criadoEm)}
-                </p>
-
-            </div>
-
-
-            <div class="chamado-card-descricao">
-
-                ${escapeHTML(chamado.descricao)}
-
-            </div>
-
-
-            <div class="chamado-card-acoes">
+            <td>
 
                 <button
                     type="button"
-                    onclick="abrirDetalhes(${chamado.id})"
+                    onclick="abrirChamado(${Number(chamado.id)})"
                 >
-                    👁️ Detalhes
+                    👁️
                 </button>
-
 
                 <button
                     type="button"
-                    onclick="abrirEdicao(${chamado.id})"
+                    onclick="editarChamado(${Number(chamado.id)})"
                 >
-                    ✏️ Editar
+                    ✏️
                 </button>
-
 
                 <button
                     type="button"
-                    onclick="excluirChamado(${chamado.id})"
+                    onclick="excluirChamado(${Number(chamado.id)})"
                 >
-                    🗑️ Excluir
+                    🗑️
                 </button>
 
-            </div>
+            </td>
 
-        </article>
+        </tr>
 
     `;
 
@@ -1824,451 +2024,189 @@ function criarCardChamadoAdmin(chamado) {
 
 
 /* =========================================================
-   DETALHES DO CHAMADO
+   ABRIR CHAMADO
 ========================================================= */
 
-function abrirDetalhes(id) {
+function abrirChamado(id) {
+
+    if (!administradorLogado) {
+
+        alert(
+            "Acesso administrativo necessário."
+        );
+
+        return;
+
+    }
+
 
     const chamado =
-        encontrarChamado(id);
+        chamados.find(
+            item =>
+                Number(item.id) ===
+                Number(id)
+        );
 
 
-    if (!chamado)
+    if (!chamado) {
+
+        alert(
+            "Chamado não encontrado."
+        );
+
         return;
+
+    }
 
 
     chamadoSelecionado =
-        chamado.id;
+        chamado;
 
 
     const modal =
         document.getElementById(
-            "modalDetalhes"
+            "modalChamado"
         );
 
 
-    const conteudo =
-        document.getElementById(
-            "conteudoDetalhes"
+    if (!modal) {
+
+        mostrarDetalhesChamado(
+            chamado
         );
 
-
-    if (!modal || !conteudo)
         return;
 
+    }
 
-    conteudo.innerHTML = `
 
-        <div class="detalhes-chamado">
+    const campos = {
 
-            <p>
-                <strong>ID:</strong>
-                #${chamado.id}
-            </p>
+        "detalheId":
+            `#${chamado.id}`,
 
-            <p>
-                <strong>Cliente:</strong>
-                ${escapeHTML(chamado.cliente)}
-            </p>
+        "detalheCliente":
+            chamado.cliente,
 
-            <p>
-                <strong>E-mail:</strong>
-                ${escapeHTML(chamado.email)}
-            </p>
+        "detalheEmail":
+            chamado.email,
 
-            ${
-                chamado.telefone
-                    ? `
-                    <p>
-                        <strong>Telefone:</strong>
-                        ${escapeHTML(chamado.telefone)}
-                    </p>
-                    `
-                    : ""
+        "detalheTelefone":
+            chamado.telefone,
+
+        "detalheCategoria":
+            chamado.categoria,
+
+        "detalheAssunto":
+            chamado.assunto,
+
+        "detalhePrioridade":
+            chamado.prioridade,
+
+        "detalheStatus":
+            chamado.status,
+
+        "detalheAtendente":
+            chamado.atendente ||
+            "Não atribuído",
+
+        "detalheDescricao":
+            chamado.descricao
+
+    };
+
+
+    Object.keys(campos)
+        .forEach(
+            function (idCampo) {
+
+                const elemento =
+                    document.getElementById(
+                        idCampo
+                    );
+
+
+                if (elemento)
+                    elemento.textContent =
+                        campos[idCampo];
+
             }
+        );
 
-            <p>
-                <strong>Categoria:</strong>
-                ${escapeHTML(chamado.categoria || "Outro")}
-            </p>
 
-            <p>
-                <strong>Assunto:</strong>
-                ${escapeHTML(chamado.assunto)}
-            </p>
-
-            <p>
-                <strong>Prioridade:</strong>
-                ${iconePrioridade(chamado.prioridade)}
-                ${escapeHTML(chamado.prioridade)}
-            </p>
-
-            <p>
-                <strong>Status:</strong>
-                ${iconeStatus(chamado.status)}
-                ${escapeHTML(chamado.status)}
-            </p>
-
-            <p>
-                <strong>Atendente:</strong>
-                ${
-                    chamado.atendente
-                        ? escapeHTML(chamado.atendente)
-                        : "Não atribuído"
-                }
-            </p>
-
-            <p>
-                <strong>Descrição:</strong>
-            </p>
-
-            <div class="descricao-detalhes">
-                ${escapeHTML(chamado.descricao)}
-            </div>
-
-            <p>
-                <strong>Criado em:</strong>
-                ${formatarData(chamado.criadoEm)}
-            </p>
-
-        </div>
-
-    `;
+    modal.style.display =
+        "flex";
 
 
     renderizarHistoricoChamado(
         chamado
     );
 
-
-    modal.style.display = "flex";
-
 }
 
 
-function fecharDetalhes() {
+/* =========================================================
+   FECHAR MODAL
+========================================================= */
+
+function fecharModalChamado() {
 
     const modal =
         document.getElementById(
-            "modalDetalhes"
+            "modalChamado"
         );
 
 
     if (modal)
-        modal.style.display = "none";
+        modal.style.display =
+            "none";
 
 
-    chamadoSelecionado = null;
-
-
-    const campo =
-        document.getElementById(
-            "novoHistorico"
-        );
-
-
-    if (campo)
-        campo.value = "";
+    chamadoSelecionado =
+        null;
 
 }
 
 
 /* =========================================================
-   DETALHES PARA CLIENTE
+   MOSTRAR DETALHES SEM MODAL
 ========================================================= */
 
-function verDetalhesCliente(id) {
+function mostrarDetalhesChamado(
+    chamado
+) {
 
-    const chamado =
-        encontrarChamado(id);
+    const texto = `
 
+Chamado #${chamado.id}
 
-    if (!chamado)
-        return;
+Cliente: ${chamado.cliente}
 
+E-mail: ${chamado.email}
 
-    const modal =
-        document.getElementById(
-            "modalDetalhes"
-        );
+Telefone: ${chamado.telefone}
 
+Categoria: ${chamado.categoria}
 
-    const conteudo =
-        document.getElementById(
-            "conteudoDetalhes"
-        );
+Assunto: ${chamado.assunto}
 
+Prioridade: ${chamado.prioridade}
 
-    if (!modal || !conteudo)
-        return;
+Status: ${chamado.status}
 
+Atendente: ${
+    chamado.atendente ||
+    "Não atribuído"
+}
 
-    chamadoSelecionado =
-        chamado.id;
+Descrição:
 
-
-    conteudo.innerHTML = `
-
-        <div class="detalhes-chamado">
-
-            <p>
-                <strong>Chamado:</strong>
-                #${chamado.id}
-            </p>
-
-            <p>
-                <strong>Assunto:</strong>
-                ${escapeHTML(chamado.assunto)}
-            </p>
-
-            <p>
-                <strong>Status:</strong>
-                ${iconeStatus(chamado.status)}
-                ${escapeHTML(chamado.status)}
-            </p>
-
-            <p>
-                <strong>Prioridade:</strong>
-                ${iconePrioridade(chamado.prioridade)}
-                ${escapeHTML(chamado.prioridade)}
-            </p>
-
-            <p>
-                <strong>Categoria:</strong>
-                ${escapeHTML(chamado.categoria || "Outro")}
-            </p>
-
-            <p>
-                <strong>Atendente:</strong>
-                ${
-                    chamado.atendente
-                        ? escapeHTML(chamado.atendente)
-                        : "Aguardando atendimento"
-                }
-            </p>
-
-            <p>
-                <strong>Descrição:</strong>
-            </p>
-
-            <div class="descricao-detalhes">
-                ${escapeHTML(chamado.descricao)}
-            </div>
-
-            <p>
-                <strong>Data:</strong>
-                ${formatarData(chamado.criadoEm)}
-            </p>
-
-        </div>
+${chamado.descricao}
 
     `;
 
 
-    renderizarHistoricoChamado(
-        chamado
-    );
-
-
-    /* Esconder campo de atualização para cliente */
-
-    const campo =
-        document.getElementById(
-            "novoHistorico"
-        );
-
-
-    const label =
-        document.querySelector(
-            'label[for="novoHistorico"]'
-        );
-
-
-    const botao =
-        document.querySelector(
-            '#modalDetalhes button[onclick="adicionarHistorico()"]'
-        );
-
-
-    if (campo)
-        campo.style.display = "none";
-
-    if (label)
-        label.style.display = "none";
-
-    if (botao)
-        botao.style.display = "none";
-
-
-    modal.style.display = "flex";
-
-}
-
-
-/* =========================================================
-   HISTÓRICO DO CHAMADO
-========================================================= */
-
-function renderizarHistoricoChamado(chamado) {
-
-    const container =
-        document.getElementById(
-            "historicoChamado"
-        );
-
-
-    if (!container)
-        return;
-
-
-    const historico =
-        chamado.historico || [];
-
-
-    if (historico.length === 0) {
-
-        container.innerHTML = `
-
-            <p>
-                Nenhum atendimento registrado.
-            </p>
-
-        `;
-
-        return;
-
-    }
-
-
-    container.innerHTML =
-        historico
-            .slice()
-            .reverse()
-            .map(function (item) {
-
-                return `
-
-                    <div class="historico-item">
-
-                        <strong>
-                            ${escapeHTML(item.acao || "Atualização")}
-                        </strong>
-
-                        <p>
-                            ${escapeHTML(item.descricao || "")}
-                        </p>
-
-                        <small>
-                            ${formatarData(item.data)}
-                        </small>
-
-                    </div>
-
-                `;
-
-            })
-            .join("");
-
-}
-
-
-/* =========================================================
-   ADICIONAR HISTÓRICO
-========================================================= */
-
-function adicionarHistorico() {
-
-    if (!chamadoSelecionado)
-        return;
-
-
-    const chamado =
-        encontrarChamado(
-            chamadoSelecionado
-        );
-
-
-    if (!chamado)
-        return;
-
-
-    const campo =
-        document.getElementById(
-            "novoHistorico"
-        );
-
-
-    if (!campo)
-        return;
-
-
-    const texto =
-        campo.value.trim();
-
-
-    if (!texto) {
-
-        alert(
-            "Digite uma atualização."
-        );
-
-        return;
-
-    }
-
-
-    if (!chamado.historico)
-        chamado.historico = [];
-
-
-    chamado.historico.push({
-
-        data:
-            new Date().toISOString(),
-
-        acao:
-            "Atualização de atendimento",
-
-        descricao:
-            texto
-
-    });
-
-
-    chamado.atualizadoEm =
-        new Date().toISOString();
-
-
-    adicionarHistoricoGeral(
-
-        "Atualização de chamado",
-
-        `O chamado #${chamado.id} recebeu uma nova atualização.`
-
-    );
-
-
-    adicionarNotificacao(
-
-        "Chamado atualizado",
-
-        `O chamado #${chamado.id} recebeu uma atualização.`
-
-    );
-
-
-    salvarDados();
-
-
-    campo.value = "";
-
-
-    renderizarHistoricoChamado(
-        chamado
-    );
-
-
-    atualizarTudo();
+    alert(texto);
 
 }
 
@@ -2277,58 +2215,328 @@ function adicionarHistorico() {
    EDITAR CHAMADO
 ========================================================= */
 
-function abrirEdicao(id) {
+function editarChamado(id) {
+
+    if (!administradorLogado) {
+
+        alert(
+            "Acesso administrativo necessário."
+        );
+
+        return;
+
+    }
+
 
     const chamado =
-        encontrarChamado(id);
+        chamados.find(
+            item =>
+                Number(item.id) ===
+                Number(id)
+        );
 
 
-    if (!chamado)
+    if (!chamado) {
+
+        alert(
+            "Chamado não encontrado."
+        );
+
         return;
+
+    }
 
 
     chamadoEditando =
-        chamado.id;
+        chamado;
 
 
-    preencherSelectAtendentes(
-        "editarAtendente"
+    const campos = {
+
+        "editarCliente":
+            chamado.cliente,
+
+        "editarEmail":
+            chamado.email,
+
+        "editarTelefone":
+            chamado.telefone,
+
+        "editarCategoria":
+            chamado.categoria,
+
+        "editarAssunto":
+            chamado.assunto,
+
+        "editarPrioridade":
+            chamado.prioridade,
+
+        "editarStatus":
+            chamado.status,
+
+        "editarAtendente":
+            chamado.atendente || "",
+
+        "editarDescricao":
+            chamado.descricao
+
+    };
+
+
+    let encontrouFormulario =
+        false;
+
+
+    Object.keys(campos)
+        .forEach(
+            function (idCampo) {
+
+                const elemento =
+                    document.getElementById(
+                        idCampo
+                    );
+
+
+                if (elemento) {
+
+                    encontrouFormulario =
+                        true;
+
+                    elemento.value =
+                        campos[idCampo];
+
+                }
+
+            }
+        );
+
+
+    const modal =
+        document.getElementById(
+            "modalEditar"
+        );
+
+
+    if (modal) {
+
+        modal.style.display =
+            "flex";
+
+        return;
+
+    }
+
+
+    if (!encontrouFormulario) {
+
+        const novoStatus =
+            prompt(
+                "Digite o novo status:",
+                chamado.status
+            );
+
+
+        if (
+            novoStatus &&
+            novoStatus.trim()
+        ) {
+
+            alterarStatusChamado(
+                chamado.id,
+                novoStatus.trim()
+            );
+
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   SALVAR EDIÇÃO
+========================================================= */
+
+function salvarEdicao(event) {
+
+    event.preventDefault();
+
+
+    if (!administradorLogado) {
+
+        alert(
+            "Acesso administrativo necessário."
+        );
+
+        return;
+
+    }
+
+
+    if (!chamadoEditando) {
+
+        alert(
+            "Nenhum chamado selecionado."
+        );
+
+        return;
+
+    }
+
+
+    const chamado =
+        chamadoEditando;
+
+
+    const obterValor =
+        function (id, valorAtual) {
+
+            const elemento =
+                document.getElementById(id);
+
+
+            return elemento
+                ? elemento.value.trim()
+                : valorAtual;
+
+        };
+
+
+    const statusAnterior =
+        chamado.status;
+
+
+    chamado.cliente =
+        obterValor(
+            "editarCliente",
+            chamado.cliente
+        );
+
+
+    chamado.email =
+        obterValor(
+            "editarEmail",
+            chamado.email
+        );
+
+
+    chamado.telefone =
+        obterValor(
+            "editarTelefone",
+            chamado.telefone
+        );
+
+
+    chamado.categoria =
+        obterValor(
+            "editarCategoria",
+            chamado.categoria
+        );
+
+
+    chamado.assunto =
+        obterValor(
+            "editarAssunto",
+            chamado.assunto
+        );
+
+
+    chamado.prioridade =
+        obterValor(
+            "editarPrioridade",
+            chamado.prioridade
+        );
+
+
+    chamado.status =
+        obterValor(
+            "editarStatus",
+            chamado.status
+        );
+
+
+    chamado.atendente =
+        obterValor(
+            "editarAtendente",
+            chamado.atendente
+        );
+
+
+    chamado.descricao =
+        obterValor(
+            "editarDescricao",
+            chamado.descricao
+        );
+
+
+    chamado.dataAtualizacao =
+        new Date().toISOString();
+
+
+    if (
+        statusAnterior !==
+        chamado.status
+    ) {
+
+        if (
+            chamado.status ===
+            "Fechado"
+        ) {
+
+            chamado.dataFechamento =
+                new Date().toISOString();
+
+        }
+
+
+        adicionarHistoricoChamado(
+
+            chamado,
+
+            "Status alterado",
+
+            `Status alterado de "${statusAnterior}" para "${chamado.status}".`
+
+        );
+
+    } else {
+
+        adicionarHistoricoChamado(
+
+            chamado,
+
+            "Chamado atualizado",
+
+            "As informações do chamado foram atualizadas."
+
+        );
+
+    }
+
+
+    salvarDados();
+
+
+    adicionarNotificacao(
+
+        "Chamado atualizado",
+
+        `O chamado #${chamado.id} foi atualizado.`
+
     );
 
 
-    document.getElementById(
-        "editarCliente"
-    ).value = chamado.cliente;
+    adicionarHistoricoGeral(
+
+        "Chamado atualizado",
+
+        `O chamado #${chamado.id} foi atualizado pelo administrador.`
+
+    );
 
 
-    document.getElementById(
-        "editarEmail"
-    ).value = chamado.email;
-
-
-    document.getElementById(
-        "editarAssunto"
-    ).value = chamado.assunto;
-
-
-    document.getElementById(
-        "editarDescricao"
-    ).value = chamado.descricao;
-
-
-    document.getElementById(
-        "editarPrioridade"
-    ).value = chamado.prioridade;
-
-
-    document.getElementById(
-        "editarStatus"
-    ).value = chamado.status;
-
-
-    document.getElementById(
-        "editarAtendente"
-    ).value = chamado.atendente || "";
+    chamadoEditando =
+        null;
 
 
     const modal =
@@ -2338,141 +2546,8 @@ function abrirEdicao(id) {
 
 
     if (modal)
-        modal.style.display = "flex";
-
-}
-
-
-function salvarEdicao(event) {
-
-    event.preventDefault();
-
-
-    if (!chamadoEditando)
-        return;
-
-
-    const chamado =
-        encontrarChamado(
-            chamadoEditando
-        );
-
-
-    if (!chamado)
-        return;
-
-
-    const statusAnterior =
-        chamado.status;
-
-
-    chamado.cliente =
-        document.getElementById(
-            "editarCliente"
-        ).value.trim();
-
-
-    chamado.email =
-        document.getElementById(
-            "editarEmail"
-        ).value.trim();
-
-
-    chamado.assunto =
-        document.getElementById(
-            "editarAssunto"
-        ).value.trim();
-
-
-    chamado.descricao =
-        document.getElementById(
-            "editarDescricao"
-        ).value.trim();
-
-
-    chamado.prioridade =
-        document.getElementById(
-            "editarPrioridade"
-        ).value;
-
-
-    chamado.status =
-        document.getElementById(
-            "editarStatus"
-        ).value;
-
-
-    chamado.atendente =
-        document.getElementById(
-            "editarAtendente"
-        ).value;
-
-
-    chamado.atualizadoEm =
-        new Date().toISOString();
-
-
-    if (!chamado.historico)
-        chamado.historico = [];
-
-
-    chamado.historico.push({
-
-        data:
-            new Date().toISOString(),
-
-        acao:
-            "Chamado editado",
-
-        descricao:
-            "As informações do chamado foram alteradas."
-
-    });
-
-
-    if (
-        statusAnterior !==
-        chamado.status
-    ) {
-
-        chamado.historico.push({
-
-            data:
-                new Date().toISOString(),
-
-            acao:
-                "Status alterado",
-
-            descricao:
-                `Status alterado de "${statusAnterior}" para "${chamado.status}".`
-
-        });
-
-
-        adicionarNotificacao(
-
-            "Status atualizado",
-
-            `O chamado #${chamado.id} agora está "${chamado.status}".`
-
-        );
-
-    }
-
-
-    adicionarHistoricoGeral(
-
-        "Chamado editado",
-
-        `O chamado #${chamado.id} foi atualizado.`
-
-    );
-
-
-    salvarDados();
-
-
-    fecharEdicao();
+        modal.style.display =
+            "none";
 
 
     atualizarTudo();
@@ -2485,70 +2560,68 @@ function salvarEdicao(event) {
 }
 
 
-function fecharEdicao() {
-
-    const modal =
-        document.getElementById(
-            "modalEditar"
-        );
-
-
-    if (modal)
-        modal.style.display = "none";
-
-
-    chamadoEditando = null;
-
-}
-
-
 /* =========================================================
-   EXCLUIR CHAMADO
+   ALTERAR STATUS
 ========================================================= */
 
-function excluirChamado(id) {
+function alterarStatusChamado(
+    id,
+    novoStatus
+) {
+
+    if (!administradorLogado) {
+
+        alert(
+            "Acesso administrativo necessário."
+        );
+
+        return;
+
+    }
+
 
     const chamado =
-        encontrarChamado(id);
+        chamados.find(
+            item =>
+                Number(item.id) ===
+                Number(id)
+        );
 
 
     if (!chamado)
         return;
 
 
-    const confirmar =
-        confirm(
-            `Deseja realmente excluir o chamado #${id}?`
-        );
+    const statusAnterior =
+        chamado.status;
 
 
-    if (!confirmar)
-        return;
+    chamado.status =
+        novoStatus;
 
 
-    chamados =
-        chamados.filter(function (item) {
-
-            return Number(item.id) !==
-                Number(id);
-
-        });
+    chamado.dataAtualizacao =
+        new Date().toISOString();
 
 
-    adicionarHistoricoGeral(
+    if (
+        novoStatus ===
+        "Fechado"
+    ) {
 
-        "Chamado excluído",
+        chamado.dataFechamento =
+            new Date().toISOString();
 
-        `O chamado #${id} de ${chamado.cliente} foi excluído.`
-
-    );
+    }
 
 
-    adicionarNotificacao(
+    adicionarHistoricoChamado(
 
-        "Chamado excluído",
+        chamado,
 
-        `O chamado #${id} foi removido do sistema.`
+        "Status alterado",
+
+        `Status alterado de "${statusAnterior}" para "${novoStatus}".`
 
     );
 
@@ -2558,14 +2631,98 @@ function excluirChamado(id) {
 
     atualizarTudo();
 
+}/* =========================================================
+   RENDERIZAR ATENDENTES
+========================================================= */
+
+function renderizarAtendentes() {
+
+    const lista =
+        document.getElementById(
+            "listaAtendentes"
+        );
+
+    if (!lista)
+        return;
+
+
+    if (atendentes.length === 0) {
+
+        lista.innerHTML = `
+            <div class="sem-registros">
+                Nenhum atendente cadastrado.
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    lista.innerHTML =
+        atendentes.map(
+            atendente => `
+
+                <div class="atendente-item">
+
+                    <div>
+
+                        <strong>
+                            ${escapeHTML(
+                                atendente.nome
+                            )}
+                        </strong>
+
+                        <small>
+                            ${escapeHTML(
+                                atendente.email || ""
+                            )}
+                        </small>
+
+                    </div>
+
+                    <div>
+
+                        <button
+                            type="button"
+                            onclick="editarAtendente(${Number(atendente.id)})"
+                        >
+                            ✏️
+                        </button>
+
+                        <button
+                            type="button"
+                            onclick="excluirAtendente(${Number(atendente.id)})"
+                        >
+                            🗑️
+                        </button>
+
+                    </div>
+
+                </div>
+
+            `
+        ).join("");
+
 }
 
 
 /* =========================================================
-   ATENDENTES
+   NOVO ATENDENTE
 ========================================================= */
 
 function abrirNovoAtendente() {
+
+    if (!administradorLogado) {
+
+        alert(
+            "Acesso administrativo necessário."
+        );
+
+        return;
+
+    }
+
 
     const form =
         document.getElementById(
@@ -2584,53 +2741,94 @@ function abrirNovoAtendente() {
 
 
     if (modal)
-        modal.style.display = "flex";
+        modal.style.display =
+            "flex";
 
 }
 
+
+/* =========================================================
+   SALVAR ATENDENTE
+========================================================= */
 
 function salvarAtendente(event) {
 
     event.preventDefault();
 
 
+    if (!administradorLogado) {
+
+        alert(
+            "Acesso administrativo necessário."
+        );
+
+        return;
+
+    }
+
+
     const nome =
-        document.getElementById(
-            "nomeAtendente"
-        ).value.trim();
+        document
+            .getElementById(
+                "atendenteNome"
+            )
+            ?.value
+            .trim() || "";
 
 
     const email =
-        document.getElementById(
-            "emailAtendente"
-        ).value.trim();
+        document
+            .getElementById(
+                "atendenteEmail"
+            )
+            ?.value
+            .trim() || "";
 
 
-    const funcao =
-        document.getElementById(
-            "funcaoAtendente"
-        ).value;
+    const telefone =
+        document
+            .getElementById(
+                "atendenteTelefone"
+            )
+            ?.value
+            .trim() || "";
 
 
-    if (!nome || !email)
+    if (!nome) {
+
+        alert(
+            "Informe o nome do atendente."
+        );
+
         return;
+
+    }
+
+
+    const id =
+        atendentes.length > 0
+            ? Math.max(
+                ...atendentes.map(
+                    item =>
+                        Number(item.id) || 0
+                )
+            ) + 1
+            : 1;
 
 
     const novoAtendente = {
 
-        id:
-            gerarIdAtendente(),
+        id: id,
 
-        nome:
-            nome,
+        nome: nome,
 
-        email:
-            email,
+        email: email,
 
-        funcao:
-            funcao,
+        telefone: telefone,
 
-        criadoEm:
+        ativo: true,
+
+        dataCadastro:
             new Date().toISOString()
 
     };
@@ -2653,10 +2851,22 @@ function salvarAtendente(event) {
     );
 
 
-    fecharAtendente();
+    renderizarAtendentes();
 
 
-    atualizarTudo();
+    const modal =
+        document.getElementById(
+            "modalAtendente"
+        );
+
+
+    if (modal)
+        modal.style.display =
+            "none";
+
+
+    if (event.target)
+        event.target.reset();
 
 
     alert(
@@ -2666,73 +2876,16 @@ function salvarAtendente(event) {
 }
 
 
-function fecharAtendente() {
+/* =========================================================
+   EDITAR ATENDENTE
+========================================================= */
 
-    const modal =
-        document.getElementById(
-            "modalAtendente"
-        );
+function editarAtendente(id) {
 
+    if (!administradorLogado) {
 
-    if (modal)
-        modal.style.display = "none";
-
-}
-
-
-function gerarIdAtendente() {
-
-    if (atendentes.length === 0)
-        return 1;
-
-
-    return Math.max(
-        ...atendentes.map(function (item) {
-
-            return Number(item.id) || 0;
-
-        })
-    ) + 1;
-
-}
-
-
-function renderizarAtendentes() {
-
-    const container =
-        document.getElementById(
-            "listaAtendentes"
-        );
-
-
-    if (!container)
-        return;
-
-
-    if (atendentes.length === 0) {
-
-        container.innerHTML = `
-
-            <div class="sem-atendentes">
-
-                <h3>
-                    Nenhum atendente cadastrado
-                </h3>
-
-                <p>
-                    Cadastre um atendente para começar.
-                </p>
-
-            </div>
-
-        `;
-
-        preencherSelectAtendentes(
-            "atendente"
-        );
-
-        preencherSelectAtendentes(
-            "editarAtendente"
+        alert(
+            "Acesso administrativo necessário."
         );
 
         return;
@@ -2740,128 +2893,98 @@ function renderizarAtendentes() {
     }
 
 
-    container.innerHTML =
-        atendentes
-            .map(function (atendente) {
-
-                return `
-
-                    <div class="atendente-card">
-
-                        <div class="atendente-avatar">
-                            👤
-                        </div>
-
-                        <div class="atendente-info">
-
-                            <h3>
-                                ${escapeHTML(atendente.nome)}
-                            </h3>
-
-                            <p>
-                                ✉️ ${escapeHTML(atendente.email)}
-                            </p>
-
-                            <span>
-                                ${escapeHTML(atendente.funcao)}
-                            </span>
-
-                        </div>
-
-                        <button
-                            type="button"
-                            onclick="excluirAtendente(${atendente.id})"
-                        >
-                            🗑️
-                        </button>
-
-                    </div>
-
-                `;
-
-            })
-            .join("");
+    const atendente =
+        atendentes.find(
+            item =>
+                Number(item.id) ===
+                Number(id)
+        );
 
 
-    preencherSelectAtendentes(
-        "atendente"
-    );
+    if (!atendente) {
 
+        alert(
+            "Atendente não encontrado."
+        );
 
-    preencherSelectAtendentes(
-        "editarAtendente"
-    );
-
-}
-
-
-function preencherSelectAtendentes(id) {
-
-    const select =
-        document.getElementById(id);
-
-
-    if (!select)
         return;
-
-
-    const valorAtual =
-        select.value;
-
-
-    let primeiraOpcao;
-
-
-    if (id === "editarAtendente") {
-
-        primeiraOpcao =
-            `<option value="">Sem atendente</option>`;
-
-    } else {
-
-        primeiraOpcao =
-            `<option value="">Selecione um atendente</option>`;
 
     }
 
 
-    select.innerHTML =
-        primeiraOpcao;
+    const nome =
+        prompt(
+            "Nome do atendente:",
+            atendente.nome
+        );
 
 
-    atendentes.forEach(function (atendente) {
+    if (
+        nome === null ||
+        !nome.trim()
+    ) {
 
-        const option =
-            document.createElement("option");
+        return;
 
-
-        option.value =
-            atendente.nome;
-
-
-        option.textContent =
-            `${atendente.nome} — ${atendente.funcao}`;
+    }
 
 
-        select.appendChild(option);
+    const email =
+        prompt(
+            "E-mail do atendente:",
+            atendente.email || ""
+        );
 
-    });
+
+    atendente.nome =
+        nome.trim();
 
 
-    select.value = valorAtual;
+    if (email !== null)
+        atendente.email =
+            email.trim();
+
+
+    salvarDados();
+
+
+    adicionarHistoricoGeral(
+
+        "Atendente atualizado",
+
+        `${atendente.nome} foi atualizado.`
+
+    );
+
+
+    renderizarAtendentes();
 
 }
 
+
+/* =========================================================
+   EXCLUIR ATENDENTE
+========================================================= */
 
 function excluirAtendente(id) {
 
+    if (!administradorLogado) {
+
+        alert(
+            "Acesso administrativo necessário."
+        );
+
+        return;
+
+    }
+
+
     const atendente =
-        atendentes.find(function (item) {
-
-            return Number(item.id) ===
-                Number(id);
-
-        });
+        atendentes.find(
+            item =>
+                Number(item.id) ===
+                Number(id)
+        );
 
 
     if (!atendente)
@@ -2870,7 +2993,7 @@ function excluirAtendente(id) {
 
     const confirmar =
         confirm(
-            `Deseja excluir o atendente ${atendente.nome}?`
+            `Deseja excluir o atendente "${atendente.nome}"?`
         );
 
 
@@ -2879,28 +3002,32 @@ function excluirAtendente(id) {
 
 
     atendentes =
-        atendentes.filter(function (item) {
+        atendentes.filter(
+            item =>
+                Number(item.id) !==
+                Number(id)
+        );
 
-            return Number(item.id) !==
-                Number(id);
 
-        });
+    /* Remove o atendente dos chamados */
 
+    chamados.forEach(
+        chamado => {
 
-    /* Remover atendente dos chamados */
+            if (
+                chamado.atendente ===
+                atendente.nome
+            ) {
 
-    chamados.forEach(function (chamado) {
+                chamado.atendente = "";
 
-        if (
-            chamado.atendente ===
-            atendente.nome
-        ) {
-
-            chamado.atendente = "";
+            }
 
         }
+    );
 
-    });
+
+    salvarDados();
 
 
     adicionarHistoricoGeral(
@@ -2912,97 +3039,14 @@ function excluirAtendente(id) {
     );
 
 
-    salvarDados();
+    renderizarAtendentes();
 
 
-    atualizarTudo();
-
-}
+    renderizarChamados();
 
 
-/* =========================================================
-   SLA
-========================================================= */
-
-function atualizarSLA() {
-
-    const agora =
-        Date.now();
-
-
-    let dentro = 0;
-
-    let atencao = 0;
-
-    let atrasados = 0;
-
-
-    chamados
-        .filter(function (chamado) {
-
-            return chamado.status !== "Resolvido";
-
-        })
-        .forEach(function (chamado) {
-
-            const criado =
-                new Date(
-                    chamado.criadoEm
-                ).getTime();
-
-
-            const horas =
-                (
-                    agora - criado
-                ) / (
-                    1000 * 60 * 60
-                );
-
-
-            /*
-
-               SLA definido de forma
-               simples para o projeto:
-
-               até 24h = dentro
-               24h até 48h = atenção
-               acima de 48h = atrasado
-
-            */
-
-
-            if (horas <= 24) {
-
-                dentro++;
-
-            } else if (horas <= 48) {
-
-                atencao++;
-
-            } else {
-
-                atrasados++;
-
-            }
-
-        });
-
-
-    definirTexto(
-        "slaDentro",
-        dentro
-    );
-
-
-    definirTexto(
-        "slaAtencao",
-        atencao
-    );
-
-
-    definirTexto(
-        "slaAtrasados",
-        atrasados
+    alert(
+        "Atendente excluído com sucesso!"
     );
 
 }
@@ -3017,7 +3061,7 @@ function adicionarNotificacao(
     mensagem
 ) {
 
-    notificacoes.unshift({
+    const notificacao = {
 
         id:
             Date.now(),
@@ -3034,11 +3078,28 @@ function adicionarNotificacao(
         lida:
             false
 
-    });
+    };
 
 
-    notificacoes =
-        notificacoes.slice(0, 100);
+    notificacoes.unshift(
+        notificacao
+    );
+
+
+    /* Limita o histórico */
+
+    if (
+        notificacoes.length >
+        100
+    ) {
+
+        notificacoes =
+            notificacoes.slice(
+                0,
+                100
+            );
+
+    }
 
 
     salvarDados();
@@ -3048,34 +3109,36 @@ function adicionarNotificacao(
 
     renderizarNotificacoesCliente();
 
+    atualizarContadores();
+
 }
 
 
+/* =========================================================
+   RENDERIZAR NOTIFICAÇÕES ADMIN
+========================================================= */
+
 function renderizarNotificacoes() {
 
-    const container =
+    const lista =
         document.getElementById(
             "listaNotificacoes"
         );
 
 
-    if (!container)
+    if (!lista)
         return;
 
 
-    if (notificacoes.length === 0) {
+    if (
+        notificacoes.length === 0
+    ) {
 
-        container.innerHTML = `
+        lista.innerHTML = `
 
-            <div class="sem-notificacoes">
+            <div class="sem-registros">
 
-                <h3>
-                    Nenhuma notificação
-                </h3>
-
-                <p>
-                    Tudo está em ordem por enquanto.
-                </p>
+                Nenhuma notificação.
 
             </div>
 
@@ -3086,148 +3149,21 @@ function renderizarNotificacoes() {
     }
 
 
-    container.innerHTML =
-        notificacoes
-            .map(function (notificacao) {
+    lista.innerHTML =
+        notificacoes.map(
+            notificacao => `
 
-                return `
-
-                    <div class="notificacao-item ${
+                <div
+                    class="notificacao-item ${
                         notificacao.lida
                             ? "lida"
-                            : "nova"
-                    }">
+                            : "nao-lida"
+                    }"
+                >
 
-                        <div>
-
-                            <strong>
-                                🔔
-                                ${escapeHTML(
-                                    notificacao.titulo
-                                )}
-                            </strong>
-
-                            <p>
-                                ${escapeHTML(
-                                    notificacao.mensagem
-                                )}
-                            </p>
-
-                            <small>
-                                ${formatarData(
-                                    notificacao.data
-                                )}
-                            </small>
-
-                        </div>
-
-                    </div>
-
-                `;
-
-            })
-            .join("");
-
-}
-
-
-function renderizarNotificacoesCliente() {
-
-    const container =
-        document.getElementById(
-            "listaNotificacoesCliente"
-        );
-
-
-    if (!container)
-        return;
-
-
-    if (!clienteLogado) {
-
-        container.innerHTML = `
-
-            <div class="cliente-sem-chamados">
-
-                <span>🔔</span>
-
-                <h3>Nenhuma notificação</h3>
-
-                <p>
-                    Faça login para acompanhar suas notificações.
-                </p>
-
-            </div>
-
-        `;
-
-        return;
-
-    }
-
-
-    const meusIds =
-        obterChamadosCliente()
-            .map(function (c) {
-
-                return String(c.id);
-
-            });
-
-
-    const minhasNotificacoes =
-        notificacoes.filter(function (notificacao) {
-
-            const texto =
-                (
-                    notificacao.mensagem || ""
-                ).toLowerCase();
-
-
-            return meusIds.some(function (id) {
-
-                return texto.includes(
-                    "#" + id
-                );
-
-            });
-
-        });
-
-
-    if (minhasNotificacoes.length === 0) {
-
-        container.innerHTML = `
-
-            <div class="cliente-sem-chamados">
-
-                <span>🔔</span>
-
-                <h3>Nenhuma notificação</h3>
-
-                <p>
-                    Você não possui novas notificações.
-                </p>
-
-            </div>
-
-        `;
-
-        return;
-
-    }
-
-
-    container.innerHTML =
-        minhasNotificacoes
-            .map(function (notificacao) {
-
-                return `
-
-                    <div class="notificacao-cliente-item">
+                    <div>
 
                         <strong>
-                            🔔
                             ${escapeHTML(
                                 notificacao.titulo
                             )}
@@ -3247,19 +3183,193 @@ function renderizarNotificacoesCliente() {
 
                     </div>
 
-                `;
+                    <button
+                        type="button"
+                        onclick="marcarNotificacaoLida(${Number(notificacao.id)})"
+                    >
 
-            })
-            .join("");
+                        ${
+                            notificacao.lida
+                                ? "✓"
+                                : "Marcar como lida"
+                        }
+
+                    </button>
+
+                </div>
+
+            `
+        ).join("");
 
 }
 
 
+/* =========================================================
+   MARCAR NOTIFICAÇÃO COMO LIDA
+========================================================= */
+
+function marcarNotificacaoLida(
+    id
+) {
+
+    const notificacao =
+        notificacoes.find(
+            item =>
+                Number(item.id) ===
+                Number(id)
+        );
+
+
+    if (!notificacao)
+        return;
+
+
+    notificacao.lida =
+        true;
+
+
+    salvarDados();
+
+
+    renderizarNotificacoes();
+
+    renderizarNotificacoesCliente();
+
+    atualizarContadores();
+
+}
+
+
+/* =========================================================
+   MARCAR TODAS COMO LIDAS
+========================================================= */
+
+function marcarTodasNotificacoesLidas() {
+
+    notificacoes.forEach(
+        notificacao => {
+
+            notificacao.lida =
+                true;
+
+        }
+    );
+
+
+    salvarDados();
+
+
+    renderizarNotificacoes();
+
+    renderizarNotificacoesCliente();
+
+    atualizarContadores();
+
+}
+
+
+/* =========================================================
+   NOTIFICAÇÕES DO CLIENTE
+========================================================= */
+
+function renderizarNotificacoesCliente() {
+
+    const lista =
+        document.getElementById(
+            "listaNotificacoesCliente"
+        );
+
+
+    if (!lista)
+        return;
+
+
+    if (
+        notificacoes.length === 0
+    ) {
+
+        lista.innerHTML = `
+
+            <div class="sem-registros">
+
+                Nenhuma notificação.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    lista.innerHTML =
+        notificacoes.map(
+            notificacao => `
+
+                <div
+                    class="notificacao-item ${
+                        notificacao.lida
+                            ? "lida"
+                            : "nao-lida"
+                    }"
+                >
+
+                    <strong>
+                        ${escapeHTML(
+                            notificacao.titulo
+                        )}
+                    </strong>
+
+                    <p>
+                        ${escapeHTML(
+                            notificacao.mensagem
+                        )}
+                    </p>
+
+                    <small>
+                        ${formatarData(
+                            notificacao.data
+                        )}
+                    </small>
+
+                </div>
+
+            `
+        ).join("");
+
+}
+
+
+/* =========================================================
+   LIMPAR NOTIFICAÇÕES
+========================================================= */
+
 function limparNotificacoes() {
+
+    if (!administradorLogado) {
+
+        alert(
+            "Acesso administrativo necessário."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        notificacoes.length === 0
+    ) {
+
+        return;
+
+    }
+
 
     const confirmar =
         confirm(
-            "Deseja limpar todas as notificações?"
+            "Deseja apagar todas as notificações?"
         );
 
 
@@ -3276,6 +3386,127 @@ function limparNotificacoes() {
     renderizarNotificacoes();
 
     renderizarNotificacoesCliente();
+
+    atualizarContadores();
+
+}/* =========================================================
+   HISTÓRICO DO CHAMADO
+========================================================= */
+
+function adicionarHistoricoChamado(
+    chamado,
+    acao,
+    descricao
+) {
+
+    if (!chamado)
+        return;
+
+
+    if (!Array.isArray(chamado.historico)) {
+
+        chamado.historico = [];
+
+    }
+
+
+    chamado.historico.push({
+
+        data:
+            new Date().toISOString(),
+
+        acao:
+            acao || "Atualização",
+
+        descricao:
+            descricao || ""
+
+    });
+
+
+    chamado.dataAtualizacao =
+        new Date().toISOString();
+
+}
+
+
+/* =========================================================
+   RENDERIZAR HISTÓRICO DO CHAMADO
+========================================================= */
+
+function renderizarHistoricoChamado(
+    chamado
+) {
+
+    const lista =
+        document.getElementById(
+            "historicoChamado"
+        );
+
+
+    if (!lista)
+        return;
+
+
+    if (
+        !chamado ||
+        !Array.isArray(
+            chamado.historico
+        ) ||
+        chamado.historico.length === 0
+    ) {
+
+        lista.innerHTML = `
+
+            <div class="sem-registros">
+
+                Nenhum histórico disponível.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    lista.innerHTML =
+        chamado.historico
+            .slice()
+            .reverse()
+            .map(
+                item => `
+
+                    <div class="historico-item">
+
+                        <div>
+
+                            <strong>
+                                ${escapeHTML(
+                                    item.acao
+                                )}
+                            </strong>
+
+                            <p>
+                                ${escapeHTML(
+                                    item.descricao
+                                )}
+                            </p>
+
+                            <small>
+                                ${formatarData(
+                                    item.data
+                                )}
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                `
+            )
+            .join("");
 
 }
 
@@ -3294,55 +3525,65 @@ function adicionarHistoricoGeral(
         id:
             Date.now(),
 
+        data:
+            new Date().toISOString(),
+
         acao:
-            acao,
+            acao || "Ação realizada",
 
         descricao:
-            descricao,
-
-        data:
-            new Date().toISOString()
+            descricao || ""
 
     });
 
 
-    historicoGeral =
-        historicoGeral.slice(0, 200);
+    if (
+        historicoGeral.length >
+        200
+    ) {
+
+        historicoGeral =
+            historicoGeral.slice(
+                0,
+                200
+            );
+
+    }
 
 
     salvarDados();
 
 
-    renderizarHistoricoGeral();
+    renderizarHistorico();
 
 }
 
 
-function renderizarHistoricoGeral() {
+/* =========================================================
+   RENDERIZAR HISTÓRICO GERAL
+========================================================= */
 
-    const container =
+function renderizarHistorico() {
+
+    const lista =
         document.getElementById(
-            "listaHistoricoGeral"
+            "listaHistorico"
         );
 
 
-    if (!container)
+    if (!lista)
         return;
 
 
-    if (historicoGeral.length === 0) {
+    if (
+        historicoGeral.length === 0
+    ) {
 
-        container.innerHTML = `
+        lista.innerHTML = `
 
-            <div class="sem-historico-geral">
+            <div class="sem-registros">
 
-                <h3>
-                    Nenhuma atividade registrada
-                </h3>
-
-                <p>
-                    As atividades do sistema aparecerão aqui.
-                </p>
+                Nenhum histórico registrado.
 
             </div>
 
@@ -3353,13 +3594,12 @@ function renderizarHistoricoGeral() {
     }
 
 
-    container.innerHTML =
+    lista.innerHTML =
         historicoGeral
-            .map(function (item) {
+            .map(
+                item => `
 
-                return `
-
-                    <div class="historico-geral-item">
+                    <div class="historico-item">
 
                         <div>
 
@@ -3375,97 +3615,47 @@ function renderizarHistoricoGeral() {
                                 )}
                             </p>
 
-                        </div>
+                            <small>
+                                ${formatarData(
+                                    item.data
+                                )}
+                            </small>
 
-                        <small>
-                            ${formatarData(
-                                item.data
-                            )}
-                        </small>
+                        </div>
 
                     </div>
 
-                `;
-
-            })
+                `
+            )
             .join("");
 
 }
 
 
+/* =========================================================
+   HISTÓRICO DO CLIENTE
+========================================================= */
+
 function renderizarHistoricoCliente() {
 
-    const container =
+    const lista =
         document.getElementById(
             "listaHistoricoCliente"
         );
 
 
-    if (!container)
+    if (!lista)
         return;
 
 
     if (!clienteLogado) {
 
-        return;
+        lista.innerHTML = `
 
-    }
+            <div class="sem-registros">
 
-
-    const meusChamados =
-        obterChamadosCliente();
-
-
-    const atividades = [];
-
-
-    meusChamados.forEach(function (chamado) {
-
-        (
-            chamado.historico || []
-        ).forEach(function (item) {
-
-            atividades.push({
-
-                data:
-                    item.data,
-
-                acao:
-                    item.acao,
-
-                descricao:
-                    `Chamado #${chamado.id}: ${item.descricao}`
-
-            });
-
-        });
-
-    });
-
-
-    atividades.sort(function (a, b) {
-
-        return new Date(b.data) -
-            new Date(a.data);
-
-    });
-
-
-    if (atividades.length === 0) {
-
-        container.innerHTML = `
-
-            <div class="cliente-sem-chamados">
-
-                <span>📜</span>
-
-                <h3>
-                    Nenhuma atividade registrada
-                </h3>
-
-                <p>
-                    O histórico dos seus chamados aparecerá aqui.
-                </p>
+                Faça login para visualizar
+                seu histórico.
 
             </div>
 
@@ -3476,41 +3666,238 @@ function renderizarHistoricoCliente() {
     }
 
 
-    container.innerHTML =
-        atividades
-            .map(function (item) {
+    const emailCliente =
+        (
+            clienteLogado.email || ""
+        )
+        .toLowerCase();
 
-                return `
 
-                    <div class="historico-cliente-item">
+    const chamadosCliente =
+        chamados.filter(
+            chamado =>
+                (
+                    chamado.email || ""
+                )
+                .toLowerCase() ===
+                emailCliente
+        );
+
+
+    let historico = [];
+
+
+    chamadosCliente.forEach(
+        chamado => {
+
+            if (
+                Array.isArray(
+                    chamado.historico
+                )
+            ) {
+
+                chamado.historico.forEach(
+                    item => {
+
+                        historico.push({
+
+                            ...item,
+
+                            chamadoId:
+                                chamado.id,
+
+                            assunto:
+                                chamado.assunto
+
+                        });
+
+                    }
+                );
+
+            }
+
+        }
+    );
+
+
+    historico.sort(
+        (a, b) =>
+            new Date(b.data) -
+            new Date(a.data)
+    );
+
+
+    if (historico.length === 0) {
+
+        lista.innerHTML = `
+
+            <div class="sem-registros">
+
+                Nenhum histórico disponível.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    lista.innerHTML =
+        historico
+            .map(
+                item => `
+
+                    <div class="historico-item">
 
                         <strong>
-                            ${escapeHTML(item.acao)}
+                            Chamado #${Number(
+                                item.chamadoId
+                            )}
                         </strong>
 
+                        <span>
+                            ${escapeHTML(
+                                item.acao
+                            )}
+                        </span>
+
                         <p>
-                            ${escapeHTML(item.descricao)}
+                            ${escapeHTML(
+                                item.descricao
+                            )}
                         </p>
 
                         <small>
-                            ${formatarData(item.data)}
+                            ${formatarData(
+                                item.data
+                            )}
                         </small>
 
                     </div>
 
-                `;
-
-            })
+                `
+            )
             .join("");
 
 }
 
 
-function limparHistoricoGeral() {
+/* =========================================================
+   EXCLUIR CHAMADO
+========================================================= */
+
+function excluirChamado(id) {
+
+    if (!administradorLogado) {
+
+        alert(
+            "Acesso administrativo necessário."
+        );
+
+        return;
+
+    }
+
+
+    const chamado =
+        chamados.find(
+            item =>
+                Number(item.id) ===
+                Number(id)
+        );
+
+
+    if (!chamado) {
+
+        alert(
+            "Chamado não encontrado."
+        );
+
+        return;
+
+    }
+
 
     const confirmar =
         confirm(
-            "Deseja realmente limpar todo o histórico?"
+            `Deseja realmente excluir o chamado #${chamado.id}?`
+        );
+
+
+    if (!confirmar)
+        return;
+
+
+    chamados =
+        chamados.filter(
+            item =>
+                Number(item.id) !==
+                Number(id)
+        );
+
+
+    salvarDados();
+
+
+    adicionarHistoricoGeral(
+
+        "Chamado excluído",
+
+        `O chamado #${chamado.id} de ${chamado.cliente} foi excluído.`
+
+    );
+
+
+    adicionarNotificacao(
+
+        "Chamado excluído",
+
+        `O chamado #${chamado.id} foi removido do sistema.`
+
+    );
+
+
+    atualizarTudo();
+
+
+    alert(
+        "Chamado excluído com sucesso!"
+    );
+
+}
+
+
+/* =========================================================
+   LIMPAR HISTÓRICO GERAL
+========================================================= */
+
+function limparHistorico() {
+
+    if (!administradorLogado) {
+
+        alert(
+            "Acesso administrativo necessário."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        historicoGeral.length === 0
+    ) {
+
+        return;
+
+    }
+
+
+    const confirmar =
+        confirm(
+            "Deseja apagar todo o histórico?"
         );
 
 
@@ -3524,121 +3911,318 @@ function limparHistoricoGeral() {
     salvarDados();
 
 
-    renderizarHistoricoGeral();
+    renderizarHistorico();
+
+}/* =========================================================
+   DASHBOARD ADMINISTRATIVO
+========================================================= */
+
+function atualizarDashboard() {
+
+    const total =
+        chamados.length;
+
+    const abertos =
+        chamados.filter(
+            chamado =>
+                chamado.status === "Aberto"
+        ).length;
+
+    const andamento =
+        chamados.filter(
+            chamado =>
+                chamado.status === "Em andamento"
+        ).length;
+
+    const pendentes =
+        chamados.filter(
+            chamado =>
+                chamado.status === "Pendente"
+        ).length;
+
+    const resolvidos =
+        chamados.filter(
+            chamado =>
+                chamado.status === "Resolvido"
+        ).length;
+
+    const fechados =
+        chamados.filter(
+            chamado =>
+                chamado.status === "Fechado"
+        ).length;
+
+
+    definirTexto(
+        "dashboardTotal",
+        total
+    );
+
+    definirTexto(
+        "dashboardAbertos",
+        abertos
+    );
+
+    definirTexto(
+        "dashboardAndamento",
+        andamento
+    );
+
+    definirTexto(
+        "dashboardPendentes",
+        pendentes
+    );
+
+    definirTexto(
+        "dashboardResolvidos",
+        resolvidos
+    );
+
+    definirTexto(
+        "dashboardFechados",
+        fechados
+    );
+
+
+    atualizarPercentuais();
 
 }
 
 
 /* =========================================================
-   RELATÓRIO
+   PERCENTUAIS DO DASHBOARD
 ========================================================= */
 
-function atualizarRelatorio() {
+function atualizarPercentuais() {
 
     const total =
         chamados.length;
 
 
-    const abertos =
-        chamados.filter(function (c) {
+    if (total === 0) {
 
-            return c.status === "Aberto";
+        definirTexto(
+            "percentualAbertos",
+            "0%"
+        );
 
-        }).length;
+        definirTexto(
+            "percentualAndamento",
+            "0%"
+        );
 
+        definirTexto(
+            "percentualPendentes",
+            "0%"
+        );
 
-    const andamento =
-        chamados.filter(function (c) {
+        definirTexto(
+            "percentualResolvidos",
+            "0%"
+        );
 
-            return c.status === "Em andamento";
+        definirTexto(
+            "percentualFechados",
+            "0%"
+        );
 
-        }).length;
+        return;
 
-
-    const resolvidos =
-        chamados.filter(function (c) {
-
-            return c.status === "Resolvido";
-
-        }).length;
-
-
-    const taxa =
-        total > 0
-            ? Math.round(
-                (resolvidos / total) * 100
-            )
-            : 0;
-
-
-    definirTexto(
-        "relatorioTotal",
-        total
-    );
+    }
 
 
-    definirTexto(
-        "relatorioAbertos",
-        abertos
-    );
+    const calcular =
+        function (status) {
+
+            const quantidade =
+                chamados.filter(
+                    chamado =>
+                        chamado.status ===
+                        status
+                ).length;
 
 
-    definirTexto(
-        "relatorioAndamento",
-        andamento
-    );
+            return Math.round(
+                (
+                    quantidade /
+                    total
+                ) * 100
+            ) + "%";
 
-
-    definirTexto(
-        "relatorioResolvidos",
-        resolvidos
-    );
+        };
 
 
     definirTexto(
-        "relatorioTaxa",
-        taxa + "%"
+        "percentualAbertos",
+        calcular("Aberto")
     );
 
-}
+    definirTexto(
+        "percentualAndamento",
+        calcular("Em andamento")
+    );
 
+    definirTexto(
+        "percentualPendentes",
+        calcular("Pendente")
+    );
 
-function imprimirRelatorio() {
+    definirTexto(
+        "percentualResolvidos",
+        calcular("Resolvido")
+    );
 
-    window.print();
+    definirTexto(
+        "percentualFechados",
+        calcular("Fechado")
+    );
 
 }
 
 
 /* =========================================================
-   CHAMADOS RECENTES ADMIN
+   DASHBOARD CLIENTE
 ========================================================= */
 
-function renderizarChamadosRecentes() {
+function atualizarDashboardCliente() {
 
-    const container =
-        document.getElementById(
-            "chamadosRecentes"
-        );
-
-
-    if (!container)
+    if (!clienteLogado)
         return;
 
 
-    const lista =
-        [...chamados]
-            .sort(ordenarPorDataDesc)
-            .slice(0, 5);
+    const email =
+        (
+            clienteLogado.email || ""
+        )
+        .toLowerCase();
 
 
-    if (lista.length === 0) {
+    const meusChamados =
+        chamados.filter(
+            chamado =>
+                (
+                    chamado.email || ""
+                )
+                .toLowerCase() ===
+                email
+        );
 
-        container.innerHTML = `
 
-            <p class="sem-recentes">
-                Nenhum chamado cadastrado.
-            </p>
+    const total =
+        meusChamados.length;
+
+
+    const abertos =
+        meusChamados.filter(
+            chamado =>
+                chamado.status ===
+                "Aberto"
+        ).length;
+
+
+    const andamento =
+        meusChamados.filter(
+            chamado =>
+                chamado.status ===
+                "Em andamento"
+        ).length;
+
+
+    const pendentes =
+        meusChamados.filter(
+            chamado =>
+                chamado.status ===
+                "Pendente"
+        ).length;
+
+
+    const resolvidos =
+        meusChamados.filter(
+            chamado =>
+                chamado.status ===
+                "Resolvido"
+        ).length;
+
+
+    const fechados =
+        meusChamados.filter(
+            chamado =>
+                chamado.status ===
+                "Fechado"
+        ).length;
+
+
+    definirTexto(
+        "clienteTotalChamados",
+        total
+    );
+
+
+    definirTexto(
+        "clienteChamadosAbertos",
+        abertos
+    );
+
+
+    definirTexto(
+        "clienteChamadosAndamento",
+        andamento
+    );
+
+
+    definirTexto(
+        "clienteChamadosPendentes",
+        pendentes
+    );
+
+
+    definirTexto(
+        "clienteChamadosResolvidos",
+        resolvidos
+    );
+
+
+    definirTexto(
+        "clienteChamadosFechados",
+        fechados
+    );
+
+}
+
+
+/* =========================================================
+   RENDERIZAR CHAMADOS DO CLIENTE
+========================================================= */
+
+function renderizarChamadosCliente() {
+
+    const tabela =
+        document.getElementById(
+            "listaChamadosCliente"
+        );
+
+
+    if (!tabela)
+        return;
+
+
+    if (!clienteLogado) {
+
+        tabela.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="100%"
+                    style="text-align:center;"
+                >
+
+                    Faça login para visualizar
+                    seus chamados.
+
+                </td>
+
+            </tr>
 
         `;
 
@@ -3647,55 +4231,468 @@ function renderizarChamadosRecentes() {
     }
 
 
-    container.innerHTML =
-        lista
-            .map(function (chamado) {
+    const emailCliente =
+        (
+            clienteLogado.email || ""
+        )
+        .toLowerCase();
 
-                return `
 
-                    <div class="chamado-recente">
+    const pesquisa =
+        (
+            document.getElementById(
+                "pesquisaChamadosCliente"
+            )?.value || ""
+        )
+        .toLowerCase()
+        .trim();
 
-                        <div>
 
-                            <strong>
-                                #${chamado.id}
-                            </strong>
+    const filtroStatus =
+        document.getElementById(
+            "filtroStatusCliente"
+        )?.value || "";
 
-                            <span>
-                                ${escapeHTML(
-                                    chamado.assunto
-                                )}
-                            </span>
 
-                        </div>
+    const filtroPrioridade =
+        document.getElementById(
+            "filtroPrioridadeCliente"
+        )?.value || "";
 
-                        <div>
 
-                            <small>
-                                ${escapeHTML(
-                                    chamado.cliente
-                                )}
-                            </small>
+    let lista =
+        chamados.filter(
+            chamado =>
+                (
+                    chamado.email || ""
+                )
+                .toLowerCase() ===
+                emailCliente
+        );
 
-                            <span class="status-badge ${classeStatus(chamado.status)}">
-                                ${escapeHTML(
-                                    chamado.status
-                                )}
-                            </span>
 
-                        </div>
+    if (pesquisa) {
 
-                    </div>
+        lista =
+            lista.filter(
+                chamado =>
 
-                `;
+                    String(chamado.id)
+                        .toLowerCase()
+                        .includes(pesquisa)
 
-            })
-            .join("");
+                    ||
+
+                    (chamado.assunto || "")
+                        .toLowerCase()
+                        .includes(pesquisa)
+
+                    ||
+
+                    (chamado.categoria || "")
+                        .toLowerCase()
+                        .includes(pesquisa)
+
+                    ||
+
+                    (chamado.descricao || "")
+                        .toLowerCase()
+                        .includes(pesquisa)
+
+            );
+
+    }
+
+
+    if (filtroStatus) {
+
+        lista =
+            lista.filter(
+                chamado =>
+                    chamado.status ===
+                    filtroStatus
+            );
+
+    }
+
+
+    if (filtroPrioridade) {
+
+        lista =
+            lista.filter(
+                chamado =>
+                    chamado.prioridade ===
+                    filtroPrioridade
+            );
+
+    }
+
+
+    lista.sort(
+        (a, b) =>
+            Number(b.id) -
+            Number(a.id)
+    );
+
+
+    if (lista.length === 0) {
+
+        tabela.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="100%"
+                    style="text-align:center;"
+                >
+
+                    Você ainda não possui
+                    chamados.
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    tabela.innerHTML =
+        lista.map(
+            chamado => `
+
+                <tr>
+
+                    <td>
+                        #${Number(
+                            chamado.id
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHTML(
+                            chamado.assunto
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHTML(
+                            chamado.categoria
+                        )}
+                    </td>
+
+                    <td>
+
+                        <span
+                            class="status status-${normalizarClasse(
+                                chamado.status
+                            )}"
+                        >
+
+                            ${escapeHTML(
+                                chamado.status
+                            )}
+
+                        </span>
+
+                    </td>
+
+                    <td>
+
+                        <span
+                            class="prioridade prioridade-${normalizarClasse(
+                                chamado.prioridade
+                            )}"
+                        >
+
+                            ${escapeHTML(
+                                chamado.prioridade
+                            )}
+
+                        </span>
+
+                    </td>
+
+                    <td>
+                        ${formatarData(
+                            chamado.dataCriacao
+                        )}
+                    </td>
+
+                    <td>
+
+                        <button
+                            type="button"
+                            onclick="verChamadoCliente(${Number(chamado.id)})"
+                        >
+
+                            👁️ Ver
+
+                        </button>
+
+                    </td>
+
+                </tr>
+
+            `
+        ).join("");
 
 }
 
 
 /* =========================================================
+   VER CHAMADO DO CLIENTE
+========================================================= */
+
+function verChamadoCliente(id) {
+
+    if (!clienteLogado) {
+
+        alert(
+            "Faça login para continuar."
+        );
+
+        return;
+
+    }
+
+
+    const chamado =
+        chamados.find(
+            item =>
+                Number(item.id) ===
+                Number(id)
+        );
+
+
+    if (!chamado) {
+
+        alert(
+            "Chamado não encontrado."
+        );
+
+        return;
+
+    }
+
+
+    const emailCliente =
+        (
+            clienteLogado.email || ""
+        )
+        .toLowerCase();
+
+
+    if (
+        (
+            chamado.email || ""
+        )
+        .toLowerCase() !==
+        emailCliente
+    ) {
+
+        alert(
+            "Você não tem acesso a este chamado."
+        );
+
+        return;
+
+    }
+
+
+    const modal =
+        document.getElementById(
+            "modalChamadoCliente"
+        );
+
+
+    if (!modal) {
+
+        alert(`
+
+Chamado #${chamado.id}
+
+Assunto: ${chamado.assunto}
+
+Status: ${chamado.status}
+
+Prioridade: ${chamado.prioridade}
+
+Categoria: ${chamado.categoria}
+
+Atendente: ${
+    chamado.atendente ||
+    "Não atribuído"
+}
+
+Descrição:
+
+${chamado.descricao}
+
+        `);
+
+        return;
+
+    }
+
+
+    const campos = {
+
+        "clienteDetalheId":
+            `#${chamado.id}`,
+
+        "clienteDetalheAssunto":
+            chamado.assunto,
+
+        "clienteDetalheCategoria":
+            chamado.categoria,
+
+        "clienteDetalheStatus":
+            chamado.status,
+
+        "clienteDetalhePrioridade":
+            chamado.prioridade,
+
+        "clienteDetalheAtendente":
+            chamado.atendente ||
+            "Não atribuído",
+
+        "clienteDetalheDescricao":
+            chamado.descricao,
+
+        "clienteDetalheData":
+            formatarData(
+                chamado.dataCriacao
+            )
+
+    };
+
+
+    Object.keys(campos)
+        .forEach(
+            function (idCampo) {
+
+                const elemento =
+                    document.getElementById(
+                        idCampo
+                    );
+
+
+                if (elemento)
+                    elemento.textContent =
+                        campos[idCampo];
+
+            }
+        );
+
+
+    modal.style.display =
+        "flex";
+
+
+    renderizarHistoricoChamadoCliente(
+        chamado
+    );
+
+}
+
+
+/* =========================================================
+   FECHAR MODAL CLIENTE
+========================================================= */
+
+function fecharModalChamadoCliente() {
+
+    const modal =
+        document.getElementById(
+            "modalChamadoCliente"
+        );
+
+
+    if (modal)
+        modal.style.display =
+            "none";
+
+}
+
+
+/* =========================================================
+   HISTÓRICO DO CHAMADO — CLIENTE
+========================================================= */
+
+function renderizarHistoricoChamadoCliente(
+    chamado
+) {
+
+    const lista =
+        document.getElementById(
+            "historicoChamadoCliente"
+        );
+
+
+    if (!lista)
+        return;
+
+
+    if (
+        !chamado ||
+        !Array.isArray(
+            chamado.historico
+        )
+    ) {
+
+        lista.innerHTML = `
+
+            <div class="sem-registros">
+
+                Nenhum histórico disponível.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    lista.innerHTML =
+        chamado.historico
+            .slice()
+            .reverse()
+            .map(
+                item => `
+
+                    <div class="historico-item">
+
+                        <strong>
+                            ${escapeHTML(
+                                item.acao
+                            )}
+                        </strong>
+
+                        <p>
+                            ${escapeHTML(
+                                item.descricao
+                            )}
+                        </p>
+
+                        <small>
+                            ${formatarData(
+                                item.data
+                            )}
+                        </small>
+
+                    </div>
+
+                `
+            )
+            .join("");
+
+}/* =========================================================
    CONFIGURAÇÕES
 ========================================================= */
 
@@ -3703,19 +4700,17 @@ function carregarConfiguracoes() {
 
     const nomeSistema =
         document.getElementById(
-            "nomeSistema"
+            "configNomeSistema"
         );
-
 
     const nomeEmpresa =
         document.getElementById(
-            "nomeEmpresa"
+            "configNomeEmpresa"
         );
-
 
     const emailEmpresa =
         document.getElementById(
-            "emailEmpresa"
+            "configEmailEmpresa"
         );
 
 
@@ -3739,59 +4734,107 @@ function carregarConfiguracoes() {
 }
 
 
+/* =========================================================
+   APLICAR CONFIGURAÇÕES
+========================================================= */
+
+function aplicarConfiguracoes() {
+
+    document.title =
+        configuracoes.nomeSistema ||
+        "Central de Atendimento";
+
+
+    const elementosNome =
+        document.querySelectorAll(
+            ".nomeSistema"
+        );
+
+
+    elementosNome.forEach(
+        elemento => {
+
+            elemento.textContent =
+                configuracoes.nomeSistema ||
+                "Central de Atendimento";
+
+        }
+    );
+
+
+    const elementosEmpresa =
+        document.querySelectorAll(
+            ".nomeEmpresa"
+        );
+
+
+    elementosEmpresa.forEach(
+        elemento => {
+
+            elemento.textContent =
+                configuracoes.nomeEmpresa ||
+                "Sistema de Chamados";
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   SALVAR CONFIGURAÇÕES
+========================================================= */
+
 function salvarConfiguracoes() {
 
+    if (!administradorLogado) {
+
+        alert(
+            "Acesso administrativo necessário."
+        );
+
+        return;
+
+    }
+
+
     const nomeSistema =
-        document
-            .getElementById(
-                "nomeSistema"
-            )
-            .value
-            .trim();
+        document.getElementById(
+            "configNomeSistema"
+        )?.value.trim();
 
 
     const nomeEmpresa =
-        document
-            .getElementById(
-                "nomeEmpresa"
-            )
-            .value
-            .trim();
+        document.getElementById(
+            "configNomeEmpresa"
+        )?.value.trim();
 
 
     const emailEmpresa =
-        document
-            .getElementById(
-                "emailEmpresa"
-            )
-            .value
-            .trim();
+        document.getElementById(
+            "configEmailEmpresa"
+        )?.value.trim();
 
 
-    configuracoes = {
+    configuracoes.nomeSistema =
+        nomeSistema ||
+        "Central de Atendimento";
 
-        nomeSistema:
-            nomeSistema ||
-            "Central de Atendimento",
 
-        nomeEmpresa:
-            nomeEmpresa ||
-            "Sistema de Chamados",
+    configuracoes.nomeEmpresa =
+        nomeEmpresa ||
+        "Sistema de Chamados";
 
-        emailEmpresa:
-            emailEmpresa
 
-    };
+    configuracoes.emailEmpresa =
+        emailEmpresa || "";
 
 
     localStorage.setItem(
-
         "configuracoes",
-
         JSON.stringify(
             configuracoes
         )
-
     );
 
 
@@ -3800,7 +4843,7 @@ function salvarConfiguracoes() {
 
     adicionarHistoricoGeral(
 
-        "Configurações alteradas",
+        "Configurações atualizadas",
 
         "As configurações do sistema foram atualizadas."
 
@@ -3814,156 +4857,31 @@ function salvarConfiguracoes() {
 }
 
 
-function aplicarConfiguracoes() {
-
-    const nomeSistema =
-        configuracoes.nomeSistema ||
-        "Central de Atendimento";
-
-
-    const nomeEmpresa =
-        configuracoes.nomeEmpresa ||
-        "Sistema de Chamados";
-
-
-    definirTexto(
-        "menuNomeSistema",
-        nomeSistema
-    );
-
-
-    definirTexto(
-        "logoNomeEmpresa",
-        nomeSistema
-    );
-
-
-    definirTexto(
-        "logoEmpresa",
-        nomeEmpresa
-    );
-
-
-    definirTexto(
-        "tituloSistema",
-        "🎧 " + nomeSistema
-    );
-
-
-    document.title =
-        nomeSistema;
-
-
-}
-
-
 /* =========================================================
-   SALVAR DADOS
-========================================================= */
-
-function salvarDados() {
-
-    localStorage.setItem(
-
-        "chamados",
-
-        JSON.stringify(
-            chamados
-        )
-
-    );
-
-
-    localStorage.setItem(
-
-        "atendentes",
-
-        JSON.stringify(
-            atendentes
-        )
-
-    );
-
-
-    localStorage.setItem(
-
-        "notificacoes",
-
-        JSON.stringify(
-            notificacoes
-        )
-
-    );
-
-
-    localStorage.setItem(
-
-        "historicoGeral",
-
-        JSON.stringify(
-            historicoGeral
-        )
-
-    );
-
-}
-
-
-/* =========================================================
-   ATUALIZAR TUDO
-========================================================= */
-
-function atualizarTudo() {
-
-    atualizarDashboard();
-
-    renderizarChamados();
-
-    renderizarAtendentes();
-
-    atualizarSLA();
-
-    renderizarNotificacoes();
-
-    renderizarHistoricoGeral();
-
-    renderizarChamadosRecentes();
-
-    atualizarRelatorio();
-
-    atualizarDashboardCliente();
-
-    renderizarChamadosCliente();
-
-    renderizarNotificacoesCliente();
-
-    renderizarHistoricoCliente();
-
-}
-
-
-/* =========================================================
-   SAIR ADMINISTRATIVO
+   LOGOUT ADMINISTRATIVO
 ========================================================= */
 
 function sairAdministrativo() {
 
-    const confirmar =
-        confirm(
-            "Deseja sair da área administrativa?"
+    if (administradorLogado) {
+
+        adicionarHistoricoGeral(
+
+            "Logout administrativo",
+
+            "O administrador saiu da área administrativa."
+
         );
 
-
-    if (!confirmar)
-        return;
+    }
 
 
-    adicionarHistoricoGeral(
+    administradorLogado =
+        false;
 
-        "Logout administrativo",
 
-        "O usuário saiu da área administrativa."
-
+    sessionStorage.removeItem(
+        "administradorLogado"
     );
 
 
@@ -3973,8 +4891,20 @@ function sairAdministrativo() {
         );
 
 
+    const loginAdmin =
+        document.getElementById(
+            "loginAdministrativo"
+        );
+
+
     if (sistema)
-        sistema.style.display = "none";
+        sistema.style.display =
+            "none";
+
+
+    if (loginAdmin)
+        loginAdmin.style.display =
+            "none";
 
 
     voltarTelaEscolha();
@@ -3983,48 +4913,33 @@ function sairAdministrativo() {
 
 
 /* =========================================================
-   FUNÇÕES AUXILIARES
+   FORMATAR DATA
 ========================================================= */
 
-function encontrarChamado(id) {
-
-    return chamados.find(function (chamado) {
-
-        return Number(chamado.id) ===
-            Number(id);
-
-    });
-
-}
-
-
-function definirTexto(id, valor) {
-
-    const elemento =
-        document.getElementById(id);
-
-
-    if (elemento)
-        elemento.textContent = valor;
-
-}
-
-
-function formatarData(data) {
+function formatarData(
+    data
+) {
 
     if (!data)
-        return "—";
+        return "-";
 
 
-    const dataObj =
+    const dataObjeto =
         new Date(data);
 
 
-    if (isNaN(dataObj.getTime()))
-        return "—";
+    if (
+        Number.isNaN(
+            dataObjeto.getTime()
+        )
+    ) {
+
+        return "-";
+
+    }
 
 
-    return dataObj.toLocaleString(
+    return dataObjeto.toLocaleString(
         "pt-BR",
         {
 
@@ -4044,110 +4959,62 @@ function formatarData(data) {
 }
 
 
-function ordenarPorDataDesc(a, b) {
+/* =========================================================
+   NORMALIZAR CLASSE
+========================================================= */
 
-    return new Date(
-        b.criadoEm
-    ) - new Date(
-        a.criadoEm
-    );
+function normalizarClasse(
+    texto
+) {
 
-}
-
-
-function classeStatus(status) {
-
-    if (status === "Resolvido")
-        return "status-resolvido";
-
-    if (status === "Em andamento")
-        return "status-andamento";
-
-    return "status-aberto";
-
-}
-
-
-function iconeStatus(status) {
-
-    if (status === "Resolvido")
-        return "🔵";
-
-    if (status === "Em andamento")
-        return "🟡";
-
-    return "🟢";
-
-}
-
-
-function iconePrioridade(prioridade) {
-
-    if (prioridade === "Alta")
-        return "🔴";
-
-    if (prioridade === "Baixa")
-        return "🟢";
-
-    return "🟡";
-
-}
-
-
-function limitarTexto(texto, limite) {
-
-    if (!texto)
-        return "";
-
-
-    if (texto.length <= limite)
-        return texto;
-
-
-    return texto.substring(
-        0,
-        limite
-    ) + "...";
+    return String(
+        texto || ""
+    )
+        .normalize("NFD")
+        .replace(
+            /[\u0300-\u036f]/g,
+            ""
+        )
+        .toLowerCase()
+        .replace(
+            /\s+/g,
+            "-"
+        )
+        .replace(
+            /[^a-z0-9-]/g,
+            ""
+        );
 
 }
 
 
 /* =========================================================
-   SEGURANÇA HTML
+   ESCAPAR HTML
 ========================================================= */
 
-function escapeHTML(valor) {
+function escapeHTML(
+    valor
+) {
 
-    if (valor === null ||
-        valor === undefined) {
-
-        return "";
-
-    }
-
-
-    return String(valor)
-
+    return String(
+        valor ?? ""
+    )
         .replace(
             /&/g,
             "&amp;"
         )
-
         .replace(
             /</g,
             "&lt;"
         )
-
         .replace(
             />/g,
             "&gt;"
         )
-
         .replace(
             /"/g,
             "&quot;"
         )
-
         .replace(
             /'/g,
             "&#039;"
@@ -4157,81 +5024,779 @@ function escapeHTML(valor) {
 
 
 /* =========================================================
-   FECHAR MODAIS CLICANDO FORA
+   FECHAR MODAIS AO CLICAR FORA
 ========================================================= */
 
-window.addEventListener(
+document.addEventListener(
     "click",
     function (event) {
 
-        const modalDetalhes =
-            document.getElementById(
-                "modalDetalhes"
+        const modais =
+            document.querySelectorAll(
+                ".modal"
             );
 
 
-        const modalEditar =
-            document.getElementById(
-                "modalEditar"
-            );
+        modais.forEach(
+            function (modal) {
 
+                if (
+                    event.target ===
+                    modal
+                ) {
 
-        const modalAtendente =
-            document.getElementById(
-                "modalAtendente"
-            );
+                    modal.style.display =
+                        "none";
 
+                }
 
-        if (
-            event.target ===
-            modalDetalhes
-        ) {
-
-            fecharDetalhes();
-
-        }
-
-
-        if (
-            event.target ===
-            modalEditar
-        ) {
-
-            fecharEdicao();
-
-        }
-
-
-        if (
-            event.target ===
-            modalAtendente
-        ) {
-
-            fecharAtendente();
-
-        }
+            }
+        );
 
     }
 );
 
 
 /* =========================================================
-   ESC FECHA MODAIS
+   ESC PARA FECHAR MODAIS
 ========================================================= */
 
 document.addEventListener(
     "keydown",
     function (event) {
 
-        if (event.key !== "Escape")
+        if (
+            event.key !==
+            "Escape"
+        ) {
+
             return;
 
+        }
 
-        fecharDetalhes();
 
-        fecharEdicao();
+        document
+            .querySelectorAll(
+                ".modal"
+            )
+            .forEach(
+                function (modal) {
 
-        fecharAtendente();
+                    modal.style.display =
+                        "none";
+
+                }
+            );
+
+
+        chamadoSelecionado =
+            null;
+
+        chamadoEditando =
+            null;
+
+    }
+);
+
+
+/* =========================================================
+   ATUALIZAÇÃO AUTOMÁTICA
+========================================================= */
+
+setInterval(
+    function () {
+
+        chamados =
+            JSON.parse(
+                localStorage.getItem(
+                    "chamados"
+                )
+            ) || [];
+
+
+        atendentes =
+            JSON.parse(
+                localStorage.getItem(
+                    "atendentes"
+                )
+            ) || [];
+
+
+        notificacoes =
+            JSON.parse(
+                localStorage.getItem(
+                    "notificacoes"
+                )
+            ) || [];
+
+
+        historicoGeral =
+            JSON.parse(
+                localStorage.getItem(
+                    "historicoGeral"
+                )
+            ) || [];
+
+
+        atualizarTudo();
+
+    },
+    5000
+);/* =========================================================
+   NAVEGAÇÃO ADMINISTRATIVA
+========================================================= */
+
+function mostrarTelaAdmin(id, botao) {
+
+    if (!administradorLogado) {
+
+        alert(
+            "Faça login como administrador para continuar."
+        );
+
+        return;
+
+    }
+
+
+    document
+        .querySelectorAll(".admin-tela")
+        .forEach(function (tela) {
+
+            tela.style.display = "none";
+
+            tela.classList.remove("ativo");
+
+        });
+
+
+    const tela =
+        document.getElementById(id);
+
+
+    if (tela) {
+
+        tela.style.display = "block";
+
+        tela.classList.add("ativo");
+
+    }
+
+
+    document
+        .querySelectorAll(".menu-link")
+        .forEach(function (item) {
+
+            item.classList.remove("ativo");
+
+        });
+
+
+    if (botao) {
+
+        botao.classList.add("ativo");
+
+    }
+
+
+    /* Atualiza o conteúdo da tela */
+
+    switch (id) {
+
+        case "dashboard":
+
+            atualizarDashboard();
+
+            break;
+
+
+        case "chamados":
+
+            renderizarChamados();
+
+            break;
+
+
+        case "atendentes":
+
+            renderizarAtendentes();
+
+            break;
+
+
+        case "notificacoes":
+
+            renderizarNotificacoes();
+
+            break;
+
+
+        case "historico":
+
+            renderizarHistorico();
+
+            break;
+
+
+        case "configuracoes":
+
+            carregarConfiguracoes();
+
+            break;
+
+    }
+
+}
+
+
+/* =========================================================
+   NAVEGAÇÃO ADMIN POR ID
+========================================================= */
+
+function mostrarTelaAdminPorId(id) {
+
+    if (!administradorLogado) {
+
+        alert(
+            "Faça login como administrador para continuar."
+        );
+
+        return;
+
+    }
+
+
+    let botao = null;
+
+
+    document
+        .querySelectorAll(".menu-link")
+        .forEach(function (item) {
+
+            const onclick =
+                item.getAttribute("onclick") || "";
+
+
+            if (
+                onclick.includes(id)
+            ) {
+
+                botao = item;
+
+            }
+
+        });
+
+
+    mostrarTelaAdmin(
+        id,
+        botao
+    );
+
+}
+
+
+/* =========================================================
+   ABRIR NOVO CHAMADO ADMIN
+========================================================= */
+
+function abrirNovoChamadoAdmin() {
+
+    if (!administradorLogado) {
+
+        alert(
+            "Acesso administrativo necessário."
+        );
+
+        return;
+
+    }
+
+
+    const formulario =
+        document.getElementById(
+            "formChamado"
+        );
+
+
+    if (formulario) {
+
+        formulario.reset();
+
+    }
+
+
+    mostrarTelaAdminPorId(
+        "novoChamado"
+    );
+
+}
+
+
+/* =========================================================
+   FECHAR QUALQUER MODAL
+========================================================= */
+
+function fecharModal(id) {
+
+    const modal =
+        document.getElementById(id);
+
+
+    if (modal) {
+
+        modal.style.display =
+            "none";
+
+    }
+
+
+    chamadoSelecionado =
+        null;
+
+    chamadoEditando =
+        null;
+
+}
+
+
+/* =========================================================
+   LIMPAR PESQUISA ADMIN
+========================================================= */
+
+function limparPesquisa() {
+
+    const pesquisa =
+        document.getElementById(
+            "pesquisa"
+        );
+
+
+    const filtroStatus =
+        document.getElementById(
+            "filtroStatus"
+        );
+
+
+    const filtroPrioridade =
+        document.getElementById(
+            "filtroPrioridade"
+        );
+
+
+    if (pesquisa)
+        pesquisa.value = "";
+
+
+    if (filtroStatus)
+        filtroStatus.value = "";
+
+
+    if (filtroPrioridade)
+        filtroPrioridade.value = "";
+
+
+    renderizarChamados();
+
+}
+
+
+/* =========================================================
+   LIMPAR PESQUISA CLIENTE
+========================================================= */
+
+function limparPesquisaCliente() {
+
+    const pesquisa =
+        document.getElementById(
+            "pesquisaChamadosCliente"
+        );
+
+
+    const filtroStatus =
+        document.getElementById(
+            "filtroStatusCliente"
+        );
+
+
+    const filtroPrioridade =
+        document.getElementById(
+            "filtroPrioridadeCliente"
+        );
+
+
+    if (pesquisa)
+        pesquisa.value = "";
+
+
+    if (filtroStatus)
+        filtroStatus.value = "";
+
+
+    if (filtroPrioridade)
+        filtroPrioridade.value = "";
+
+
+    renderizarChamadosCliente();
+
+}
+
+
+/* =========================================================
+   RECARREGAR SISTEMA
+========================================================= */
+
+function recarregarSistema() {
+
+    atualizarTudo();
+
+}
+
+
+/* =========================================================
+   EXPORTAR DADOS
+========================================================= */
+
+function exportarDados() {
+
+    if (!administradorLogado) {
+
+        alert(
+            "Acesso administrativo necessário."
+        );
+
+        return;
+
+    }
+
+
+    const dados = {
+
+        chamados:
+            chamados,
+
+        atendentes:
+            atendentes,
+
+        notificacoes:
+            notificacoes,
+
+        historicoGeral:
+            historicoGeral,
+
+        configuracoes:
+            configuracoes
+
+    };
+
+
+    const arquivo =
+        new Blob(
+            [
+                JSON.stringify(
+                    dados,
+                    null,
+                    2
+                )
+            ],
+            {
+                type:
+                    "application/json"
+            }
+        );
+
+
+    const url =
+        URL.createObjectURL(
+            arquivo
+        );
+
+
+    const link =
+        document.createElement(
+            "a"
+        );
+
+
+    link.href =
+        url;
+
+
+    link.download =
+        "backup-central-atendimento.json";
+
+
+    document.body.appendChild(
+        link
+    );
+
+
+    link.click();
+
+
+    document.body.removeChild(
+        link
+    );
+
+
+    URL.revokeObjectURL(
+        url
+    );
+
+
+    adicionarHistoricoGeral(
+
+        "Backup exportado",
+
+        "O administrador exportou os dados do sistema."
+
+    );
+
+}
+
+
+/* =========================================================
+   IMPORTAR DADOS
+========================================================= */
+
+function importarDados(event) {
+
+    if (!administradorLogado) {
+
+        alert(
+            "Acesso administrativo necessário."
+        );
+
+        return;
+
+    }
+
+
+    const arquivo =
+        event.target.files?.[0];
+
+
+    if (!arquivo)
+        return;
+
+
+    const leitor =
+        new FileReader();
+
+
+    leitor.onload =
+        function () {
+
+            try {
+
+                const dados =
+                    JSON.parse(
+                        leitor.result
+                    );
+
+
+                if (
+                    dados.chamados &&
+                    Array.isArray(
+                        dados.chamados
+                    )
+                ) {
+
+                    chamados =
+                        dados.chamados;
+
+                }
+
+
+                if (
+                    dados.atendentes &&
+                    Array.isArray(
+                        dados.atendentes
+                    )
+                ) {
+
+                    atendentes =
+                        dados.atendentes;
+
+                }
+
+
+                if (
+                    dados.notificacoes &&
+                    Array.isArray(
+                        dados.notificacoes
+                    )
+                ) {
+
+                    notificacoes =
+                        dados.notificacoes;
+
+                }
+
+
+                if (
+                    dados.historicoGeral &&
+                    Array.isArray(
+                        dados.historicoGeral
+                    )
+                ) {
+
+                    historicoGeral =
+                        dados.historicoGeral;
+
+                }
+
+
+                if (
+                    dados.configuracoes &&
+                    typeof dados.configuracoes ===
+                    "object"
+                ) {
+
+                    configuracoes =
+                        dados.configuracoes;
+
+                }
+
+
+                salvarDados();
+
+
+                atualizarTudo();
+
+
+                alert(
+                    "Dados importados com sucesso!"
+                );
+
+
+                adicionarHistoricoGeral(
+
+                    "Backup importado",
+
+                    "Os dados do sistema foram restaurados."
+
+                );
+
+
+            } catch (erro) {
+
+                console.error(
+                    erro
+                );
+
+
+                alert(
+                    "Erro ao importar o arquivo. Verifique se o backup é válido."
+                );
+
+            }
+
+        };
+
+
+    leitor.readAsText(
+        arquivo
+    );
+
+}
+
+
+/* =========================================================
+   LIMPAR TODOS OS DADOS
+========================================================= */
+
+function limparTodosDados() {
+
+    if (!administradorLogado) {
+
+        alert(
+            "Acesso administrativo necessário."
+        );
+
+        return;
+
+    }
+
+
+    const confirmar =
+        confirm(
+            "ATENÇÃO!\n\nIsso apagará todos os chamados, atendentes, notificações e histórico.\n\nDeseja realmente continuar?"
+        );
+
+
+    if (!confirmar)
+        return;
+
+
+    const confirmarNovamente =
+        confirm(
+            "Tem certeza? Essa ação não poderá ser desfeita sem um backup."
+        );
+
+
+    if (!confirmarNovamente)
+        return;
+
+
+    chamados = [];
+
+    atendentes = [];
+
+    notificacoes = [];
+
+    historicoGeral = [];
+
+
+    salvarDados();
+
+
+    atualizarTudo();
+
+
+    alert(
+        "Todos os dados foram apagados."
+    );
+
+}
+
+
+/* =========================================================
+   INICIALIZAÇÃO FINAL
+========================================================= */
+
+function inicializarSistema() {
+
+    carregarConfiguracoes();
+
+    atualizarTudo();
+
+
+    if (clienteLogado) {
+
+        preencherDadosCliente();
+
+    }
+
+
+    if (administradorLogado) {
+
+        protegerAreaAdministrativa();
+
+    }
+
+}
+
+
+/* =========================================================
+   INICIALIZAÇÃO DE SEGURANÇA
+========================================================= */
+
+window.addEventListener(
+    "load",
+    function () {
+
+        inicializarSistema();
 
     }
 );
@@ -4250,53 +5815,116 @@ window.abrirAreaAdministrativa =
 window.voltarTelaEscolha =
     voltarTelaEscolha;
 
+window.fazerLoginCliente =
+    fazerLoginCliente;
+
+window.fazerLoginAdmin =
+    fazerLoginAdmin;
+
+window.sairCliente =
+    sairCliente;
+
+window.sairAdministrativo =
+    sairAdministrativo;
+
 window.mostrarTelaCliente =
     mostrarTelaCliente;
 
 window.mostrarTelaClientePorId =
     mostrarTelaClientePorId;
 
+window.mostrarTelaAdmin =
+    mostrarTelaAdmin;
+
+window.mostrarTelaAdminPorId =
+    mostrarTelaAdminPorId;
+
 window.abrirTelaNovoChamadoCliente =
     abrirTelaNovoChamadoCliente;
 
-window.sairCliente =
-    sairCliente;
+window.abrirNovoChamadoAdmin =
+    abrirNovoChamadoAdmin;
 
-window.abrirDetalhes =
-    abrirDetalhes;
+window.cadastrarChamadoCliente =
+    cadastrarChamadoCliente;
 
-window.fecharDetalhes =
-    fecharDetalhes;
+window.cadastrarChamadoAdmin =
+    cadastrarChamadoAdmin;
 
-window.adicionarHistorico =
-    adicionarHistorico;
+window.abrirChamado =
+    abrirChamado;
 
-window.abrirEdicao =
-    abrirEdicao;
-
-window.fecharEdicao =
-    fecharEdicao;
+window.editarChamado =
+    editarChamado;
 
 window.excluirChamado =
     excluirChamado;
 
+window.alterarStatusChamado =
+    alterarStatusChamado;
+
+window.fecharModalChamado =
+    fecharModalChamado;
+
+window.verChamadoCliente =
+    verChamadoCliente;
+
+window.fecharModalChamadoCliente =
+    fecharModalChamadoCliente;
+
 window.abrirNovoAtendente =
     abrirNovoAtendente;
 
-window.fecharAtendente =
-    fecharAtendente;
+window.salvarAtendente =
+    salvarAtendente;
+
+window.editarAtendente =
+    editarAtendente;
 
 window.excluirAtendente =
     excluirAtendente;
 
+window.marcarNotificacaoLida =
+    marcarNotificacaoLida;
+
+window.marcarTodasNotificacoesLidas =
+    marcarTodasNotificacoesLidas;
+
 window.limparNotificacoes =
     limparNotificacoes;
 
-window.limparHistoricoGeral =
-    limparHistoricoGeral;
+window.limparHistorico =
+    limparHistorico;
 
-window.imprimirRelatorio =
-    imprimirRelatorio;
+window.salvarConfiguracoes =
+    salvarConfiguracoes;
 
-window.verDetalhesCliente =
-    verDetalhesCliente;
+window.fecharModal =
+    fecharModal;
+
+window.limparPesquisa =
+    limparPesquisa;
+
+window.limparPesquisaCliente =
+    limparPesquisaCliente;
+
+window.recarregarSistema =
+    recarregarSistema;
+
+window.exportarDados =
+    exportarDados;
+
+window.importarDados =
+    importarDados;
+
+window.limparTodosDados =
+    limparTodosDados;
+
+
+/* =========================================================
+   FIM DO SCRIPT
+========================================================= */
+
+console.log(
+    "Central de Atendimento carregada com sucesso."
+);
