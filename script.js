@@ -4658,33 +4658,6 @@ window.scrollTo(
 );
 
 
-function mostrarTelaClientePorId(id) {
-
-    const botoes =
-        document.querySelectorAll(
-            ".cliente-menu-link"
-        );
-
-    let botaoEncontrado = null;
-
-    botoes.forEach(function (botao) {
-
-        const onclick =
-            botao.getAttribute("onclick") || "";
-
-        if (onclick.includes(id)) {
-            botaoEncontrado = botao;
-        }
-
-    });
-
-    mostrarTelaCliente(
-        id,
-        botaoEncontrado
-    );
-
-}
-
 /* =========================================================
    ABRIR NOVO CHAMADO PELO MENU
 ========================================================= */
@@ -8700,6 +8673,30 @@ window.abrirAreaClienteSegura =
 
 window.abrirSistemaAdministrativoSeguro =
     abrirSistemaAdministrativoSeguro;
+window.abrirSistemaAdministrativoSeguro =
+    abrirSistemaAdministrativoSeguro;
+
+
+/* =========================================================
+   NAVEGAÇÃO AUXILIAR DA ÁREA DO CLIENTE
+========================================================= */
+
+function mostrarTelaClientePorId(idTela) {
+
+    const botao = Array.from(
+        document.querySelectorAll(".cliente-menu-link")
+    ).find(function(item) {
+
+        const onclick = item.getAttribute("onclick");
+
+        return onclick && onclick.includes(idTela);
+    });
+
+    mostrarTelaCliente(idTela, botao || null);
+}
+
+window.mostrarTelaClientePorId =
+    mostrarTelaClientePorId;
 
 
 /* =========================================================
