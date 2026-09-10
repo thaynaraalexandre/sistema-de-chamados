@@ -8609,8 +8609,6 @@ window.abrirTelaNovoChamadoCliente =
 
 window.abrirDetalhes =
     abrirDetalhesChamadoAdmin;
-window.fecharDetalhes =
-    fecharDetalhes;
 
 
 window.adicionarHistorico =
