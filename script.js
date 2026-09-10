@@ -8608,9 +8608,7 @@ window.abrirTelaNovoChamadoCliente =
 
 
 window.abrirDetalhes =
-    abrirDetalhes;
-
-
+    abrirDetalhesChamadoAdmin;
 window.fecharDetalhes =
     fecharDetalhes;
 
@@ -8673,8 +8671,7 @@ window.abrirAreaClienteSegura =
 
 window.abrirSistemaAdministrativoSeguro =
     abrirSistemaAdministrativoSeguro;
-window.abrirSistemaAdministrativoSeguro =
-    abrirSistemaAdministrativoSeguro;
+
 
 
 /* =========================================================
