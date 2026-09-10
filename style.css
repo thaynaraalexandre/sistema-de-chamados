@@ -360,10 +360,8 @@ a {
 /* =====================================================
    PAINEL CLIENTE
 ===================================================== */
-
 .painel-cliente {
     min-height: 100vh;
-    display: flex;
     background: #f8fafc;
 }
 
@@ -1647,5 +1645,825 @@ a {
     .cliente-titulo-pagina h2 {
         font-size: 22px;
     }
+}/* =====================================================
+   ASSISTENTE IA
+===================================================== */
+
+.assistente-ia-card {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 22px;
+    margin: 20px 0;
+    border-radius: 16px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
 }
 
+.assistente-ia-icone {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #f3f4f6;
+    font-size: 30px;
+}
+
+.assistente-ia-conteudo {
+    flex: 1;
+}
+
+.assistente-ia-conteudo h3 {
+    margin: 0 0 6px;
+}
+
+.assistente-ia-conteudo p {
+    margin: 0 0 15px;
+    color: #6b7280;
+}
+
+.btn-assistente-ia {
+    border: none;
+    border-radius: 10px;
+    padding: 12px 18px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+
+/* =====================================================
+   MODAL DO ASSISTENTE IA
+===================================================== */
+
+.modal-assistente-ia {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 9999;
+}
+
+.assistente-ia-container {
+    width: 100%;
+    max-width: 480px;
+    height: 650px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: 18px;
+    background: #ffffff;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+}
+
+
+/* =====================================================
+   CABEÇALHO DO CHAT
+===================================================== */
+
+.assistente-ia-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 20px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.assistente-ia-header strong {
+    display: block;
+    font-size: 17px;
+}
+
+.assistente-ia-header small {
+    display: block;
+    margin-top: 4px;
+    color: #6b7280;
+}
+
+.btn-fechar-ia {
+    border: none;
+    background: transparent;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+
+/* =====================================================
+   ÁREA DO CHAT
+===================================================== */
+
+.chat-assistente-ia {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    background: #f8fafc;
+}
+
+.mensagem-ia {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.mensagem-ia-avatar {
+    width: 35px;
+    height: 35px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #ffffff;
+}
+
+.mensagem-ia-texto {
+    max-width: 80%;
+    padding: 12px 15px;
+    border-radius: 12px;
+    background: #ffffff;
+    line-height: 1.5;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+
+/* =====================================================
+   CAMPO DE MENSAGEM
+===================================================== */
+
+.assistente-ia-input {
+    display: flex;
+    gap: 10px;
+    padding: 15px;
+    border-top: 1px solid #e5e7eb;
+    background: #ffffff;
+}
+
+.assistente-ia-input input {
+    flex: 1;
+    min-width: 0;
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    outline: none;
+}
+
+.assistente-ia-input button {
+    width: 45px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+
+/* =====================================================
+   MENSAGEM DO USUÁRIO
+===================================================== */
+
+.mensagem-usuario {
+    justify-content: flex-end;
+}
+
+.mensagem-usuario .mensagem-ia-texto {
+    background: #f3f4f6;
+}
+
+/* =====================================================
+   CORREÇÃO DEFINITIVA - ASSISTENTE IA
+===================================================== */
+
+.cliente-conteudo {
+    position: relative !important;
+    width: calc(100% - 280px) !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    margin-left: 280px !important;
+    box-sizing: border-box !important;
+    overflow: visible !important;
+}
+
+
+/* Cartão da IA */
+
+.cliente-conteudo .assistente-ia-card {
+    position: relative !important;
+    display: flex !important;
+    width: calc(100% - 40px) !important;
+    max-width: none !important;
+    min-width: 0 !important;
+
+    margin: 20px !important;
+    padding: 22px !important;
+
+    box-sizing: border-box !important;
+
+    align-items: center !important;
+    gap: 20px !important;
+
+    overflow: visible !important;
+}
+
+
+/* Conteúdo interno */
+
+.cliente-conteudo .assistente-ia-conteudo {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    width: auto !important;
+}
+
+
+/* Ícone */
+
+.cliente-conteudo .assistente-ia-icone {
+    flex: 0 0 60px !important;
+}
+
+
+/* Botão */
+
+.cliente-conteudo .btn-assistente-ia {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+
+/* =====================================================
+   CORRIGE CONTAINER PAI
+===================================================== */
+
+#areaCliente {
+    width: 100% !important;
+    max-width: none !important;
+    overflow-x: hidden !important;
+}
+
+
+#areaCliente .cliente-layout {
+    width: 100% !important;
+    max-width: none !important;
+}
+
+
+/* =====================================================
+   RESPONSIVO
+===================================================== */
+
+@media (max-width: 900px) {
+
+    .cliente-conteudo {
+        width: 100% !important;
+        margin-left: 0 !important;
+    }
+
+    .cliente-conteudo .assistente-ia-card {
+        width: calc(100% - 30px) !important;
+        margin: 15px !important;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .cliente-conteudo .assistente-ia-card {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        width: calc(100% - 20px) !important;
+        margin: 10px !important;
+    }
+
+    .cliente-conteudo .btn-assistente-ia {
+        width: 100% !important;
+    }
+
+}/* =====================================================
+   CORREÇÃO FINAL - PAINEL DO CLIENTE
+===================================================== */
+
+#painelCliente {
+    display: flex !important;
+    width: 100% !important;
+    min-height: 100vh !important;
+    overflow: hidden !important;
+}
+
+
+/* MENU LATERAL */
+
+#painelCliente .cliente-menu-lateral {
+    flex: 0 0 235px !important;
+    width: 235px !important;
+    min-width: 235px !important;
+    position: relative !important;
+    left: auto !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+}
+
+
+/* CONTEÚDO PRINCIPAL */
+
+#painelCliente .cliente-conteudo {
+    flex: 1 1 auto !important;
+    width: auto !important;
+    max-width: none !important;
+    min-width: 0 !important;
+
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+
+    padding: 20px !important;
+
+    box-sizing: border-box !important;
+
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+}
+
+
+/* =====================================================
+   ASSISTENTE IA
+===================================================== */
+
+#painelCliente .assistente-ia-card {
+    display: flex !important;
+
+    width: 100% !important;
+    max-width: 100% !important;
+
+    margin: 0 0 24px 0 !important;
+
+    padding: 24px !important;
+
+    box-sizing: border-box !important;
+
+    align-items: center !important;
+    gap: 20px !important;
+
+    overflow: visible !important;
+}
+
+
+#painelCliente .assistente-ia-icone {
+    flex: 0 0 60px !important;
+    width: 60px !important;
+    height: 60px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+
+#painelCliente .assistente-ia-conteudo {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    width: auto !important;
+}
+
+
+#painelCliente .assistente-ia-conteudo h3 {
+    margin-top: 0 !important;
+}
+
+
+#painelCliente .assistente-ia-conteudo p {
+    margin-bottom: 16px !important;
+}
+
+
+/* =====================================================
+   TOPO DO CLIENTE
+===================================================== */
+
+#painelCliente .cliente-topo {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+
+/* =====================================================
+   BOTÃO DA IA
+===================================================== */
+
+#painelCliente .btn-assistente-ia {
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+
+/* =====================================================
+   TELAS MENORES
+===================================================== */
+
+@media (max-width: 800px) {
+
+    #painelCliente {
+        flex-direction: column !important;
+        overflow: visible !important;
+    }
+
+    #painelCliente .cliente-menu-lateral {
+        width: 100% !important;
+        min-width: 100% !important;
+        flex: none !important;
+    }
+
+    #painelCliente .cliente-conteudo {
+        width: 100% !important;
+        padding: 15px !important;
+    }
+
+    #painelCliente .assistente-ia-card {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+    }
+
+    #painelCliente .btn-assistente-ia {
+        width: 100% !important;
+    }
+}/* =====================================================
+   CHAT DA ASSISTENTE IA
+===================================================== */
+
+#janelaAssistenteIA {
+    position: fixed !important;
+    right: 25px !important;
+    bottom: 25px !important;
+
+    width: 380px !important;
+    max-width: calc(100vw - 40px) !important;
+    height: 520px !important;
+    max-height: calc(100vh - 40px) !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+
+    background: #ffffff !important;
+
+    border-radius: 18px !important;
+
+    box-shadow:
+        0 15px 45px rgba(0, 0, 0, 0.20) !important;
+
+    border: 1px solid #e5e7eb !important;
+
+    z-index: 99999 !important;
+
+    overflow: hidden !important;
+}
+
+
+/* =====================================================
+   CONTAINER DO CHAT
+===================================================== */
+
+#janelaAssistenteIA .assistente-ia-chat {
+    width: 100% !important;
+    height: 100% !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+
+    background: #ffffff !important;
+}
+
+
+/* =====================================================
+   CABEÇALHO
+===================================================== */
+
+.assistente-ia-chat-topo {
+    min-height: 75px !important;
+
+    padding: 15px 18px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+
+    background: #172554 !important;
+
+    color: white !important;
+
+    box-sizing: border-box !important;
+}
+
+
+.assistente-ia-chat-topo strong {
+    display: block !important;
+
+    font-size: 16px !important;
+
+    margin-bottom: 4px !important;
+}
+
+
+.assistente-ia-chat-topo small {
+    display: block !important;
+
+    font-size: 12px !important;
+
+    opacity: 0.8 !important;
+}
+
+
+/* =====================================================
+   BOTÃO FECHAR
+===================================================== */
+
+.assistente-ia-fechar {
+    width: 34px !important;
+    height: 34px !important;
+
+    border: none !important;
+    border-radius: 8px !important;
+
+    background: rgba(255,255,255,0.15) !important;
+
+    color: white !important;
+
+    font-size: 18px !important;
+
+    cursor: pointer !important;
+}
+
+
+.assistente-ia-fechar:hover {
+    background: rgba(255,255,255,0.25) !important;
+}
+
+
+/* =====================================================
+   ÁREA DAS MENSAGENS
+===================================================== */
+
+.assistente-ia-mensagens {
+    flex: 1 !important;
+
+    padding: 18px !important;
+
+    overflow-y: auto !important;
+
+    background: #f8fafc !important;
+
+    box-sizing: border-box !important;
+}
+
+
+/* =====================================================
+   MENSAGEM DA IA
+===================================================== */
+
+.mensagem-ia {
+    max-width: 85% !important;
+
+    margin-bottom: 14px !important;
+
+    padding: 12px 14px !important;
+
+    background: white !important;
+
+    border: 1px solid #e5e7eb !important;
+
+    border-radius: 14px 14px 14px 4px !important;
+
+    color: #334155 !important;
+
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05) !important;
+
+    box-sizing: border-box !important;
+}
+
+
+.mensagem-ia strong {
+    display: block !important;
+
+    font-size: 13px !important;
+
+    margin-bottom: 5px !important;
+}
+
+
+.mensagem-ia p {
+    margin: 0 !important;
+
+    font-size: 14px !important;
+
+    line-height: 1.5 !important;
+}
+
+
+/* =====================================================
+   MENSAGEM DO CLIENTE
+===================================================== */
+
+.mensagem-cliente {
+    max-width: 85% !important;
+
+    margin-left: auto !important;
+    margin-bottom: 14px !important;
+
+    padding: 12px 14px !important;
+
+    background: #e0e7ff !important;
+
+    border-radius: 14px 14px 4px 14px !important;
+
+    color: #1e293b !important;
+
+    box-sizing: border-box !important;
+}
+
+
+.mensagem-cliente p {
+    margin: 0 !important;
+
+    font-size: 14px !important;
+
+    line-height: 1.5 !important;
+}
+
+
+/* =====================================================
+   CAMPO DE DIGITAÇÃO
+===================================================== */
+
+.assistente-ia-chat-input {
+    display: flex !important;
+
+    gap: 8px !important;
+
+    padding: 12px !important;
+
+    background: white !important;
+
+    border-top: 1px solid #e5e7eb !important;
+
+    box-sizing: border-box !important;
+}
+
+
+.assistente-ia-chat-input input {
+    flex: 1 !important;
+
+    min-width: 0 !important;
+
+    height: 44px !important;
+
+    padding: 0 13px !important;
+
+    border: 1px solid #cbd5e1 !important;
+
+    border-radius: 10px !important;
+
+    outline: none !important;
+
+    font-size: 14px !important;
+
+    box-sizing: border-box !important;
+}
+
+
+.assistente-ia-chat-input input:focus {
+    border-color: #4f46e5 !important;
+
+    box-shadow: 0 0 0 3px rgba(79,70,229,0.10) !important;
+}
+
+
+/* =====================================================
+   BOTÃO ENVIAR
+===================================================== */
+
+.assistente-ia-chat-input button {
+    width: 44px !important;
+    height: 44px !important;
+
+    flex-shrink: 0 !important;
+
+    border: none !important;
+
+    border-radius: 10px !important;
+
+    background: #4f46e5 !important;
+
+    color: white !important;
+
+    font-size: 18px !important;
+
+    cursor: pointer !important;
+}
+
+
+.assistente-ia-chat-input button:hover {
+    opacity: 0.9 !important;
+}
+
+
+/* =====================================================
+   CELULAR
+===================================================== */
+
+@media (max-width: 600px) {
+
+    #janelaAssistenteIA {
+        right: 10px !important;
+        bottom: 10px !important;
+
+        width: calc(100vw - 20px) !important;
+
+        height: calc(100vh - 20px) !important;
+
+        max-width: none !important;
+        max-height: none !important;
+
+        border-radius: 14px !important;
+    }
+
+}/* =====================================================
+   SEGURANÇA - PAINEL CLIENTE SEM LOGIN
+===================================================== */
+
+#painelCliente[style*="display:none"],
+#painelCliente[style*="display: none"] {
+    display: none !important;
+}/* =========================================================
+   SELETOR DE EMPRESA - MODO COMERCIAL
+========================================================= */
+
+#selecaoEmpresaComercial {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 14px;
+    box-sizing: border-box;
+}
+
+#selecaoEmpresaComercial label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+#empresaComercial,
+#novoNomeEmpresa {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    background: white;
+    font-size: 14px;
+}
+
+#empresaAtivaTexto {
+    margin: 8px 0;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+#selecaoEmpresaComercial button {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 12px;
+    margin-top: 6px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+}/* =========================================================
+   LAYOUT COMERCIAL - EMPRESA EM LINHA INTEIRA
+========================================================= */
+
+#selecaoAcessoSistema {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: stretch;
+}
+
+#modoSistemaSelecionado {
+    flex: 1 1 100%;
+}
+
+#selecaoEmpresaComercial {
+    flex: 1 1 100%;
+}
+
+#selecaoAcessoSistema .btn-escolha {
+    flex: 1 1 280px;
+}
+
+#selecaoAcessoSistema .btn-voltar {
+    flex: 1 1 100%;
+}

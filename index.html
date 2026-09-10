@@ -11,6 +11,26 @@
 
 <link rel="stylesheet" href="style.css">
 
+<style>
+    /* ETAPA 1 — identificação do modo do sistema */
+    #modoSistemaSelecionado {
+        padding: 10px 14px;
+        border-radius: 10px;
+        background: rgba(79, 70, 229, 0.08);
+        color: #334155;
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    #textoModoSistema {
+        transition: 0.2s ease;
+    }
+
+    #selecaoAcessoSistema .btn-voltar {
+        width: 100%;
+    }
+</style>
+
 
 </head>
 
@@ -32,11 +52,110 @@
             Central de Atendimento
         </h1>
 
-        <p>
-            Escolha como deseja acessar o sistema.
+        <p id="textoModoSistema">
+            Escolha uma versão para continuar.
         </p>
 
-        <div class="escolha-acoes">
+        <!-- =================================================
+             ETAPA 1 — ESCOLHA DA VERSÃO
+        ================================================== -->
+
+        <div id="selecaoModoSistema" class="escolha-acoes">
+
+            <button
+                type="button"
+                class="btn-escolha cliente"
+                onclick="selecionarModoSistema('portfolio')"
+            >
+                <span>🟢</span>
+
+                <div>
+                    <strong>Versão Portfólio</strong>
+                    <small>
+                        Demonstração do sistema com dados fictícios
+                    </small>
+                </div>
+            </button>
+
+
+            <button
+                type="button"
+                class="btn-escolha administrativo"
+                onclick="selecionarModoSistema('comercial')"
+            >
+                <span>🔵</span>
+
+                <div>
+                    <strong>Versão Comercial</strong>
+                    <small>
+                        Sistema preparado para empresas e clientes
+                    </small>
+                </div>
+            </button>
+
+        </div>
+
+
+        <!-- =================================================
+             ACESSO AO SISTEMA
+        ================================================== -->
+
+        <div
+            id="selecaoAcessoSistema"
+            class="escolha-acoes"
+            style="display:none;"
+        >
+
+            <div
+                id="modoSistemaSelecionado"
+                style="width:100%; text-align:center; margin-bottom:8px;"
+            ></div>
+<div
+    id="selecaoEmpresaComercial"
+    style="display:none; width:100%; margin-bottom:12px;"
+>
+
+    <label
+        for="empresaComercial"
+        style="display:block; margin-bottom:6px; font-weight:600;"
+    >
+        Empresa
+    </label>
+
+    <select
+        id="empresaComercial"
+        onchange="selecionarEmpresa(this.value)"
+        style="width:100%; padding:10px; border-radius:8px;"
+    >
+        <option value="empresa_001">
+            Empresa 001
+        </option>
+
+        <option value="empresa_002">
+            Empresa 002
+        </option>
+    </select>
+<p
+    id="empresaAtivaTexto"
+    style="margin-top:6px; font-size:12px;"
+>
+    Empresa ativa: Empresa 001
+</p>
+<input
+    type="text"
+    id="novoNomeEmpresa"
+    placeholder="Nome da empresa"
+    style="width:100%; padding:8px; margin-top:8px; border-radius:8px;"
+>
+
+<button
+    type="button"
+    onclick="salvarNomeEmpresa()"
+    style="width:100%; margin-top:6px;"
+>
+    💾 Salvar nome
+</button>
+</div>
 
             <button
                 type="button"
@@ -47,7 +166,7 @@
 
                 <div>
                     <strong>Área do Cliente</strong>
-                    <small>
+                    <small id="descricaoAcessoCliente">
                         Solicite atendimento e acompanhe seus chamados
                     </small>
                 </div>
@@ -63,10 +182,20 @@
 
                 <div>
                     <strong>Área Administrativa</strong>
-                    <small>
+                    <small id="descricaoAcessoAdmin">
                         Gerencie chamados e atendimento
                     </small>
                 </div>
+            </button>
+
+
+            <button
+                type="button"
+                class="btn-voltar"
+                onclick="voltarSelecaoModo()"
+                style="margin-top:8px;"
+            >
+                ← Escolher outra versão
             </button>
 
         </div>
@@ -174,7 +303,6 @@
 
             </form>
 
-
             <p
                 id="mensagemLoginCliente"
                 class="mensagem-login-cliente"
@@ -207,7 +335,6 @@
         </footer>
 
     </div>
-
 
     <!-- =================================================
          PAINEL DO CLIENTE
@@ -245,7 +372,6 @@
                 </div>
 
             </div>
-
 
             <nav class="cliente-navegacao">
 
@@ -323,7 +449,6 @@
                 </button>
 
             </div>
-
         </aside>
 
 
@@ -332,53 +457,100 @@
         ================================================== -->
 
         <div class="cliente-conteudo">
+<!-- =================================================
+     EMPRESA ATIVA - ÁREA DO CLIENTE
+================================================= -->
 
+<div
+    id="empresaAtivaCliente"
+    style="display:none;"
+>
+    🏢 Empresa:
+    <strong id="nomeEmpresaCliente">
+        —
+    </strong>
+</div>
 
             <!-- =================================================
-                 TOPO CLIENTE
+                 ASSISTENTE IA
             ================================================== -->
 
-            <header class="cliente-topo">
+            <div class="assistente-ia-card">
 
-                <div>
+                <div class="assistente-ia-icone">
+                    🤖
+                </div>
 
-                    <h1>
-                        Central de Atendimento
-                    </h1>
+
+                <div class="assistente-ia-conteudo">
+
+                    <h3>
+                        Assistente IA
+                    </h3>
+
 
                     <p>
-                        Bem-vindo,
-                        <strong id="nomeClienteLogado">
-                            Cliente
-                        </strong>.
+                        Precisa de ajuda? Converse com nosso
+                        assistente virtual.
                     </p>
 
-                </div>
 
-
-                <div class="cliente-topo-usuario">
-
-                    <div class="cliente-avatar">
-                        👤
-                    </div>
-
-                    <div>
-
-                        <strong id="nomeClienteTopo">
-                            Cliente
-                        </strong>
-
-                        <small>
-                            Cliente
-                        </small>
-
-                    </div>
+                    <button
+                        type="button"
+                        class="btn-assistente-ia"
+                        onclick="abrirAssistenteIA()"
+                    >
+                        🤖 Falar com Assistente IA
+                    </button>
 
                 </div>
 
-            </header>
+            </div>
+
+    <!-- =================================================
+         TOPO CLIENTE
+    ================================================== -->
+
+    <header class="cliente-topo">
+
+        <div>
+
+            <h1>
+                Central de Atendimento
+            </h1>
+
+            <p>
+                Bem-vindo,
+
+                <strong id="nomeClienteLogado">
+                    Cliente
+                </strong>.
+            </p>
+
+        </div>
 
 
+        <div class="cliente-topo-usuario">
+
+            <div class="cliente-avatar">
+                👤
+            </div>
+
+            <div>
+
+                <strong id="nomeClienteTopo">
+                    Cliente
+                </strong>
+
+                <small>
+                    Cliente
+                </small>
+
+            </div>
+
+        </div>
+
+    </header>
             <!-- =================================================
                  DASHBOARD CLIENTE
             ================================================== -->
@@ -753,7 +925,12 @@
                                 rows="7"
                                 required
                             ></textarea>
-
+<button
+    type="button"
+    onclick="analisarChamadoComIA()"
+>
+    🤖 Analisar com IA
+</button>
                         </div>
 
 
@@ -1259,7 +1436,13 @@
                 </small>
 
             </div>
-
+<div
+    id="empresaAtivaAdmin"
+    style="margin-top:8px; font-size:12px;"
+>
+    🏢 Empresa:
+    <strong id="nomeEmpresaAdmin">-</strong>
+</div>
         </div>
 
 
@@ -2517,8 +2700,429 @@
 ====================================================== -->
 
 <script src="script.js"></script>
-```
+
+<!-- =====================================================
+     MODAL - ASSISTENTE IA
+====================================================== -->
+
+<div
+    id="modalAssistenteIA"
+    class="modal modal-assistente-ia"
+    style="display:none;"
+>
+
+    <div class="modal-conteudo assistente-ia-modal">
+
+        <!-- CABEÇALHO -->
+
+        <div class="assistente-ia-header">
+
+            <div class="assistente-ia-header-info">
+
+                <div class="assistente-ia-avatar">
+                    🤖
+                </div>
+
+                <div>
+
+                    <h2>
+                        Assistente IA
+                    </h2>
+
+                    <span>
+                        🟢 Online • Assistente virtual
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="fechar-modal"
+                onclick="fecharAssistenteIA()"
+                aria-label="Fechar"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <!-- ÁREA DE MENSAGENS -->
+
+        <div
+            id="chatMensagensIA"
+            class="chat-mensagens-ia"
+        >
+
+            <div class="mensagem-ia">
+
+                <div class="mensagem-avatar">
+                    🤖
+                </div>
+
+                <div class="mensagem-balao">
+
+                    <strong>
+                        Assistente IA
+                    </strong>
+
+                    <p>
+                        Olá! 👋
+                    </p>
+
+                    <p>
+                        Sou o assistente virtual da Central de
+                        Atendimento. Posso ajudar você com dúvidas
+                        sobre chamados, acesso, suporte e atendimento.
+                    </p>
+
+                    <p>
+                        Como posso ajudar?
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- SUGESTÕES -->
+
+        <div class="ia-sugestoes">
+
+            <button
+                type="button"
+                onclick="perguntarIA('Como abrir um chamado?')"
+            >
+                🎫 Como abrir um chamado?
+            </button>
+
+            <button
+                type="button"
+                onclick="perguntarIA('Como acompanhar meu chamado?')"
+            >
+                📋 Acompanhar chamado
+            </button>
+
+            <button
+                type="button"
+                onclick="perguntarIA('Quais são os status dos chamados?')"
+            >
+                📊 Status do chamado
+            </button>
+
+            <button
+                type="button"
+                onclick="perguntarIA('Preciso de suporte técnico')"
+            >
+                🛠️ Suporte técnico
+            </button>
+
+        </div>
+
+
+        <!-- ÁREA DE DIGITAÇÃO -->
+
+        <form
+            id="formChatIA"
+            class="chat-input-ia"
+        >
+
+            <textarea
+                id="inputChatIA"
+                placeholder="Digite sua pergunta..."
+                rows="1"
+                autocomplete="off"
+            ></textarea>
+
+
+            <button
+                type="submit"
+                class="btn-enviar-ia"
+                aria-label="Enviar mensagem"
+            >
+                ➤
+            </button>
+
+        </form>
+
+
+        <div class="ia-aviso">
+
+            🤖 Assistente virtual • As respostas são automáticas.
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<!-- MODAL DETALHES -->
+...
+
+
+<!-- MODAL EDITAR -->
+...
+
+
+<!-- MODAL ATENDENTE -->
+...
+
+<!-- =====================================================
+     MODAL - ASSISTENTE IA
+====================================================== -->
+
+<div
+    id="modalAssistenteIA"
+    class="modal modal-assistente-ia"
+    style="display:none;"
+>
+
+    <div class="modal-conteudo assistente-ia-modal">
+
+        <!-- CABEÇALHO -->
+        <div class="assistente-ia-header">
+
+            <div class="assistente-ia-header-info">
+
+                <div class="assistente-ia-avatar">
+                    🤖
+                </div>
+
+                <div>
+                    <h2>Assistente IA</h2>
+
+                    <span>
+                        🟢 Online
+                    </span>
+                </div>
+
+            </div>
+
+            <button
+                type="button"
+                class="fechar-modal"
+                onclick="fecharAssistenteIA()"
+                aria-label="Fechar"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <!-- ÁREA DE MENSAGENS -->
+        <div
+            id="chatMensagensIA"
+            class="chat-mensagens-ia"
+        >
+
+            <!-- PRIMEIRA MENSAGEM DA IA -->
+            <div class="mensagem-ia">
+
+                <div class="mensagem-avatar">
+                    🤖
+                </div>
+
+                <div class="mensagem-balao">
+
+                    <strong>
+                        Assistente IA
+                    </strong>
+
+                    <p>
+                        Olá! 👋
+                    </p>
+
+                    <p>
+                        Sou o Assistente IA da Central de Atendimento.
+                    </p>
+
+                    <p>
+                        Digite sua pergunta abaixo e eu vou tentar ajudar.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ÁREA DE DIGITAÇÃO -->
+        <form
+            id="formChatIA"
+            class="chat-input-ia"
+        >
+
+            <textarea
+                id="inputChatIA"
+                placeholder="Digite sua pergunta..."
+                rows="1"
+                autocomplete="off"
+                required
+            ></textarea>
+
+            <button
+                type="submit"
+                class="btn-enviar-ia"
+                aria-label="Enviar mensagem"
+            >
+                ➤
+            </button>
+
+        </form>
+
+
+        <!-- AVISO -->
+        <div class="ia-aviso">
+
+            🤖 Assistente virtual • As respostas são automáticas.
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     JAVASCRIPT
+====================================================== -->
+
+<script src="script.js"></script>
 
 </body>
+</html><!-- =====================================================
+     MODAL - ASSISTENTE IA
+====================================================== -->
 
+<div
+    id="modalAssistenteIA"
+    class="modal modal-assistente-ia"
+    style="display:none;"
+>
+
+    <div class="modal-conteudo assistente-ia-modal">
+
+
+        <!-- CABEÇALHO -->
+        <div class="assistente-ia-header">
+
+            <div class="assistente-ia-header-info">
+
+                <div class="assistente-ia-avatar">
+                    🤖
+                </div>
+
+                <div>
+                    <h2>Assistente IA</h2>
+
+                    <span>
+                        🟢 Online
+                    </span>
+                </div>
+
+            </div>
+
+            <button
+                type="button"
+                class="fechar-modal"
+                onclick="fecharAssistenteIA()"
+                aria-label="Fechar"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <!-- ÁREA DE MENSAGENS -->
+        <div
+            id="chatMensagensIA"
+            class="chat-mensagens-ia"
+        >
+
+            <div class="mensagem-ia">
+
+                <div class="mensagem-avatar">
+                    🤖
+                </div>
+
+                <div class="mensagem-balao">
+
+                    <strong>
+                        Assistente IA
+                    </strong>
+
+                    <p>
+                        Olá! 👋
+                    </p>
+
+                    <p>
+                        Sou o Assistente IA da Central de Atendimento.
+                    </p>
+
+                    <p>
+                        Digite sua pergunta abaixo e eu vou tentar ajudar.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ÁREA DE DIGITAÇÃO -->
+        <form
+            id="formChatIA"
+            class="chat-input-ia"
+        >
+
+            <textarea
+                id="inputChatIA"
+                placeholder="Digite sua pergunta..."
+                rows="1"
+                autocomplete="off"
+                required
+            ></textarea>
+
+
+            <button
+                type="submit"
+                class="btn-enviar-ia"
+                aria-label="Enviar mensagem"
+            >
+                ➤
+            </button>
+
+        </form>
+
+
+        <!-- AVISO -->
+        <div class="ia-aviso">
+
+            🤖 Assistente virtual • As respostas são automáticas.
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     JAVASCRIPT
+====================================================== -->
+
+<script src="script.js"></script>
+
+</body>
 </html>
