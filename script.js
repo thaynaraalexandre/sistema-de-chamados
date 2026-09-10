@@ -4652,7 +4652,38 @@ function mostrarTelaCliente(
         0
     );
 }
+window.scrollTo(
+    0,
+    0
+);
 
+
+function mostrarTelaClientePorId(id) {
+
+    const botoes =
+        document.querySelectorAll(
+            ".cliente-menu-link"
+        );
+
+    let botaoEncontrado = null;
+
+    botoes.forEach(function (botao) {
+
+        const onclick =
+            botao.getAttribute("onclick") || "";
+
+        if (onclick.includes(id)) {
+            botaoEncontrado = botao;
+        }
+
+    });
+
+    mostrarTelaCliente(
+        id,
+        botaoEncontrado
+    );
+
+}
 
 /* =========================================================
    ABRIR NOVO CHAMADO PELO MENU
