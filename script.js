@@ -92,11 +92,6 @@ function salvarNomeEmpresa() {
     }
 
     campoNome.value = "";
-
-    console.log(
-        "Nome da empresa atualizado:",
-        novoNome
-    );
 }
 function chaveModo(nome) {
 
@@ -135,10 +130,6 @@ if (empresaAtivaTexto) {
 
     carregarDadosDoModo();
 
-    console.log(
-        "Empresa atual:",
-        empresaAtual
-    );
 }
 window.selecionarEmpresa = selecionarEmpresa;
 window.chaveModo = chaveModo;
@@ -200,12 +191,6 @@ function carregarDadosDoModo() {
                 ""
 
         };
-
-
-    console.log(
-        "Dados carregados do modo:",
-        modoSistema
-    );
 }
 
 /* =========================================================
@@ -1119,11 +1104,6 @@ function configurarLoginCliente() {
 
 function abrirAreaCliente() {
 
-    console.log(
-        "Abrindo Área do Cliente..."
-    );
-
-
     /*
      * Primeiro esconde todas as áreas.
      */
@@ -1177,10 +1157,6 @@ function abrirAreaCliente() {
 
     if (!clienteLogado) {
 
-        console.log(
-            "Cliente não logado. Mostrando login."
-        );
-
 
         /*
          * Login aparece.
@@ -1211,12 +1187,6 @@ function abrirAreaCliente() {
     /* =========================================
        CLIENTE ESTÁ LOGADO
     ========================================= */
-
-    console.log(
-        "Cliente autenticado:",
-        clienteLogado.nome
-    );
-
 
     /*
      * Esconde tela de login.
@@ -1261,10 +1231,6 @@ function abrirAreaCliente() {
 ========================================================= */
 
 function sairCliente() {
-
-    console.log(
-        "Saindo da Área do Cliente..."
-    );
 
 
     /*
@@ -1344,10 +1310,6 @@ function sairCliente() {
         form.reset();
     }
 
-
-    console.log(
-        "Logout realizado."
-    );
 }
 
 
@@ -6486,11 +6448,6 @@ function iniciarProtecaoCliente() {
 
 function inicializarSistema() {
 
-    console.log(
-        "Inicializando Central de Atendimento..."
-    );
-
-
     /*
      * Recupera a sessão do cliente.
      */
@@ -6690,10 +6647,6 @@ function bloquearAreasSemLogin() {
 
 function abrirAreaCliente() {
 
-    console.log(
-        "Abrindo Área do Cliente..."
-    );
-
 
     /*
      * Esconde tudo.
@@ -6769,11 +6722,7 @@ function abrirAreaCliente() {
 
     if (!clienteEstaLogado()) {
 
-        console.log(
-            "Cliente não está logado."
-        );
-
-
+    
         if (loginCliente) {
 
             loginCliente.style.display =
@@ -6805,11 +6754,6 @@ function abrirAreaCliente() {
      * COM LOGIN
      * =========================================
      */
-
-    console.log(
-        "Cliente autenticado:",
-        clienteLogado.nome
-    );
 
 
     if (loginCliente) {
@@ -6880,11 +6824,6 @@ if (modoSistema === "comercial") {
 ========================================================= */
 
 function abrirSistemaAdministrativo() {
-
-    console.log(
-        "Login administrativo autorizado."
-    );
-
 
     /*
      * Esconde tudo.
@@ -6978,11 +6917,6 @@ function abrirSistemaAdministrativo() {
 ========================================================= */
 
 function voltarTelaEscolha() {
-
-    console.log(
-        "Voltando para tela inicial..."
-    );
-
 
     /*
      * Esconde todas as áreas.
@@ -7607,19 +7541,6 @@ function corrigirEstadoInicial() {
 
 function iniciarAplicacao() {
 
-    console.log(
-        "================================="
-    );
-
-    console.log(
-        "CENTRAL DE ATENDIMENTO"
-    );
-
-    console.log(
-        "Inicializando aplicação..."
-    );
-
-
     /*
      * Corrige estado visual.
      */
@@ -7752,10 +7673,6 @@ function iniciarAplicacao() {
         atualizarMenuCliente();
     }
 
-
-    console.log(
-        "Sistema inicializado com sucesso."
-    );
 }
 
 
@@ -9300,40 +9217,6 @@ function mostrarAtendentes() {
         }).join("");
 }
 mostrarAtendentes();
-/* =========================================================
-   ÚLTIMA VERIFICAÇÃO
-========================================================= */
-/* =========================================================
-   ÚLTIMA VERIFICAÇÃO
-========================================================= */
-
-console.log(
-    "========================================"
-);
-
-console.log(
-    "CENTRAL DE ATENDIMENTO"
-);
-
-console.log(
-    "Script carregado com sucesso."
-);
-
-console.log(
-    "Área do Cliente protegida."
-);
-
-console.log(
-    "Área Administrativa protegida."
-);
-
-console.log(
-    "Assistente IA carregado."
-);
-
-console.log(
-    "========================================"
-);
 
 
 /* =========================================================
@@ -9687,8 +9570,7 @@ onclick="abrirDetalhesChamadoAdmin('${chamado.id}')"
 
     `;
 
-}
-/* =========================================================
+}/* =========================================================
    ATUALIZAR LISTA DO PAINEL
 ========================================================= */
 
@@ -9696,31 +9578,13 @@ function atualizarListaChamadosAdmin() {
 
     renderizarChamadosAdmin();
 
-}document.addEventListener(
-    "DOMContentLoaded",
-    function () {
+}
 
-        renderizarChamadosAdmin();
 
-        atualizarDashboardAdmin();
-        
-        atualizarRelatorioAdmin();
-        
-        atualizarSLAAdmin();
-
-       renderizarNotificacoesAdmin();
-
-        renderizarHistoricoGeral();
-    }
-);document.addEventListener("DOMContentLoaded", function () {
-
-    renderizarChamadosAdmin();
-
-});console.log("TOTAL DE CHAMADOS:", chamados.length);
-console.log("CHAMADOS:", chamados);console.log("TOTAL DE CHAMADOS:", chamados.length);
-console.log("CHAMADOS:", chamados);
 /* =========================================================
    ATUALIZAR PAINEL ADMINISTRATIVO
+========================================================= */
+
 function atualizarTudo() {
 
     renderizarChamadosAdmin();
@@ -9736,6 +9600,20 @@ function atualizarTudo() {
     renderizarHistoricoGeral();
 
 }
+
+
+/* =========================================================
+   CARREGAMENTO INICIAL
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        atualizarTudo();
+
+    }
+);
 /* =========================================================
    IMPRIMIR RELATÓRIO — ADMIN
 ========================================================= */
@@ -10213,22 +10091,24 @@ function abrirDetalhesChamadoAdmin(id) {
         data: agora
 
     });
-        salvarDados();
+       salvarDados();
 
-        renderizarChamadosAdmin();
+renderizarChamadosAdmin();
 
-        atualizarDashboardAdmin();
+atualizarDashboardAdmin();
 
-        atualizarRelatorioAdmin();
+atualizarRelatorioAdmin();
 
-       renderizarNotificacoesAdmin();
+atualizarSLAAdmin();
 
-        renderizarHistoricoGeral();
-    alert(
-        "Chamado atualizado para: " +
-        novoStatus
-    );
+renderizarNotificacoesAdmin();
 
+renderizarHistoricoGeral();
+
+alert(
+    "Chamado atualizado para: " +
+    novoStatus
+);
 }
 /* =========================================================
    ATUALIZAR SLA — ADMIN
