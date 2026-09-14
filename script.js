@@ -8614,35 +8614,6 @@ window.abrirDetalhes =
 window.adicionarHistorico =
     adicionarHistoricoChamado;
 
-
-window.abrirEdicao =
-    abrirEdicao;
-
-
-window.fecharEdicao =
-    fecharEdicao;
-
-
-window.excluirChamado =
-    excluirChamado;
-
-
-window.excluirAtendente =
-    excluirAtendente;
-
-
-window.limparNotificacoes =
-    limparNotificacoes;
-
-
-window.limparHistoricoGeral =
-    limparHistoricoGeral;
-
-
-window.imprimirRelatorio =
-    imprimirRelatorio;
-
-
 window.abrirAssistenteIA =
     abrirAssistenteIA;
 
