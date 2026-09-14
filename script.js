@@ -1757,44 +1757,36 @@ function configurarFormularioChamado() {
             ========================================= */
 
             salvarDados();
+/* =========================================
+   ATUALIZAR TELAS
+========================================= */
+
+if (
+    typeof renderizarChamadosAdmin ===
+    "function"
+) {
+
+    renderizarChamadosAdmin();
+}
 
 
-            /* =========================================
-               ATUALIZAR TELAS
-            ========================================= */
+/* Atualiza os números do Dashboard */
 
-            if (
-                typeof renderizarChamadosAdmin ===
-                "function"
-            ) {
-
-                renderizarChamadosAdmin();
-            }
+atualizarDashboardAdmin();
 
 
-            if (
-                typeof atualizarDashboard ===
-                "function"
-            ) {
+form.reset();
 
-                atualizarDashboard();
-            }
+atualizarSelectAtendentes();
 
 
-            form.reset();
-
-            atualizarSelectAtendentes();
-
-
-            alert(
-                "Chamado cadastrado com sucesso!"
-            );
+alert(
+    "Chamado cadastrado com sucesso!"
+);
 
         }
     );
 }
-
-
 /* =========================================================
    CARREGAR ATENDENTES NO NOVO CHAMADO
 ========================================================= */
@@ -2628,7 +2620,62 @@ function atualizarDashboardCliente() {
         resolvidos
     );
 }
+function atualizarDashboardAdmin() {
 
+    const total = chamados.length;
+
+    const abertos = chamados.filter(function(chamado) {
+        return chamado.status === "Aberto";
+    }).length;
+
+    const andamento = chamados.filter(function(chamado) {
+        return chamado.status === "Em andamento";
+    }).length;
+
+    const resolvidos = chamados.filter(function(chamado) {
+        return chamado.status === "Resolvido";
+    }).length;
+
+    const taxa =
+        total > 0
+            ? Math.round((resolvidos / total) * 100)
+            : 0;
+
+    const totalElemento =
+        document.getElementById("totalChamados");
+
+    const abertosElemento =
+        document.getElementById("chamadosAbertos");
+
+    const andamentoElemento =
+        document.getElementById("chamadosAndamento");
+
+    const resolvidosElemento =
+        document.getElementById("chamadosResolvidos");
+
+    const taxaElemento =
+        document.getElementById("taxaResolucao");
+
+    if (totalElemento) {
+        totalElemento.textContent = total;
+    }
+
+    if (abertosElemento) {
+        abertosElemento.textContent = abertos;
+    }
+
+    if (andamentoElemento) {
+        andamentoElemento.textContent = andamento;
+    }
+
+    if (resolvidosElemento) {
+        resolvidosElemento.textContent = resolvidos;
+    }
+
+    if (taxaElemento) {
+        taxaElemento.textContent = taxa + "%";
+    }
+}
 
 /* =========================================================
    ATUALIZAR PRIMEIRO ELEMENTO ENCONTRADO
@@ -9362,7 +9409,7 @@ function abrirDetalhesChamadoAdmin(id) {
     salvarDados();
 
     renderizarChamadosAdmin();
-
+atualizarDashboardAdmin();
     alert(
         "Chamado atualizado para: " +
         novoStatus
