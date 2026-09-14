@@ -2732,6 +2732,89 @@ function atualizarDashboardAdmin() {
     }
 }
 /* =========================================================
+   ATUALIZAR RELATÓRIO — ADMIN
+========================================================= */
+
+function atualizarRelatorioAdmin() {
+
+    const total =
+        chamados.length;
+
+    const abertos =
+        chamados.filter(function(chamado) {
+            return chamado.status === "Aberto";
+        }).length;
+
+    const andamento =
+        chamados.filter(function(chamado) {
+            return chamado.status === "Em andamento";
+        }).length;
+
+    const resolvidos =
+        chamados.filter(function(chamado) {
+            return chamado.status === "Resolvido";
+        }).length;
+
+    const taxa =
+        total > 0
+            ? Math.round(
+                (resolvidos / total) * 100
+            )
+            : 0;
+
+
+    const totalElemento =
+        document.getElementById(
+            "relatorioTotal"
+        );
+
+    const abertosElemento =
+        document.getElementById(
+            "relatorioAbertos"
+        );
+
+    const andamentoElemento =
+        document.getElementById(
+            "relatorioAndamento"
+        );
+
+    const resolvidosElemento =
+        document.getElementById(
+            "relatorioResolvidos"
+        );
+
+    const taxaElemento =
+        document.getElementById(
+            "relatorioTaxa"
+        );
+
+
+    if (totalElemento) {
+        totalElemento.textContent =
+            total;
+    }
+
+    if (abertosElemento) {
+        abertosElemento.textContent =
+            abertos;
+    }
+
+    if (andamentoElemento) {
+        andamentoElemento.textContent =
+            andamento;
+    }
+
+    if (resolvidosElemento) {
+        resolvidosElemento.textContent =
+            resolvidos;
+    }
+
+    if (taxaElemento) {
+        taxaElemento.textContent =
+            taxa + "%";
+    }
+}
+/* =========================================================
    RENDERIZAR HISTÓRICO GERAL — ADMIN
 ========================================================= */
 
@@ -9395,7 +9478,11 @@ function atualizarListaChamadosAdmin() {
     function () {
 
         renderizarChamadosAdmin();
+
         atualizarDashboardAdmin();
+        
+        atualizarRelatorioAdmin();
+
         renderizarHistoricoGeral();
     }
 );document.addEventListener("DOMContentLoaded", function () {
@@ -9413,6 +9500,8 @@ function atualizarTudo() {
     renderizarChamadosAdmin();
 
     atualizarDashboardAdmin();
+
+    atualizarRelatorioAdmin();
 
     renderizarHistoricoGeral();
 
