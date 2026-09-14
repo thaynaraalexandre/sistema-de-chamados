@@ -9506,6 +9506,21 @@ function atualizarTudo() {
     renderizarHistoricoGeral();
 
 }
+
+/* =========================================================
+   IMPRIMIR RELATÓRIO — ADMIN
+========================================================= */
+
+function imprimirRelatorio() {
+
+    atualizarRelatorioAdmin();
+
+    window.print();
+}
+
+window.imprimirRelatorio =
+    imprimirRelatorio;
+    
 /* =========================================================
    ABRIR DETALHES DO CHAMADO — ADMIN
 ========================================================= */
