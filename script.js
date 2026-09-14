@@ -9242,7 +9242,7 @@ function atualizarListaChamadosAdmin() {
     function () {
 
         renderizarChamadosAdmin();
-
+atualizarDashboardAdmin();
     }
 );document.addEventListener("DOMContentLoaded", function () {
 
@@ -9257,6 +9257,8 @@ console.log("CHAMADOS:", chamados);
 function atualizarTudo() {
 
     renderizarChamadosAdmin();
+
+    atualizarDashboardAdmin();
 
 }
 /* =========================================================
