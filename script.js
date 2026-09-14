@@ -8612,7 +8612,7 @@ window.abrirDetalhes =
 
 
 window.adicionarHistorico =
-    adicionarHistorico;
+    adicionarHistoricoChamado;
 
 
 window.abrirEdicao =
