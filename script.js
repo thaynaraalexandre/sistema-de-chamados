@@ -2636,10 +2636,37 @@ function atualizarDashboardAdmin() {
         return chamado.status === "Resolvido";
     }).length;
 
+
+    /* =========================================
+       PRIORIDADES
+    ========================================= */
+
+    const prioridadeAlta = chamados.filter(function(chamado) {
+        return chamado.prioridade === "Alta";
+    }).length;
+
+    const prioridadeMedia = chamados.filter(function(chamado) {
+        return chamado.prioridade === "Média";
+    }).length;
+
+    const prioridadeBaixa = chamados.filter(function(chamado) {
+        return chamado.prioridade === "Baixa";
+    }).length;
+
+
+    /* =========================================
+       TAXA DE RESOLUÇÃO
+    ========================================= */
+
     const taxa =
         total > 0
             ? Math.round((resolvidos / total) * 100)
             : 0;
+
+
+    /* =========================================
+       CARDS PRINCIPAIS
+    ========================================= */
 
     const totalElemento =
         document.getElementById("totalChamados");
@@ -2655,6 +2682,7 @@ function atualizarDashboardAdmin() {
 
     const taxaElemento =
         document.getElementById("taxaResolucao");
+
 
     if (totalElemento) {
         totalElemento.textContent = total;
@@ -2675,8 +2703,34 @@ function atualizarDashboardAdmin() {
     if (taxaElemento) {
         taxaElemento.textContent = taxa + "%";
     }
-}
 
+
+    /* =========================================
+       CARDS DE PRIORIDADE
+    ========================================= */
+
+    const altaElemento =
+        document.getElementById("prioridadeAlta");
+
+    const mediaElemento =
+        document.getElementById("prioridadeMedia");
+
+    const baixaElemento =
+        document.getElementById("prioridadeBaixa");
+
+
+    if (altaElemento) {
+        altaElemento.textContent = prioridadeAlta;
+    }
+
+    if (mediaElemento) {
+        mediaElemento.textContent = prioridadeMedia;
+    }
+
+    if (baixaElemento) {
+        baixaElemento.textContent = prioridadeBaixa;
+    }
+}
 /* =========================================================
    ATUALIZAR PRIMEIRO ELEMENTO ENCONTRADO
 ========================================================= */
