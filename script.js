@@ -4459,7 +4459,7 @@ function adicionarHistoricoChamado(
             "Sistema"
 
     };
-
+chamado.historico.push(item); 
 historicoGeral.push({
 
     id:
