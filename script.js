@@ -9506,7 +9506,6 @@ function atualizarTudo() {
     renderizarHistoricoGeral();
 
 }
-
 /* =========================================================
    IMPRIMIR RELATÓRIO — ADMIN
 ========================================================= */
@@ -9515,12 +9514,329 @@ function imprimirRelatorio() {
 
     atualizarRelatorioAdmin();
 
-    window.print();
+    const relatorio =
+        document.getElementById("relatorio");
+
+    if (!relatorio) {
+        alert("Relatório não encontrado.");
+        return;
+    }
+
+    const janela =
+        window.open(
+            "",
+            "_blank",
+            "width=900,height=700"
+        );
+
+    if (!janela) {
+        alert(
+            "O navegador bloqueou a janela de impressão."
+        );
+        return;
+    }
+
+    janela.document.write(`
+        <!DOCTYPE html>
+
+        <html lang="pt-BR">
+
+        <head>
+
+            <meta charset="UTF-8">
+
+            <title>
+                Relatório - Central de Atendimento
+            </title>
+
+            <style>
+
+                * {
+                    box-sizing: border-box;
+                }
+
+                body {
+                    font-family:
+                        Arial,
+                        Helvetica,
+                        sans-serif;
+
+                    margin: 0;
+                    padding: 40px;
+
+                    background: #ffffff;
+
+                    color: #172033;
+                }
+
+                .cabecalho {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: flex-start;
+
+                    border-bottom:
+                        2px solid #e5e7eb;
+
+                    padding-bottom: 20px;
+
+                    margin-bottom: 30px;
+                }
+
+                .cabecalho h1 {
+                    margin: 0 0 8px;
+
+                    font-size: 26px;
+                }
+
+                .cabecalho p {
+                    margin: 0;
+
+                    color: #64748b;
+                }
+
+                .data {
+                    font-size: 13px;
+
+                    color: #64748b;
+
+                    text-align: right;
+                }
+
+                .titulo {
+                    margin-bottom: 20px;
+                }
+
+                .titulo h2 {
+                    margin: 0 0 5px;
+
+                    font-size: 22px;
+                }
+
+                .titulo p {
+                    margin: 0;
+
+                    color: #64748b;
+                }
+
+                .grid {
+                    display: grid;
+
+                    grid-template-columns:
+                        repeat(2, 1fr);
+
+                    gap: 18px;
+                }
+
+                .card {
+                    border:
+                        1px solid #e2e8f0;
+
+                    border-radius: 12px;
+
+                    padding: 24px;
+
+                    text-align: center;
+                }
+
+                .card strong {
+                    display: block;
+
+                    font-size: 32px;
+
+                    margin-bottom: 8px;
+                }
+
+                .card span {
+                    color: #64748b;
+
+                    font-size: 15px;
+                }
+
+                .card.taxa {
+                    grid-column:
+                        1 / -1;
+                }
+
+                .rodape {
+                    margin-top: 40px;
+
+                    padding-top: 15px;
+
+                    border-top:
+                        1px solid #e5e7eb;
+
+                    font-size: 12px;
+
+                    color: #64748b;
+
+                    text-align: center;
+                }
+
+            </style>
+
+        </head>
+
+        <body>
+
+            <div class="cabecalho">
+
+                <div>
+
+                    <h1>
+                        🎧 Central de Atendimento
+                    </h1>
+
+                    <p>
+                        Relatório de chamados
+                    </p>
+
+                </div>
+
+                <div class="data">
+
+                    Emitido em:<br>
+
+                    ${new Date().toLocaleString(
+                        "pt-BR"
+                    )}
+
+                </div>
+
+            </div>
+
+
+            <div class="titulo">
+
+                <h2>
+                    📊 Resumo geral
+                </h2>
+
+                <p>
+                    Indicadores atuais dos chamados
+                    registrados no sistema.
+                </p>
+
+            </div>
+
+
+            <div class="grid">
+
+                <div class="card">
+
+                    <strong>
+                        ${
+                            document.getElementById(
+                                "relatorioTotal"
+                            )?.textContent || "0"
+                        }
+                    </strong>
+
+                    <span>
+                        Total de chamados
+                    </span>
+
+                </div>
+
+
+                <div class="card">
+
+                    <strong>
+                        ${
+                            document.getElementById(
+                                "relatorioAbertos"
+                            )?.textContent || "0"
+                        }
+                    </strong>
+
+                    <span>
+                        Chamados abertos
+                    </span>
+
+                </div>
+
+
+                <div class="card">
+
+                    <strong>
+                        ${
+                            document.getElementById(
+                                "relatorioAndamento"
+                            )?.textContent || "0"
+                        }
+                    </strong>
+
+                    <span>
+                        Em andamento
+                    </span>
+
+                </div>
+
+
+                <div class="card">
+
+                    <strong>
+                        ${
+                            document.getElementById(
+                                "relatorioResolvidos"
+                            )?.textContent || "0"
+                        }
+                    </strong>
+
+                    <span>
+                        Chamados resolvidos
+                    </span>
+
+                </div>
+
+
+                <div class="card taxa">
+
+                    <strong>
+                        ${
+                            document.getElementById(
+                                "relatorioTaxa"
+                            )?.textContent || "0%"
+                        }
+                    </strong>
+
+                    <span>
+                        Taxa de resolução
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="rodape">
+
+                Central de Atendimento —
+                Sistema de Chamados
+
+            </div>
+
+
+            <script>
+
+                window.onload = function() {
+
+                    window.print();
+
+                };
+
+            <\/script>
+
+        </body>
+
+        </html>
+    `);
+
+    janela.document.close();
 }
 
 window.imprimirRelatorio =
     imprimirRelatorio;
-    
+
 /* =========================================================
    ABRIR DETALHES DO CHAMADO — ADMIN
 ========================================================= */
