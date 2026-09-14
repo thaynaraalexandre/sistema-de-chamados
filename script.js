@@ -9705,6 +9705,8 @@ function atualizarListaChamadosAdmin() {
         atualizarDashboardAdmin();
         
         atualizarRelatorioAdmin();
+        
+        atualizarSLAAdmin();
 
        renderizarNotificacoesAdmin();
 
@@ -9719,7 +9721,6 @@ console.log("CHAMADOS:", chamados);console.log("TOTAL DE CHAMADOS:", chamados.le
 console.log("CHAMADOS:", chamados);
 /* =========================================================
    ATUALIZAR PAINEL ADMINISTRATIVO
-========================================================= */
 function atualizarTudo() {
 
     renderizarChamadosAdmin();
@@ -9727,6 +9728,8 @@ function atualizarTudo() {
     atualizarDashboardAdmin();
 
     atualizarRelatorioAdmin();
+
+    atualizarSLAAdmin();
 
     renderizarNotificacoesAdmin();
 
@@ -10226,4 +10229,111 @@ function abrirDetalhesChamadoAdmin(id) {
         novoStatus
     );
 
+}
+/* =========================================================
+   ATUALIZAR SLA — ADMIN
+========================================================= */
+
+function atualizarSLAAdmin() {
+
+    const agora =
+        Date.now();
+
+    const limiteSLA =
+        24 * 60 * 60 * 1000;
+
+    const limiteAtencao =
+        18 * 60 * 60 * 1000;
+
+
+    let dentro = 0;
+    let atencao = 0;
+    let atrasados = 0;
+
+
+    chamados.forEach(
+        function(chamado) {
+
+            /* Chamados resolvidos não entram no SLA ativo */
+
+            if (
+                chamado.status ===
+                "Resolvido"
+            ) {
+                return;
+            }
+
+
+            const dataCriacao =
+                new Date(
+                    chamado.criadoEm
+                ).getTime();
+
+
+            if (
+                !dataCriacao ||
+                isNaN(dataCriacao)
+            ) {
+                return;
+            }
+
+
+            const tempoAberto =
+                agora - dataCriacao;
+
+
+            if (
+                tempoAberto >
+                limiteSLA
+            ) {
+
+                atrasados++;
+
+            } else if (
+                tempoAberto >=
+                limiteAtencao
+            ) {
+
+                atencao++;
+
+            } else {
+
+                dentro++;
+
+            }
+
+        }
+    );
+
+
+    const elementoDentro =
+        document.getElementById(
+            "slaDentro"
+        );
+
+    const elementoAtencao =
+        document.getElementById(
+            "slaAtencao"
+        );
+
+    const elementoAtrasados =
+        document.getElementById(
+            "slaAtrasados"
+        );
+
+
+    if (elementoDentro) {
+        elementoDentro.textContent =
+            dentro;
+    }
+
+    if (elementoAtencao) {
+        elementoAtencao.textContent =
+            atencao;
+    }
+
+    if (elementoAtrasados) {
+        elementoAtrasados.textContent =
+            atrasados;
+    }
 }
