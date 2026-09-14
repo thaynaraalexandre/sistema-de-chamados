@@ -8631,10 +8631,6 @@ window.excluirAtendente =
     excluirAtendente;
 
 
-window.fecharAtendente =
-    fecharAtendente;
-
-
 window.limparNotificacoes =
     limparNotificacoes;
 
@@ -8693,7 +8689,43 @@ function mostrarTelaClientePorId(idTela) {
 window.mostrarTelaClientePorId =
     mostrarTelaClientePorId;
 
+/* =========================================================
+   MODAL DE ATENDENTE
+========================================================= */
 
+const btnNovoAtendente =
+    document.getElementById("btnNovoAtendente");
+
+const modalAtendente =
+    document.getElementById("modalAtendente");
+
+if (btnNovoAtendente && modalAtendente) {
+
+    btnNovoAtendente.addEventListener("click", function () {
+
+        modalAtendente.style.display = "flex";
+
+    });
+
+}
+
+function fecharAtendente() {
+
+    if (modalAtendente) {
+
+        modalAtendente.style.display = "none";
+
+    }
+
+}
+
+window.fecharAtendente =
+    fecharAtendente;
+
+
+/* =========================================================
+   ÚLTIMA VERIFICAÇÃO
+========================================================= */
 /* =========================================================
    ÚLTIMA VERIFICAÇÃO
 ========================================================= */
