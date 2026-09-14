@@ -8739,7 +8739,7 @@ if (formAtendente) {
                 novoAtendente
             );
 
-            salvar();
+         salvarDados();
 
             if (
                 typeof mostrarAtendentes ===
