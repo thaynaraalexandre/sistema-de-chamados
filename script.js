@@ -8692,8 +8692,125 @@ function fecharAtendente() {
 
 window.fecharAtendente =
     fecharAtendente;
+/* =========================================================
+   SALVAR ATENDENTE
+========================================================= */
 
+const formAtendente =
+    document.getElementById("formAtendente");
 
+if (formAtendente) {
+
+    formAtendente.addEventListener(
+        "submit",
+        function(event) {
+
+            event.preventDefault();
+
+            const nome =
+                document.getElementById("nomeAtendente").value.trim();
+
+            const email =
+                document.getElementById("emailAtendente").value.trim();
+
+            const funcao =
+                document.getElementById("funcaoAtendente").value;
+
+            if (!nome || !email) {
+
+                alert("Preencha o nome e o e-mail do atendente.");
+
+                return;
+            }
+
+            const novoAtendente = {
+
+                id: Date.now(),
+
+                nome: nome,
+
+                email: email,
+
+                funcao: funcao
+
+            };
+
+            atendentes.push(
+                novoAtendente
+            );
+
+            salvar();
+
+            if (
+                typeof mostrarAtendentes ===
+                "function"
+            ) {
+
+                mostrarAtendentes();
+
+            }
+
+            formAtendente.reset();
+
+            fecharAtendente();
+
+            alert(
+                "Atendente cadastrado com sucesso!"
+            );
+
+        }
+    );
+
+}
+/* =========================================================
+   MOSTRAR ATENDENTES
+========================================================= */
+
+function mostrarAtendentes() {
+
+    const listaAtendentes =
+        document.getElementById("listaAtendentes");
+
+    if (!listaAtendentes) {
+        return;
+    }
+
+    if (!atendentes || atendentes.length === 0) {
+
+        listaAtendentes.innerHTML = `
+            <div class="sem-atendentes">
+                <h3>Nenhum atendente cadastrado</h3>
+                <p>Cadastre um atendente para começar.</p>
+            </div>
+        `;
+
+        return;
+    }
+
+    listaAtendentes.innerHTML =
+        atendentes.map(function(atendente) {
+
+            return `
+                <div class="card-atendente">
+
+                    <h3>
+                        👤 ${atendente.nome}
+                    </h3>
+
+                    <p>
+                        📧 ${atendente.email}
+                    </p>
+
+                    <p>
+                        💼 ${atendente.funcao}
+                    </p>
+
+                </div>
+            `;
+
+        }).join("");
+}
+mostrarAtendentes();
 /* =========================================================
    ÚLTIMA VERIFICAÇÃO
 ========================================================= */
