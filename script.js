@@ -1520,101 +1520,80 @@ function verificarClienteLogado() {
    NOVO CHAMADO + INTELIGÊNCIA ARTIFICIAL
 ========================================================= */
 
-
 /* =========================================================
-   CONFIGURAR FORMULÁRIO DE NOVO CHAMADO
+   CONFIGURAR NOVO CHAMADO — ADMINISTRATIVO
 ========================================================= */
 
 function configurarFormularioChamado() {
 
     const form =
-        document.getElementById(
-            "formChamado"
-        );
-
+        document.getElementById("formChamado");
 
     if (!form) {
-
         return;
     }
 
-
-    /*
-     * Evita duplicar o evento.
-     */
-
-    if (
-        form.dataset.configurado ===
-        "true"
-    ) {
-
+    if (form.dataset.configurado === "true") {
         return;
     }
 
+    form.dataset.configurado = "true";
 
-    form.dataset.configurado =
-        "true";
 
+    /* =========================================
+       CARREGAR ATENDENTES NO SELECT
+    ========================================= */
+
+    atualizarSelectAtendentes();
+
+
+    /* =========================================
+       CADASTRAR CHAMADO
+    ========================================= */
 
     form.addEventListener(
         "submit",
-        async function (event) {
+        function(event) {
 
             event.preventDefault();
 
 
-            /* =========================================
-               VERIFICAR LOGIN
-            ========================================= */
-
-            if (!clienteLogado) {
-
-                alert(
-                    "Faça login como cliente primeiro."
-                );
-
-                abrirAreaCliente();
-
-                return;
-            }
-
-
-            /* =========================================
-               CAMPOS
-            ========================================= */
-
-            const assunto =
+            const cliente =
                 document
-                    .getElementById(
-                        "clienteAssunto"
-                    )
+                    .getElementById("cliente")
                     ?.value
                     .trim() || "";
 
 
-            const categoria =
+            const email =
                 document
-                    .getElementById(
-                        "clienteCategoria"
-                    )
+                    .getElementById("email")
+                    ?.value
+                    .trim() || "";
+
+
+            const assunto =
+                document
+                    .getElementById("assunto")
                     ?.value
                     .trim() || "";
 
 
             const prioridade =
                 document
-                    .getElementById(
-                        "clientePrioridade"
-                    )
-                    ?.value
-                    .trim() || "";
+                    .getElementById("prioridade")
+                    ?.value || "";
+
+
+            const atendente =
+                document
+                    .getElementById("atendente")
+                    ?.value || "";
 
 
             const descricao =
                 document
-                    .getElementById(
-                        "clienteDescricao"
-                    )
+                    .getElementById("descricao")
                     ?.value
                     .trim() || "";
 
@@ -1624,12 +1603,15 @@ function configurarFormularioChamado() {
             ========================================= */
 
             if (
+                !cliente ||
+                !email ||
                 !assunto ||
+                !prioridade ||
                 !descricao
             ) {
 
                 alert(
-                    "Preencha o assunto e a descrição."
+                    "Preencha todos os campos obrigatórios."
                 );
 
                 return;
@@ -1637,67 +1619,57 @@ function configurarFormularioChamado() {
 
 
             /* =========================================
-               ANALISAR COM IA
+               ANÁLISE IA
             ========================================= */
 
-            let analiseIA =
-                analisarChamadoComIA(
-                    assunto,
-                    descricao
-                );
+            let analiseIA = null;
+
+            if (
+                typeof analisarChamadoComIA ===
+                "function"
+            ) {
+
+                analiseIA =
+                    analisarChamadoComIA(
+                        assunto,
+                        descricao
+                    );
+            }
 
 
-            /*
-             * Se o cliente não escolheu categoria,
-             * usamos a sugestão da IA.
-             */
-
-            const categoriaFinal =
-                categoria ||
-                analiseIA.categoria;
-
-
-            /*
-             * Se o cliente não escolheu prioridade,
-             * usamos a sugestão da IA.
-             */
-
-            const prioridadeFinal =
-                prioridade ||
-                analiseIA.prioridade;
+            const agora =
+                new Date().toISOString();
 
 
             /* =========================================
                CRIAR CHAMADO
             ========================================= */
 
-            const agora =
-                new Date().toISOString();
-
-
             const novoChamado = {
 
                 id:
-                    gerarId(),
+                    typeof gerarId === "function"
+                        ? gerarId()
+                        : Date.now(),
 
                 protocolo:
-                    "CH-" +
-                    Date.now(),
+                    "CH-" + Date.now(),
 
                 clienteNome:
-                    clienteLogado.nome,
+                    cliente,
 
                 clienteEmail:
-                    clienteLogado.email,
+                    email,
 
                 assunto:
                     assunto,
 
                 categoria:
-                    categoriaFinal,
+                    analiseIA?.categoria ||
+                    "Geral",
 
                 prioridade:
-                    prioridadeFinal,
+                    prioridade,
 
                 descricao:
                     descricao,
@@ -1706,7 +1678,7 @@ function configurarFormularioChamado() {
                     "Aberto",
 
                 atendente:
-                    "",
+                    atendente,
 
                 criadoEm:
                     agora,
@@ -1717,45 +1689,23 @@ function configurarFormularioChamado() {
                 mensagens:
                     [],
 
-                historico:
-                    [
-                        {
+                historico: [
+                    {
+                        data:
+                            agora,
 
-                            data:
-                                agora,
+                        acao:
+                            "Chamado criado",
 
-                            acao:
-                                "Chamado criado",
-
-                            usuario:
-                                clienteLogado.nome
-                        }
-                    ],
+                        usuario:
+                            "Administrador"
+                    }
+                ],
 
                 analiseIA:
-                    {
-
-                        categoria:
-                            analiseIA.categoria,
-
-                        prioridade:
-                            analiseIA.prioridade,
-
-                        solucao:
-                            analiseIA.solucao,
-
-                        confianca:
-                            analiseIA.confianca,
-
-                        analisadoEm:
-                            agora
-                    }
+                    analiseIA || null
             };
 
-
-            /* =========================================
-               ADICIONAR CHAMADO
-            ========================================= */
 
             chamados.push(
                 novoChamado
@@ -1765,59 +1715,41 @@ function configurarFormularioChamado() {
             /* =========================================
                HISTÓRICO GERAL
             ========================================= */
-historicoGeral.push({
 
-    id:
-        gerarId(),
+            if (
+                Array.isArray(
+                    historicoGeral
+                )
+            ) {
 
-    chamadoId:
-        novoChamado.id,
+                historicoGeral.push({
 
-    protocolo:
-        novoChamado.protocolo,
+                    id:
+                        typeof gerarId ===
+                        "function"
+                            ? gerarId()
+                            : Date.now(),
 
-    acao:
-        "Chamado criado",
+                    chamadoId:
+                        novoChamado.id,
 
-    usuario:
-        clienteLogado.nome,
+                    protocolo:
+                        novoChamado.protocolo,
 
-    clienteEmail:
-        clienteLogado.email,
+                    acao:
+                        "Chamado criado",
 
-    data:
-        agora
-});
+                    usuario:
+                        "Administrador",
 
-            /* =========================================
-               NOTIFICAÇÃO
-            ========================================= */
+                    clienteEmail:
+                        email,
 
-            notificacoes.push({
+                    data:
+                        agora
 
-                id:
-                    gerarId(),
-
-                clienteEmail:
-                    clienteLogado.email,
-
-                chamadoId:
-                    novoChamado.id,
-
-                titulo:
-                    "Chamado criado",
-
-                mensagem:
-                    "Seu chamado " +
-                    novoChamado.protocolo +
-                    " foi criado com sucesso.",
-
-                lida:
-                    false,
-
-                data:
-                    agora
-            });
+                });
+            }
 
 
             /* =========================================
@@ -1828,45 +1760,96 @@ historicoGeral.push({
 
 
             /* =========================================
-               LIMPAR FORMULÁRIO
+               ATUALIZAR TELAS
             ========================================= */
+
+            if (
+                typeof renderizarChamadosAdmin ===
+                "function"
+            ) {
+
+                renderizarChamadosAdmin();
+            }
+
+
+            if (
+                typeof atualizarDashboard ===
+                "function"
+            ) {
+
+                atualizarDashboard();
+            }
+
 
             form.reset();
 
-
-            /* =========================================
-               ATUALIZAR SISTEMA
-            ========================================= */
-
-            atualizarDadosCliente();
-
-            atualizarDashboardCliente();
-
-            renderizarChamadosCliente();
-
-            renderizarNotificacoesCliente();
-
-            renderizarHistoricoCliente();
+            atualizarSelectAtendentes();
 
 
-            /* =========================================
-               MOSTRAR RESULTADO DA IA
-            ========================================= */
-
-            mostrarResultadoAnaliseIA(
-                novoChamado
-            );
-
-
-            console.log(
-                "Chamado criado:",
-                novoChamado
+            alert(
+                "Chamado cadastrado com sucesso!"
             );
 
         }
     );
 }
 
+
+/* =========================================================
+   CARREGAR ATENDENTES NO NOVO CHAMADO
+========================================================= */
+
+function atualizarSelectAtendentes() {
+
+    const select =
+        document.getElementById("atendente");
+
+    if (!select) {
+        return;
+    }
+
+    select.innerHTML = `
+        <option value="">
+            Selecione um atendente
+        </option>
+    `;
+
+
+    if (
+        !Array.isArray(atendentes)
+    ) {
+
+        return;
+    }
+
+
+    atendentes.forEach(
+        function(atendente) {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+            option.value =
+                atendente.nome;
+
+            option.textContent =
+                atendente.nome +
+                (
+                    atendente.funcao
+                        ? " — " +
+                          atendente.funcao
+                        : ""
+                );
+
+            select.appendChild(
+                option
+            );
+
+        }
+    );
+}
 
 /* =========================================================
    FORMULÁRIO DE NOVO CHAMADO — CLIENTE
