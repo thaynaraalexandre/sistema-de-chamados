@@ -3992,7 +3992,93 @@ function renderizarNotificacoesCliente() {
             .join("");
 }
 
+/* =========================================================
+   RENDERIZAR NOTIFICAÇÕES — ADMIN
+========================================================= */
 
+function renderizarNotificacoesAdmin() {
+
+    const lista =
+        document.getElementById(
+            "listaNotificacoes"
+        );
+
+    if (!lista) {
+        return;
+    }
+
+    if (
+        !Array.isArray(notificacoes) ||
+        notificacoes.length === 0
+    ) {
+
+        lista.innerHTML = `
+            <div class="sem-notificacoes">
+
+                <h3>
+                    Nenhuma notificação
+                </h3>
+
+                <p>
+                    Tudo está em ordem por enquanto.
+                </p>
+
+            </div>
+        `;
+
+        return;
+    }
+
+
+    const itens =
+        [...notificacoes]
+            .sort(function(a, b) {
+                return (
+                    new Date(b.data || 0) -
+                    new Date(a.data || 0)
+                );
+            });
+
+
+    lista.innerHTML =
+        itens
+            .map(function(notificacao) {
+
+                return `
+                    <div class="item-notificacao">
+
+                        <strong>
+                            🔔
+                            ${
+                                notificacao.titulo ||
+                                "Atualização"
+                            }
+                        </strong>
+
+                        <p>
+                            ${
+                                notificacao.mensagem ||
+                                ""
+                            }
+                        </p>
+
+                        <small>
+                            ${
+                                typeof formatarData ===
+                                "function"
+                                    ? formatarData(
+                                        notificacao.data
+                                    )
+                                    : notificacao.data || ""
+                            }
+                        </small>
+
+                    </div>
+                `;
+
+            })
+            .join("");
+}
 /* =========================================================
    MARCAR NOTIFICAÇÕES COMO LIDAS
 ========================================================= */
@@ -9620,6 +9706,8 @@ function atualizarListaChamadosAdmin() {
         
         atualizarRelatorioAdmin();
 
+       renderizarNotificacoesAdmin();
+
         renderizarHistoricoGeral();
     }
 );document.addEventListener("DOMContentLoaded", function () {
@@ -9639,6 +9727,8 @@ function atualizarTudo() {
     atualizarDashboardAdmin();
 
     atualizarRelatorioAdmin();
+
+    renderizarNotificacoesAdmin();
 
     renderizarHistoricoGeral();
 
@@ -10124,7 +10214,11 @@ function abrirDetalhesChamadoAdmin(id) {
 
         renderizarChamadosAdmin();
 
-         atualizarDashboardAdmin();
+        atualizarDashboardAdmin();
+
+        atualizarRelatorioAdmin();
+
+       renderizarNotificacoesAdmin();
 
         renderizarHistoricoGeral();
     alert(
