@@ -2732,6 +2732,105 @@ function atualizarDashboardAdmin() {
     }
 }
 /* =========================================================
+   RENDERIZAR HISTÓRICO GERAL — ADMIN
+========================================================= */
+
+function renderizarHistoricoGeral() {
+
+    const lista =
+        document.getElementById("listaHistoricoGeral");
+
+    if (!lista) {
+        return;
+    }
+
+    if (
+        !Array.isArray(historicoGeral) ||
+        historicoGeral.length === 0
+    ) {
+
+        lista.innerHTML = `
+            <div class="sem-historico-geral">
+
+                <h3>
+                    Nenhuma atividade registrada
+                </h3>
+
+                <p>
+                    As atividades do sistema aparecerão aqui.
+                </p>
+
+            </div>
+        `;
+
+        return;
+    }
+
+
+    lista.innerHTML =
+        historicoGeral
+            .slice()
+            .reverse()
+            .map(function(item) {
+
+                return `
+                    <div class="item-historico-geral">
+
+                        <div>
+
+                            <strong>
+                                ${item.acao || "Atividade"}
+                            </strong>
+
+                            <p>
+                                ${item.protocolo || ""}
+                                ${item.usuario ? " • " + item.usuario : ""}
+                            </p>
+
+                        </div>
+
+                        <small>
+                            ${formatarData(
+                                item.data
+                            )}
+                        </small>
+
+                    </div>
+                `;
+
+            })
+            .join("");
+}
+
+
+/* =========================================================
+   LIMPAR HISTÓRICO GERAL
+========================================================= */
+
+function limparHistoricoGeral() {
+
+    const confirmar =
+        confirm(
+            "Deseja realmente limpar o histórico?"
+        );
+
+    if (!confirmar) {
+        return;
+    }
+
+    historicoGeral = [];
+
+    salvarDados();
+
+    renderizarHistoricoGeral();
+}
+
+
+/* Disponibiliza para o botão do HTML */
+
+window.limparHistoricoGeral =
+    limparHistoricoGeral;
+/* =========================================================
    ATUALIZAR PRIMEIRO ELEMENTO ENCONTRADO
 ========================================================= */
 
@@ -9296,7 +9395,8 @@ function atualizarListaChamadosAdmin() {
     function () {
 
         renderizarChamadosAdmin();
-atualizarDashboardAdmin();
+        atualizarDashboardAdmin();
+        renderizarHistoricoGeral();
     }
 );document.addEventListener("DOMContentLoaded", function () {
 
@@ -9313,6 +9413,8 @@ function atualizarTudo() {
     renderizarChamadosAdmin();
 
     atualizarDashboardAdmin();
+
+    renderizarHistoricoGeral();
 
 }
 /* =========================================================
@@ -9461,11 +9563,13 @@ function abrirDetalhesChamadoAdmin(id) {
         data: agora
 
     });
+        salvarDados();
 
-    salvarDados();
+        renderizarChamadosAdmin();
 
-    renderizarChamadosAdmin();
-atualizarDashboardAdmin();
+         atualizarDashboardAdmin();
+
+        renderizarHistoricoGeral();
     alert(
         "Chamado atualizado para: " +
         novoStatus
