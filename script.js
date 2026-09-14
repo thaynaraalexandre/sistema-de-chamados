@@ -3684,7 +3684,6 @@ function atualizarTudoCliente() {
    NOTIFICAÇÕES + HISTÓRICO + MENSAGENS
 ========================================================= */
 
-
 /* =========================================================
    RENDERIZAR NOTIFICAÇÕES DO CLIENTE
 ========================================================= */
@@ -3701,6 +3700,10 @@ function renderizarNotificacoesCliente() {
         return;
     }
 
+
+    /* =========================================
+       VERIFICAR LOGIN
+    ========================================= */
 
     if (!clienteLogado) {
 
@@ -3727,39 +3730,72 @@ function renderizarNotificacoesCliente() {
     }
 
 
+    /* =========================================
+       GARANTIR ARRAY
+    ========================================= */
+
+    if (!Array.isArray(notificacoes)) {
+
+        notificacoes = [];
+
+    }
+
+
+    /* =========================================
+       FILTRAR NOTIFICAÇÕES DO CLIENTE
+    ========================================= */
+
     const minhasNotificacoes =
-        notificacoes
-            .filter(
-                function (notificacao) {
+        notificacoes.filter(
+            function (notificacao) {
 
-                    return (
-
-                        notificacao.clienteEmail ===
-                        clienteLogado.email
-
-                        ||
-
-                        notificacao.cliente ===
-                        clienteLogado.email
-
-                    );
+                if (!notificacao) {
+                    return false;
                 }
-            )
-            .sort(
-                function (a, b) {
 
-                    return (
 
-                        new Date(
-                            b.data
-                        ) -
+                const emailNotificacao =
+                    String(
+                        notificacao.clienteEmail ||
+                        notificacao.cliente ||
+                        ""
+                    )
+                    .trim()
+                    .toLowerCase();
 
-                        new Date(
-                            a.data
-                        )
-                    );
-                }
+
+                const emailCliente =
+                    String(
+                        clienteLogado.email ||
+                        ""
+                    )
+                    .trim()
+                    .toLowerCase();
+
+
+                return (
+                    emailNotificacao ===
+                    emailCliente
+                );
+
+            }
+        );
+
+
+    /* =========================================
+       ORDENAR — MAIS RECENTE PRIMEIRO
+    ========================================= */
+
+    minhasNotificacoes.sort(
+        function (a, b) {
+
+            return (
+                new Date(b.data || 0) -
+                new Date(a.data || 0)
             );
+
+        }
+    );
 
 
     /* =========================================
@@ -3782,7 +3818,8 @@ function renderizarNotificacoesCliente() {
                 </h3>
 
                 <p>
-                    Você não possui novas notificações.
+                    Quando houver uma atualização
+                    em seus chamados, ela aparecerá aqui.
                 </p>
 
             </div>
@@ -3794,7 +3831,34 @@ function renderizarNotificacoesCliente() {
 
 
     /* =========================================
-       LISTA
+       FUNÇÃO DE SEGURANÇA
+    ========================================= */
+
+    function textoSeguro(valor) {
+
+        if (
+            typeof escaparHTML ===
+            "function"
+        ) {
+
+            return escaparHTML(
+                String(valor || "")
+            );
+
+        }
+
+        return String(valor || "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+
+    }
+
+
+    /* =========================================
+       RENDERIZAR LISTA
     ========================================= */
 
     lista.innerHTML =
@@ -3802,30 +3866,62 @@ function renderizarNotificacoesCliente() {
             .map(
                 function (notificacao) {
 
+                    const titulo =
+                        textoSeguro(
+                            notificacao.titulo ||
+                            "Atualização do chamado"
+                        );
+
+
+                    const mensagem =
+                        textoSeguro(
+                            notificacao.mensagem ||
+                            "Seu chamado foi atualizado."
+                        );
+
+
+                    const protocolo =
+                        textoSeguro(
+                            notificacao.protocolo ||
+                            ""
+                        );
+
+
+                    const classeNova =
+                        notificacao.lida
+                            ? ""
+                            : " notificacao-nova";
+
+
                     return `
 
                         <div
-                            class="cliente-notificacao-item"
+                            class="cliente-notificacao-item${classeNova}"
+                            data-notificacao-id="${notificacao.id || ""}"
                             style="
-                            padding:16px;
-                            border-bottom:1px solid #e5e7eb;
+                                padding:18px;
+                                margin-bottom:12px;
+                                border:1px solid #e5e7eb;
+                                border-radius:12px;
+                                background:#ffffff;
                             "
                         >
 
                             <div
                                 style="
-                                display:flex;
-                                justify-content:space-between;
-                                gap:10px;
+                                    display:flex;
+                                    justify-content:space-between;
+                                    align-items:flex-start;
+                                    gap:15px;
                                 "
                             >
 
                                 <strong>
+
                                     🔔
-                                    ${escaparHTML(
-                                        notificacao.titulo ||
-                                        "Atualização"
-                                    )}
+
+                                    ${titulo}
+
                                 </strong>
 
 
@@ -3835,8 +3931,11 @@ function renderizarNotificacoesCliente() {
                                         : `
                                             <span
                                                 style="
-                                                font-size:12px;
-                                                font-weight:bold;
+                                                    font-size:11px;
+                                                    font-weight:bold;
+                                                    padding:4px 8px;
+                                                    border-radius:10px;
+                                                    background:#eef2ff;
                                                 "
                                             >
                                                 NOVA
@@ -3847,15 +3946,38 @@ function renderizarNotificacoesCliente() {
                             </div>
 
 
-                            <p>
-                                ${escaparHTML(
-                                    notificacao.mensagem ||
-                                    ""
-                                )}
+                            ${
+                                protocolo
+                                    ? `
+                                        <small
+                                            style="
+                                                display:block;
+                                                margin-top:6px;
+                                                color:#64748b;
+                                            "
+                                        >
+                                            Chamado:
+                                            ${protocolo}
+                                        </small>
+                                    `
+                                    : ""
+                            }
+
+
+                            <p
+                                style="
+                                    margin:10px 0;
+                                "
+                            >
+                                ${mensagem}
                             </p>
 
 
-                            <small>
+                            <small
+                                style="
+                                    color:#64748b;
+                                "
+                            >
                                 ${formatarData(
                                     notificacao.data
                                 )}
@@ -3882,35 +4004,50 @@ function marcarNotificacoesComoLidas() {
     }
 
 
+    if (!Array.isArray(notificacoes)) {
+        return;
+    }
+
+
     notificacoes.forEach(
         function (notificacao) {
 
-            const pertence =
+            const emailNotificacao =
+                String(
+                    notificacao.clienteEmail ||
+                    notificacao.cliente ||
+                    ""
+                )
+                .trim()
+                .toLowerCase();
 
-                notificacao.clienteEmail ===
-                clienteLogado.email
 
-                ||
+            const emailCliente =
+                String(
+                    clienteLogado.email ||
+                    ""
+                )
+                .trim()
+                .toLowerCase();
 
-                notificacao.cliente ===
-                clienteLogado.email;
 
+            if (
+                emailNotificacao ===
+                emailCliente
+            ) {
 
-            if (pertence) {
+                notificacao.lida = true;
 
-                notificacao.lida =
-                    true;
             }
+
         }
     );
 
 
     salvarDados();
 
-
     renderizarNotificacoesCliente();
 }
-
 
 /* =========================================================
    RENDERIZAR HISTÓRICO DO CLIENTE
