@@ -6508,7 +6508,7 @@ function abrirSistemaAdministrativo() {
     ) {
 
         renderizarChamadosAdmin();
-
+        atualizarDashboardAdmin();
     }
 
 }
