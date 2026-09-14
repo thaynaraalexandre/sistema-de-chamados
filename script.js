@@ -9136,6 +9136,45 @@ window.fecharAtendente =
 
 window.editarAtendente =
     editarAtendente;
+    function excluirAtendente(id) {
+
+    const atendente =
+        atendentes.find(function(item) {
+            return String(item.id) === String(id);
+        });
+
+    if (!atendente) {
+        alert("Atendente não encontrado.");
+        return;
+    }
+
+    const confirmar =
+        confirm(
+            "Deseja realmente excluir o atendente " +
+            atendente.nome +
+            "?"
+        );
+
+    if (!confirmar) {
+        return;
+    }
+
+    atendentes =
+        atendentes.filter(function(item) {
+            return String(item.id) !== String(id);
+        });
+
+    salvarDados();
+
+    mostrarAtendentes();
+
+    atualizarSelectAtendentes();
+
+    alert("Atendente excluído com sucesso!");
+}
+
+window.excluirAtendente =
+    excluirAtendente;
 /* =========================================================
    SALVAR ATENDENTE
 ========================================================= */
