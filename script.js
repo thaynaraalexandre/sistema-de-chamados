@@ -9075,7 +9075,7 @@ const btnNovoAtendente =
 
 const modalAtendente =
     document.getElementById("modalAtendente");
-
+let atendenteEditandoId = null;
 if (btnNovoAtendente && modalAtendente) {
 
     btnNovoAtendente.addEventListener("click", function () {
@@ -9098,10 +9098,47 @@ function fecharAtendente() {
 
 window.fecharAtendente =
     fecharAtendente;
+    function editarAtendente(id) {
+
+    const atendente =
+        atendentes.find(function(item) {
+            return String(item.id) === String(id);
+        });
+
+    if (!atendente) {
+        alert("Atendente não encontrado.");
+        return;
+    }
+
+    atendenteEditandoId =
+        atendente.id;
+
+    document.getElementById(
+        "nomeAtendente"
+    ).value =
+        atendente.nome || "";
+
+    document.getElementById(
+        "emailAtendente"
+    ).value =
+        atendente.email || "";
+
+    document.getElementById(
+        "funcaoAtendente"
+    ).value =
+        atendente.funcao || "Suporte Técnico";
+
+    if (modalAtendente) {
+        modalAtendente.style.display =
+            "flex";
+    }
+}
+
+window.editarAtendente =
+    editarAtendente;
 /* =========================================================
    SALVAR ATENDENTE
 ========================================================= */
-
 const formAtendente =
     document.getElementById("formAtendente");
 
@@ -9114,59 +9151,90 @@ if (formAtendente) {
             event.preventDefault();
 
             const nome =
-                document.getElementById("nomeAtendente").value.trim();
+                document
+                    .getElementById("nomeAtendente")
+                    .value
+                    .trim();
 
             const email =
-                document.getElementById("emailAtendente").value.trim();
+                document
+                    .getElementById("emailAtendente")
+                    .value
+                    .trim();
 
             const funcao =
-                document.getElementById("funcaoAtendente").value;
+                document
+                    .getElementById("funcaoAtendente")
+                    .value;
 
             if (!nome || !email) {
-
-                alert("Preencha o nome e o e-mail do atendente.");
-
+                alert(
+                    "Preencha o nome e o e-mail do atendente."
+                );
                 return;
             }
 
-            const novoAtendente = {
+            const estaEditando =
+                atendenteEditandoId !== null;
 
-                id: Date.now(),
+            if (estaEditando) {
 
-                nome: nome,
+                const atendente =
+                    atendentes.find(function(item) {
+                        return (
+                            String(item.id) ===
+                            String(atendenteEditandoId)
+                        );
+                    });
 
-                email: email,
+                if (!atendente) {
+                    alert(
+                        "Atendente não encontrado."
+                    );
+                    return;
+                }
 
-                funcao: funcao
+                atendente.nome =
+                    nome;
 
-            };
+                atendente.email =
+                    email;
 
-            atendentes.push(
-                novoAtendente
-            );
+                atendente.funcao =
+                    funcao;
 
-         salvarDados();
+                atendenteEditandoId =
+                    null;
 
-            if (
-                typeof mostrarAtendentes ===
-                "function"
-            ) {
+            } else {
 
-                mostrarAtendentes();
+                const novoAtendente = {
+                    id: Date.now(),
+                    nome: nome,
+                    email: email,
+                    funcao: funcao
+                };
 
+                atendentes.push(
+                    novoAtendente
+                );
             }
+
+            salvarDados();
+
+            mostrarAtendentes();
 
             formAtendente.reset();
 
             fecharAtendente();
 
             alert(
-                "Atendente cadastrado com sucesso!"
+                estaEditando
+                    ? "Atendente atualizado com sucesso!"
+                    : "Atendente cadastrado com sucesso!"
             );
-
         }
     );
-
 }
 /* =========================================================
    MOSTRAR ATENDENTES
@@ -9193,28 +9261,40 @@ function mostrarAtendentes() {
         return;
     }
 
-    listaAtendentes.innerHTML =
-        atendentes.map(function(atendente) {
+   listaAtendentes.innerHTML =
+    atendentes.map(function(atendente) {
+        return `
+            <div class="card-atendente">
+                <h3>👤 ${atendente.nome}</h3>
 
-            return `
-                <div class="card-atendente">
+                <p>
+                    📧 ${atendente.email}
+                </p>
 
-                    <h3>
-                        👤 ${atendente.nome}
-                    </h3>
+                <p>
+                    💼 ${atendente.funcao}
+                </p>
 
-                    <p>
-                        📧 ${atendente.email}
-                    </p>
+                <div class="acoes-atendente">
 
-                    <p>
-                        💼 ${atendente.funcao}
-                    </p>
+                    <button
+                        type="button"
+                        onclick="editarAtendente(${atendente.id})"
+                    >
+                        ✏️ Editar
+                    </button>
+
+                    <button
+                        type="button"
+                        onclick="excluirAtendente(${atendente.id})"
+                    >
+                        🗑️ Excluir
+                    </button>
 
                 </div>
-            `;
-
-        }).join("");
+            </div>
+        `;
+    }).join("");
 }
 mostrarAtendentes();
 
